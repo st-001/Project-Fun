@@ -1,5 +1,9 @@
 import { Handlers } from "$fresh/server.ts";
-import { getAllGroups, type Group, insertGroup } from "../../models/group.ts";
+import {
+  type Client,
+  getAllClients,
+  insertClient,
+} from "../../models/client.ts";
 import {
   httpJsonResponse,
   httpResponse500InternalServerError,
@@ -8,8 +12,8 @@ import {
 export const handler: Handlers = {
   async GET(_req, _ctx) {
     try {
-      const groups = await getAllGroups();
-      return httpJsonResponse(groups, 200);
+      const clients = await getAllClients();
+      return httpJsonResponse(clients, 200);
     } catch (error) {
       return httpResponse500InternalServerError(error);
     }
@@ -17,9 +21,9 @@ export const handler: Handlers = {
 
   async POST(req, _ctx) {
     try {
-      const group = await req.json() as Group;
-      const result = await insertGroup(
-        group.name,
+      const client = await req.json() as Client;
+      const result = await insertClient(
+        client.name,
       );
 
       return httpJsonResponse(result, 201);

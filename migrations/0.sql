@@ -31,3 +31,14 @@ CREATE TABLE user_group (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (group_id) REFERENCES groups(id)
 );
+
+CREATE TABLE client (
+    id serial NOT NULL,
+    name varchar(255) NOT NULL,
+    is_enabled boolean NOT NULL DEFAULT true,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    updated_at timestamp with time zone NOT NULL DEFAULT now(),
+    deleted_at timestamp with time zone,
+    UNIQUE (name),
+    PRIMARY KEY (id)
+);
