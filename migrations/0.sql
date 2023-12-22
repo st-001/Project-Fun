@@ -11,7 +11,7 @@ CREATE TABLE groups (
 
 CREATE TABLE users (
     id serial NOT NULL,
-    full_name varchar(255) NOT NULL,
+    name varchar(255) NOT NULL,
     email varchar(255) NOT NULL,
     password_hash varchar(255) NOT NULL,
     primary_group_id int NOT NULL,

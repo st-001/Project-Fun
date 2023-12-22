@@ -30,7 +30,7 @@ export const handler: Handlers = {
       const updateData = await req.json();
       const updatedUser = await updateUser(
         userId,
-        updateData.fullName ?? userToUpdate.fullName,
+        updateData.name ?? userToUpdate.name,
         updateData.email ?? userToUpdate.email,
         updateData.primaryGroupId ?? userToUpdate.primaryGroupId!,
         updateData.isEnabled ?? userToUpdate.isEnabled,

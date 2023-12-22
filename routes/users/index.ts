@@ -19,7 +19,7 @@ export const handler: Handlers = {
     try {
       const user = await req.json() as User;
       const result = await insertUser(
-        user.fullName,
+        user.name,
         user.email,
         user.password!,
         user.primaryGroupId!,

@@ -4,7 +4,7 @@ import { getGroupById, type Group } from "./group.ts";
 
 export interface User {
   id: number;
-  fullName: string;
+  name: string;
   email: string;
   password?: string;
   passwordHash?: string;
@@ -17,7 +17,7 @@ export interface User {
 }
 
 export async function insertUser(
-  fullName: string,
+  name: string,
   email: string,
   password: string,
   primaryGroupId: number,
@@ -26,12 +26,12 @@ export async function insertUser(
   const result = await sql.begin(async (sql) => {
     const [user] = await sql`
       insert into users
-        (full_name, email, password_hash, primary_group_id)
+        (name, email, password_hash, primary_group_id)
       values
-        (${fullName}, ${email}, ${passwordHash}, ${primaryGroupId})
+        (${name}, ${email}, ${passwordHash}, ${primaryGroupId})
       returning 
         id,
-        full_name as "fullName",
+        name,
         email,
         is_enabled as "isEnabled",
         created_at as "createdAt",
@@ -59,7 +59,7 @@ export async function insertUser(
 
 export async function updateUser(
   userId: number | string,
-  fullName: string,
+  name: string,
   email: string,
   primaryGroupId: number,
   isEnabled: boolean,
@@ -75,7 +75,7 @@ export async function updateUser(
     const [updatedUser] = await sql`
       UPDATE users
       SET
-        full_name = ${fullName},
+        name = ${name},
         email = ${email},
         primary_group_id = ${primaryGroupId},
         is_enabled = ${isEnabled},
@@ -83,7 +83,7 @@ export async function updateUser(
       WHERE id = ${userId}
       RETURNING 
         id,
-        full_name as "fullName",
+        name,
         email,
         primary_group_id as "primaryGroupId",
         is_enabled as "isEnabled",
@@ -122,7 +122,7 @@ export async function getUserById(id: number | string) {
   const [user] = await sql`
     SELECT
     id,
-    full_name AS "fullName",
+    name,
     email,
     primary_group_id AS "primaryGroupId",
     is_enabled AS "isEnabled",
@@ -146,7 +146,7 @@ export async function getAllUsers() {
   const users = await sql`
     SELECT
       users.id,
-      users.full_name AS "fullName",
+      users.name,
       users.email,
       users.is_enabled AS "isEnabled",
       users.created_at AS "createdAt",
@@ -169,7 +169,7 @@ export async function getUserByEmail(email: string) {
   const [user] = await sql`
     SELECT
     id,
-    full_name AS "fullName",
+    name,
     email,
     password_hash AS "passwordHash",
     primary_group_id AS "primaryGroupId",
