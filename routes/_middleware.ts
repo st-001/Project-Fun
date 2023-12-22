@@ -1,10 +1,14 @@
 import { FreshContext } from "$fresh/server.ts";
-import { jsonResponse } from "../utils.ts";
+import {
+  httpResponse401Unauthorized,
+  httpResponse404NotFound,
+} from "../utils.ts";
 import { verifyJwt } from "../jwt.ts";
 import { getUserById } from "../models/user.ts";
 
 interface State {
   userId: number;
+  requestId: string;
 }
 
 export async function handler(
@@ -18,7 +22,7 @@ export async function handler(
   if (ctx.route.includes("/:id")) {
     const id = Number(ctx.params.id);
     if (Number.isNaN(id)) {
-      return jsonResponse({ error: "Not Found" }, 404);
+      return httpResponse404NotFound();
     }
   }
   try {
@@ -28,12 +32,12 @@ export async function handler(
     );
     ctx.state.userId = token.id as number;
     const user = await getUserById(ctx.state.userId);
-    if (!user.isEnabled) {
-      return jsonResponse({ error: "Unauthorized" }, 401);
+    if (!user!.isEnabled) {
+      return httpResponse401Unauthorized();
     }
   } catch (_error) {
     console.log(_error);
-    return jsonResponse({ error: "Unauthorized" }, 401);
+    return httpResponse401Unauthorized();
   }
 
   const resp = await ctx.next();

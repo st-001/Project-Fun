@@ -58,7 +58,7 @@ export async function insertUser(
 }
 
 export async function updateUser(
-  userId: number,
+  userId: number | string,
   fullName: string,
   email: string,
   primaryGroupId: number,
