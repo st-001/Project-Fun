@@ -190,7 +190,7 @@ export async function getUserByEmail(email: string) {
   return user;
 }
 
-export async function getUserGroups(userId: number) {
+export async function getUserGroups(userId: number | string) {
   const [groups] = await sql`
     SELECT
       groups.id,
@@ -210,7 +210,7 @@ export async function getUserGroups(userId: number) {
   return groups as Group[];
 }
 
-export async function enableUser(userId: number) {
+export async function enableUser(userId: number | string) {
   await sql`
     UPDATE users
     SET
@@ -220,7 +220,7 @@ export async function enableUser(userId: number) {
   `;
 }
 
-export async function disableUser(userId: number) {
+export async function disableUser(userId: number | string) {
   await sql`
     UPDATE users
     SET
