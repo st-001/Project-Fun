@@ -8,6 +8,7 @@ import * as $groups_id_disable from "./routes/groups/[id]/disable.ts";
 import * as $groups_id_enable from "./routes/groups/[id]/enable.ts";
 import * as $groups_id_index from "./routes/groups/[id]/index.ts";
 import * as $groups_index from "./routes/groups/index.ts";
+import * as $users_id_index from "./routes/users/[id]/index.ts";
 import * as $users_index from "./routes/users/index.ts";
 
 import { type Manifest } from "$fresh/server.ts";
@@ -20,6 +21,7 @@ const manifest = {
     "./routes/groups/[id]/enable.ts": $groups_id_enable,
     "./routes/groups/[id]/index.ts": $groups_id_index,
     "./routes/groups/index.ts": $groups_index,
+    "./routes/users/[id]/index.ts": $users_id_index,
     "./routes/users/index.ts": $users_index,
   },
   islands: {},

@@ -118,7 +118,7 @@ export async function updateUser(
   return result as User;
 }
 
-export async function getUserById(id: number) {
+export async function getUserById(id: number | string) {
   const [user] = await sql`
     SELECT
     id,
