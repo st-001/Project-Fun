@@ -8,3 +8,20 @@ export function jsonResponse(data: any, status = 200) {
     headers: { "Content-Type": "application/json" },
   });
 }
+
+export function httpResponse204Created() {
+  return new Response(null, { status: 204 });
+}
+
+// deno-lint-ignore no-explicit-any
+export function httpResponse500InternalServerError(error: any) {
+  console.error(error);
+  return new Response(error, {
+    status: 500,
+    headers: { "Content-Type": "text/plain" },
+  });
+}
+
+export function httpResponse404NotFound() {
+  return new Response(null, { status: 404 });
+}

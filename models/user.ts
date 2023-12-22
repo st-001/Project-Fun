@@ -133,6 +133,10 @@ export async function getUserById(id: number | string) {
     WHERE id = ${id}
   ` as User[];
 
+  if (!user) {
+    return null;
+  }
+
   user.primaryGroup = await getGroupById(user.primaryGroupId!);
 
   return user;
@@ -224,4 +228,22 @@ export async function disableUser(userId: number) {
       updated_at = now()
     WHERE id = ${userId}
   `;
+}
+
+export async function resetUserPassword(
+  userId: number,
+  newPassword: string,
+) {
+  const passwordHash = await bcrypt.hash(newPassword);
+
+  const [result] = await sql`
+    UPDATE users
+    SET
+      password_hash = ${passwordHash},
+      updated_at = now()
+    WHERE id = ${userId}
+    RETURNING id
+  `;
+
+  return result ? true : false;
 }
