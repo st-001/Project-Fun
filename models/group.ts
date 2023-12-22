@@ -4,6 +4,7 @@ import { type User } from "./user.ts";
 export interface Group {
   id: number;
   name: string;
+  isEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
@@ -27,7 +28,7 @@ export async function insertGroup(name: string) {
 }
 
 export async function updateGroup(
-  id: number,
+  groupId: number | string,
   name: string,
   isEnabled: boolean,
 ) {
@@ -35,9 +36,10 @@ export async function updateGroup(
     update groups
     set
       name = ${name},
-      is_enabled = ${isEnabled}
+      is_enabled = ${isEnabled},
+      updated_at = now()
     where
-      id = ${id}
+      id = ${groupId}
     returning 
       id,
       name,
