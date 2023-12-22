@@ -1,7 +1,7 @@
 import { Handlers } from "$fresh/server.ts";
 import { enableUser, getUserById } from "../../../models/user.ts";
 import {
-  httpResponse204Created,
+  httpResponse204NoContent,
   httpResponse404NotFound,
   httpResponse500InternalServerError,
 } from "../../../utils.ts";
@@ -14,7 +14,7 @@ export const handler: Handlers = {
         return httpResponse404NotFound();
       }
       await enableUser(ctx.params.id);
-      return httpResponse204Created();
+      return httpResponse204NoContent();
     } catch (error) {
       return httpResponse500InternalServerError(error);
     }

@@ -1,7 +1,11 @@
 import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
 import { Handlers } from "$fresh/server.ts";
 import { getUserByEmail } from "../../models/user.ts";
-import { jsonResponse } from "../../utils.ts";
+import {
+  httpJsonResponse,
+  httpResponse401Unauthorized,
+  httpResponse500InternalServerError,
+} from "../../utils.ts";
 import { signJwt } from "../../jwt.ts";
 
 export const handler: Handlers = {
@@ -10,11 +14,11 @@ export const handler: Handlers = {
       const body = await req.json() as { password: string; email: string };
       const user = await getUserByEmail(body.email);
       if (!user) {
-        return jsonResponse({ error: "Unauthorized" }, 401);
+        return httpResponse401Unauthorized();
       }
 
       if (!user.isEnabled) {
-        return jsonResponse({ error: "Unauthorized" }, 401);
+        return httpResponse401Unauthorized();
       }
 
       const isValidPassword = await bcrypt.compare(
@@ -23,7 +27,7 @@ export const handler: Handlers = {
       );
 
       if (!isValidPassword) {
-        return jsonResponse({ error: "Unauthorized" }, 401);
+        return httpResponse401Unauthorized();
       }
 
       const accessToken = await signJwt(
@@ -31,9 +35,9 @@ export const handler: Handlers = {
         Deno.env.get("JWT_SECRET")!,
       );
 
-      return jsonResponse({ accessToken }, 201);
+      return httpJsonResponse({ accessToken }, 200);
     } catch (error) {
-      return jsonResponse({ error }, 500);
+      return httpResponse500InternalServerError(error);
     }
   },
 };

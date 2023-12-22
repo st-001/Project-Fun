@@ -1,10 +1,9 @@
 import { Handlers } from "$fresh/server.ts";
 import { getUserById, resetUserPassword } from "../../../models/user.ts";
 import {
-  httpResponse204Created,
+  httpResponse204NoContent,
   httpResponse404NotFound,
   httpResponse500InternalServerError,
-  jsonResponse,
 } from "../../../utils.ts";
 
 export const handler: Handlers = {
@@ -23,10 +22,10 @@ export const handler: Handlers = {
       );
 
       if (!resetPasswordSuccess) {
-        return jsonResponse({ error: "Failed to reset password" }, 500);
+        return httpResponse500InternalServerError("Failed to reset password.");
       }
 
-      return httpResponse204Created();
+      return httpResponse204NoContent();
     } catch (error) {
       return httpResponse500InternalServerError(error);
     }

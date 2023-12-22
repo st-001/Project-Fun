@@ -1,17 +1,21 @@
 import { Handlers } from "$fresh/server.ts";
 import { getGroupById } from "../../../models/group.ts";
-import { jsonResponse } from "../../../utils.ts";
+import {
+  httpJsonResponse,
+  httpResponse404NotFound,
+  httpResponse500InternalServerError,
+} from "../../../utils.ts";
 
 export const handler: Handlers = {
   async GET(_req, ctx) {
     try {
       const group = await getGroupById(ctx.params.id);
       if (!group) {
-        return jsonResponse({ error: "Not Found" }, 404);
+        return httpResponse404NotFound();
       }
-      return jsonResponse(group);
+      return httpJsonResponse(group, 200);
     } catch (error) {
-      return jsonResponse({ error }, 500);
+      return httpResponse500InternalServerError(error);
     }
   },
 };

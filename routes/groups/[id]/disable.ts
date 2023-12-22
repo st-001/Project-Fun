@@ -1,18 +1,22 @@
 import { Handlers } from "$fresh/server.ts";
 import { disableGroup, getGroupById } from "../../../models/group.ts";
-import { jsonResponse } from "../../../utils.ts";
+import {
+  httpResponse204NoContent,
+  httpResponse404NotFound,
+  httpResponse500InternalServerError,
+} from "../../../utils.ts";
 
 export const handler: Handlers = {
   async POST(_req, ctx) {
     try {
       const group = await getGroupById(ctx.params.id);
       if (!group) {
-        return jsonResponse({ error: "Not Found" }, 404);
+        return httpResponse404NotFound();
       }
       await disableGroup(ctx.params.id);
-      return jsonResponse(null, 204);
+      return httpResponse204NoContent();
     } catch (error) {
-      return jsonResponse({ error }, 500);
+      return httpResponse500InternalServerError(error);
     }
   },
 };

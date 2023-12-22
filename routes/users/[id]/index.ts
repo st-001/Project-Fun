@@ -1,17 +1,21 @@
 import { Handlers } from "$fresh/server.ts";
 import { getUserById } from "../../../models/user.ts";
-import { jsonResponse } from "../../../utils.ts";
+import {
+  httpJsonResponse,
+  httpResponse404NotFound,
+  httpResponse500InternalServerError,
+} from "../../../utils.ts";
 
 export const handler: Handlers = {
   async GET(_req, ctx) {
     try {
       const user = await getUserById(ctx.params.id);
       if (!user) {
-        return jsonResponse({ error: "Not Found" }, 404);
+        return httpResponse404NotFound();
       }
-      return jsonResponse(user);
+      return httpJsonResponse(user, 200);
     } catch (error) {
-      return jsonResponse({ error }, 500);
+      return httpResponse500InternalServerError(error);
     }
   },
 };

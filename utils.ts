@@ -1,15 +1,12 @@
 // deno-lint-ignore no-explicit-any
-export function jsonResponse(data: any, status = 200) {
-  if (status === 204 && data === null) {
-    return new Response(null, { status });
-  }
+export function httpJsonResponse(data: any, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
     headers: { "Content-Type": "application/json" },
   });
 }
 
-export function httpResponse204Created() {
+export function httpResponse204NoContent() {
   return new Response(null, { status: 204 });
 }
 
@@ -24,4 +21,8 @@ export function httpResponse500InternalServerError(error: any) {
 
 export function httpResponse404NotFound() {
   return new Response(null, { status: 404 });
+}
+
+export function httpResponse401Unauthorized() {
+  return new Response(null, { status: 401 });
 }

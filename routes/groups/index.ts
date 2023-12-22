@@ -1,14 +1,17 @@
 import { Handlers } from "$fresh/server.ts";
 import { getAllGroups, type Group, insertGroup } from "../../models/group.ts";
-import { jsonResponse } from "../../utils.ts";
+import {
+  httpJsonResponse,
+  httpResponse500InternalServerError,
+} from "../../utils.ts";
 
 export const handler: Handlers = {
   async GET(_req, _ctx) {
     try {
       const users = await getAllGroups();
-      return jsonResponse(users);
+      return httpJsonResponse(users, 200);
     } catch (error) {
-      return jsonResponse({ error }, 500);
+      return httpResponse500InternalServerError(error);
     }
   },
 
@@ -19,9 +22,9 @@ export const handler: Handlers = {
         group.name,
       );
 
-      return jsonResponse(result, 201);
+      return httpJsonResponse(result, 201);
     } catch (error) {
-      return jsonResponse({ error }, 500);
+      return httpResponse500InternalServerError(error);
     }
   },
 };
