@@ -94,15 +94,12 @@ export async function updateUser(
 
     if (oldPrimaryGroupId !== primaryGroupId) {
       await sql`
-        DELETE FROM user_group
-        WHERE user_id = ${userId} AND group_id = ${oldPrimaryGroupId!}
-      `;
-
-      await sql`
         INSERT INTO user_group
           (user_id, group_id)
         VALUES
           (${userId}, ${primaryGroupId})
+        ON CONFLICT (user_id, group_id) 
+        DO NOTHING;
       `;
     }
 
