@@ -13,6 +13,7 @@ export const PUT_REQUEST_SCHEMA = {
     name: { type: "string", maxLength: 255, minLength: 1 },
     isEnabled: { type: "boolean" },
   },
+  required: ["name", "isEnabled"],
   additionalProperties: false,
 };
 

@@ -10,12 +10,12 @@ export interface Group {
   deletedAt: Date | null;
 }
 
-export async function insertGroup(name: string) {
+export async function insertGroup(name: string, isEnabled: boolean) {
   const result = await sql`
     insert into groups
-      (name)
+      (name, is_enabled)
     values
-      (${name})
+      (${name}, ${isEnabled})
     returning 
     id, 
     name,

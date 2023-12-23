@@ -10,8 +10,9 @@ export const POST_REQUEST_SCHEMA = {
   type: "object",
   properties: {
     name: { type: "string", maxLength: 255, minLength: 1 },
+    isEnabled: { type: "boolean" },
   },
-  required: ["name"],
+  required: ["name", "isEnabled"],
   additionalProperties: false,
 };
 
@@ -55,6 +56,7 @@ export const handler: Handlers = {
 
       const result = await insertGroup(
         group.name,
+        group.isEnabled,
       );
 
       return httpJsonResponse(result, 201);
