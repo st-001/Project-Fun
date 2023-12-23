@@ -7,6 +7,42 @@ import {
 } from "../../../utils.ts";
 import ajv from "../../../ajv.ts";
 
+export const GET_RESPONSE_SCHEMA = {
+  type: "object",
+  properties: {
+    id: { type: "integer" },
+    name: { type: "string" },
+    email: { type: "string", format: "email" },
+    primaryGroupId: { type: "integer" },
+    isEnabled: { type: "boolean" },
+    createdAt: { type: "string", format: "date-time" },
+    updatedAt: { type: "string", format: "date-time" },
+    deletedAt: { type: ["string", "null"], format: "date-time" },
+    primaryGroup: {
+      type: "object",
+      properties: {
+        id: { type: "integer" },
+        name: { type: "string" },
+        isEnabled: { type: "boolean" },
+        createdAt: { type: "string", format: "date-time" },
+        updatedAt: { type: "string", format: "date-time" },
+        deletedAt: { type: ["string", "null"], format: "date-time" },
+      },
+      required: ["id", "name", "isEnabled", "createdAt", "updatedAt"],
+    },
+  },
+  required: [
+    "id",
+    "name",
+    "email",
+    "primaryGroupId",
+    "isEnabled",
+    "createdAt",
+    "updatedAt",
+    "primaryGroup",
+  ],
+};
+
 export const PUT_REQUEST_SCHEMA = {
   type: "object",
   properties: {

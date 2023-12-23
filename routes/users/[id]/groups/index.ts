@@ -8,34 +8,34 @@ import {
 } from "../../../../utils.ts";
 
 export const GET_RESPONSE_SCHEMA = {
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "id": {
-        "type": "integer",
+  type: "array",
+  items: {
+    type: "object",
+    properties: {
+      id: {
+        type: "integer",
       },
-      "name": {
-        "type": "string",
+      name: {
+        type: "string",
       },
-      "isEnabled": {
-        "type": "boolean",
+      isEnabled: {
+        type: "boolean",
       },
-      "createdAt": {
-        "type": "string",
-        "format": "date-time",
+      createdAt: {
+        type: "string",
+        format: "date-time",
       },
-      "updatedAt": {
-        "type": "string",
-        "format": "date-time",
+      updatedAt: {
+        type: "string",
+        format: "date-time",
       },
-      "deletedAt": {
-        "type": ["string", "null"],
-        "format": "date-time",
+      deletedAt: {
+        type: ["string", "null"],
+        format: "date-time",
       },
     },
-    "required": ["id", "name", "isEnabled", "createdAt", "updatedAt"],
-    "additionalProperties": false,
+    required: ["id", "name", "isEnabled", "createdAt", "updatedAt"],
+    additionalProperties: false,
   },
 };
 

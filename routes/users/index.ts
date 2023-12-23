@@ -6,6 +6,39 @@ import {
 } from "../../utils.ts";
 import ajv from "../../ajv.ts";
 
+export const GET_RESPONSE_SCHEMA = {
+  type: "array",
+  items: {
+    type: "object",
+    properties: {
+      id: { type: "integer" },
+      name: { type: "string" },
+      email: { type: "string", format: "email" },
+      isEnabled: { type: "boolean" },
+      createdAt: { type: "string", format: "date-time" },
+      updatedAt: { type: "string", format: "date-time" },
+      deletedAt: { type: ["string", "null"], format: "date-time" },
+      primaryGroup: {
+        type: "object",
+        properties: {
+          id: { type: "integer" },
+          name: { type: "string" },
+        },
+        required: ["id", "name"],
+      },
+    },
+    required: [
+      "id",
+      "name",
+      "email",
+      "isEnabled",
+      "createdAt",
+      "updatedAt",
+      "primaryGroup",
+    ],
+  },
+};
+
 export const POST_REQUEST_SCHEMA = {
   type: "object",
   properties: {
