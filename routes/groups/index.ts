@@ -26,7 +26,6 @@ export const POST_RESPONSE_SCHEMA = {
     deletedAt: {
       type: ["string", "null"],
       format: "date-time",
-      nullable: true,
     },
   },
   required: ["id", "name", "isEnabled", "createdAt", "updatedAt"],
