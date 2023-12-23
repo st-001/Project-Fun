@@ -7,11 +7,40 @@ import {
   httpResponse500InternalServerError,
 } from "../../utils.ts";
 import { signJwt } from "../../jwt.ts";
+import ajv from "../../ajv.ts";
+
+export const POST_REQUEST_SCHEMA = {
+  type: "object",
+  properties: {
+    email: { type: "string", format: "email" },
+    password: { type: "string" },
+  },
+  required: ["email", "password"],
+  additionalProperties: false,
+};
+
+export const POST_RESPONSE_SCHEMA = {
+  type: "object",
+  properties: {
+    accessToken: { type: "string" },
+  },
+  required: [
+    "accessToken",
+  ],
+  additionalProperties: false,
+};
+
+const postRequestValidator = ajv.compile(POST_REQUEST_SCHEMA);
 
 export const handler: Handlers = {
   async POST(req, _ctx) {
     try {
       const body = await req.json() as { password: string; email: string };
+
+      if (!postRequestValidator(body)) {
+        return httpJsonResponse(postRequestValidator.errors, 400);
+      }
+
       const user = await getUserByEmail(body.email);
       if (!user) {
         return httpResponse401Unauthorized();

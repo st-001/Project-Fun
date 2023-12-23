@@ -58,7 +58,7 @@ await sql.begin(async (sql) => {
     )`;
 });
 
-const group = await insertGroup("Administrators");
+const group = await insertGroup("Administrators", true);
 const user = await insertUser(
   "Administrator",
   "administrator@localhost.com",
