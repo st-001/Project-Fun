@@ -9,12 +9,12 @@ export interface Client {
   deletedAt: Date | null;
 }
 
-export async function insertClient(name: string) {
+export async function insertClient(name: string, isEnabled: boolean) {
   const result = await sql`
     insert into client
-      (name)
+      (name , is_enabled)
     values
-      (${name})
+      (${name}, ${isEnabled})
     returning 
     id, 
     name,
