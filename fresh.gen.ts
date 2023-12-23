@@ -11,6 +11,8 @@ import * as $clients_index from "./routes/clients/index.ts";
 import * as $groups_id_disable from "./routes/groups/[id]/disable.ts";
 import * as $groups_id_enable from "./routes/groups/[id]/enable.ts";
 import * as $groups_id_index from "./routes/groups/[id]/index.ts";
+import * as $groups_id_users_userId_ from "./routes/groups/[id]/users/[userId].ts";
+import * as $groups_id_users_index from "./routes/groups/[id]/users/index.ts";
 import * as $groups_index from "./routes/groups/index.ts";
 import * as $projects_id_disable from "./routes/projects/[id]/disable.ts";
 import * as $projects_id_enable from "./routes/projects/[id]/enable.ts";
@@ -36,6 +38,8 @@ const manifest = {
     "./routes/groups/[id]/disable.ts": $groups_id_disable,
     "./routes/groups/[id]/enable.ts": $groups_id_enable,
     "./routes/groups/[id]/index.ts": $groups_id_index,
+    "./routes/groups/[id]/users/[userId].ts": $groups_id_users_userId_,
+    "./routes/groups/[id]/users/index.ts": $groups_id_users_index,
     "./routes/groups/index.ts": $groups_index,
     "./routes/projects/[id]/disable.ts": $projects_id_disable,
     "./routes/projects/[id]/enable.ts": $projects_id_enable,

@@ -21,14 +21,15 @@ export async function insertUser(
   email: string,
   password: string,
   primaryGroupId: number,
+  isEnabled: boolean,
 ) {
   const passwordHash = await bcrypt.hash(password);
   const result = await sql.begin(async (sql) => {
     const [user] = await sql`
       insert into users
-        (name, email, password_hash, primary_group_id)
+        (name, email, password_hash, primary_group_id, is_enabled)
       values
-        (${name}, ${email}, ${passwordHash}, ${primaryGroupId})
+        (${name}, ${email}, ${passwordHash}, ${primaryGroupId}, ${isEnabled})
       returning 
         id,
         name,
@@ -185,26 +186,6 @@ export async function getUserByEmail(email: string) {
   user.primaryGroup = await getGroupById(user.primaryGroupId!);
 
   return user;
-}
-
-export async function getUserGroups(userId: number | string) {
-  const [groups] = await sql`
-    SELECT
-      groups.id,
-      groups.name,
-      groups.is_enabled AS "isEnabled",
-      groups.created_at AS "createdAt",
-      groups.updated_at AS "updatedAt",
-      groups.deleted_at AS "deletedAt"
-    FROM 
-      user_group
-    INNER JOIN 
-      groups ON user_group.group_id = groups.id
-    WHERE 
-      user_group.user_id = ${userId}
-  `;
-
-  return groups as Group[];
 }
 
 export async function enableUser(userId: number | string) {

@@ -46,8 +46,9 @@ export const POST_REQUEST_SCHEMA = {
     email: { type: "string", format: "email" },
     password: { type: "string", minLength: 6 },
     primaryGroupId: { type: "number" },
+    isEnabled: { type: "boolean" },
   },
-  required: ["name", "email", "password", "primaryGroupId"],
+  required: ["name", "email", "password", "primaryGroupId", "isEnabled"],
   additionalProperties: false,
 };
 
@@ -115,6 +116,7 @@ export const handler: Handlers = {
         email: string;
         password: string;
         primaryGroupId: number;
+        isEnabled: boolean;
       };
       const validRequest = postRequestValidator(user);
 
@@ -127,6 +129,7 @@ export const handler: Handlers = {
         user.email,
         user.password,
         user.primaryGroupId,
+        user.isEnabled,
       );
 
       return httpJsonResponse(result, 201);

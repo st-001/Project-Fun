@@ -102,10 +102,10 @@ export async function getUserGroups(userId: number) {
 }
 
 export async function getGroupUsers(groupId: number) {
-  const [users] = await sql`
+  const users = await sql`
     SELECT
       users.id,
-      users.full_name AS "fullName",
+      users.name,
       users.email,
       users.primary_group_id AS "primaryGroupId",
       users.is_enabled AS "isEnabled",
@@ -120,7 +120,7 @@ export async function getGroupUsers(groupId: number) {
       user_group.group_id = ${groupId}
   `;
 
-  return users as User[];
+  return users.map((x) => x as User);
 }
 
 export async function addUserToGroup(userId: number, groupId: number) {
@@ -129,6 +129,13 @@ export async function addUserToGroup(userId: number, groupId: number) {
     VALUES (${userId}, ${groupId})
     ON CONFLICT (user_id, group_id)
     DO NOTHING
+  `;
+}
+
+export async function removeUserFromGroup(userId: number, groupId: number) {
+  await sql`
+    DELETE FROM user_group
+    WHERE user_id = ${userId} AND group_id = ${groupId}
   `;
 }
 

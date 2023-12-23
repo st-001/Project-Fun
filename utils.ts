@@ -26,3 +26,7 @@ export function httpResponse404NotFound() {
 export function httpResponse401Unauthorized() {
   return new Response(null, { status: 401 });
 }
+
+export function httpResponse201Created() {
+  return new Response(null, { status: 201 });
+}
