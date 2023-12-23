@@ -82,7 +82,7 @@ export async function getAllGroups() {
 }
 
 export async function getUserGroups(userId: number) {
-  const [groups] = await sql`
+  const groups = await sql`
     SELECT
       groups.id,
       groups.name,
@@ -98,7 +98,7 @@ export async function getUserGroups(userId: number) {
       user_group.user_id = ${userId}
   `;
 
-  return groups as Group[];
+  return groups.map((x) => x as Group);
 }
 
 export async function getGroupUsers(groupId: number) {

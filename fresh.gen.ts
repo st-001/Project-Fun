@@ -18,6 +18,7 @@ import * as $projects_id_index from "./routes/projects/[id]/index.ts";
 import * as $projects_index from "./routes/projects/index.ts";
 import * as $users_id_disable from "./routes/users/[id]/disable.ts";
 import * as $users_id_enable from "./routes/users/[id]/enable.ts";
+import * as $users_id_groups_index from "./routes/users/[id]/groups/index.ts";
 import * as $users_id_index from "./routes/users/[id]/index.ts";
 import * as $users_id_password from "./routes/users/[id]/password.ts";
 import * as $users_index from "./routes/users/index.ts";
@@ -42,6 +43,7 @@ const manifest = {
     "./routes/projects/index.ts": $projects_index,
     "./routes/users/[id]/disable.ts": $users_id_disable,
     "./routes/users/[id]/enable.ts": $users_id_enable,
+    "./routes/users/[id]/groups/index.ts": $users_id_groups_index,
     "./routes/users/[id]/index.ts": $users_id_index,
     "./routes/users/[id]/password.ts": $users_id_password,
     "./routes/users/index.ts": $users_index,
