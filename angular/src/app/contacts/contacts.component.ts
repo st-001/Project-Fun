@@ -1,12 +1,102 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
+import { Contact, ContactService } from "../_services/contact/contact.service";
+import { firstValueFrom } from "rxjs";
+import { MatTableDataSource, MatTableModule } from "@angular/material/table";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatButtonModule } from "@angular/material/button";
+import { DatePipe } from "@angular/common";
+import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
+import { MatSort, MatSortModule } from "@angular/material/sort";
+import { MatDialog } from "@angular/material/dialog";
+import { CreateNewContactDialogComponent } from "../create-new-contact-dialog/create-new-contact-dialog.component";
 
 @Component({
-  selector: 'app-contacts',
+  selector: "app-contacts",
   standalone: true,
-  imports: [],
-  templateUrl: './contacts.component.html',
-  styleUrl: './contacts.component.scss'
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule,
+    DatePipe,
+    MatButtonModule,
+    MatPaginatorModule,
+    MatSortModule,
+  ],
+  templateUrl: "./contacts.component.html",
+  styleUrl: "./contacts.component.scss",
 })
-export class ContactsComponent {
+export class ContactsComponent implements OnInit {
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
 
+  @ViewChild(MatSort)
+  sort!: MatSort;
+
+  @ViewChild("input")
+  inputElement!: ElementRef;
+
+  async refreshContacts() {
+    const contacts = await this.getAllContacts();
+    this.dataSource.data = contacts;
+  }
+  exportContacts() {
+    throw new Error("Method not implemented.");
+  }
+
+  private clientService = inject(ContactService);
+  dataSource = new MatTableDataSource<Contact>();
+  displayedColumns: string[] = [
+    "name",
+    "isEnabled",
+    "emailAddress",
+    "createdAt",
+    "updatedAt",
+    "deletedAt",
+  ];
+  constructor(public dialog: MatDialog) {}
+
+  async getAllContacts() {
+    const contacts = await firstValueFrom(this.clientService.getAll());
+    return contacts;
+  }
+
+  private setupTableFeatures() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  async ngOnInit() {
+    const contacts = await this.getAllContacts();
+    this.dataSource.data = contacts;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  ngAfterViewInit() {
+    this.setupTableFeatures();
+  }
+
+  async openCreateNewContactDialog() {
+    const dialogRef = this.dialog.open(CreateNewContactDialogComponent, {
+      width: "500px",
+      position: {
+        top: "10%",
+      },
+    });
+
+    const result = await firstValueFrom(dialogRef.afterClosed()) as Contact;
+    if (result) {
+      await this.refreshContacts();
+    }
+  }
 }

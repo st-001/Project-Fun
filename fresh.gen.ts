@@ -8,6 +8,10 @@ import * as $clients_id_disable from "./routes/clients/[id]/disable.ts";
 import * as $clients_id_enable from "./routes/clients/[id]/enable.ts";
 import * as $clients_id_index from "./routes/clients/[id]/index.ts";
 import * as $clients_index from "./routes/clients/index.ts";
+import * as $contacts_id_disable from "./routes/contacts/[id]/disable.ts";
+import * as $contacts_id_enable from "./routes/contacts/[id]/enable.ts";
+import * as $contacts_id_index from "./routes/contacts/[id]/index.ts";
+import * as $contacts_index from "./routes/contacts/index.ts";
 import * as $groups_id_disable from "./routes/groups/[id]/disable.ts";
 import * as $groups_id_enable from "./routes/groups/[id]/enable.ts";
 import * as $groups_id_index from "./routes/groups/[id]/index.ts";
@@ -36,6 +40,10 @@ const manifest = {
     "./routes/clients/[id]/enable.ts": $clients_id_enable,
     "./routes/clients/[id]/index.ts": $clients_id_index,
     "./routes/clients/index.ts": $clients_index,
+    "./routes/contacts/[id]/disable.ts": $contacts_id_disable,
+    "./routes/contacts/[id]/enable.ts": $contacts_id_enable,
+    "./routes/contacts/[id]/index.ts": $contacts_id_index,
+    "./routes/contacts/index.ts": $contacts_index,
     "./routes/groups/[id]/disable.ts": $groups_id_disable,
     "./routes/groups/[id]/enable.ts": $groups_id_enable,
     "./routes/groups/[id]/index.ts": $groups_id_index,
