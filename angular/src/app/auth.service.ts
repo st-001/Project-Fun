@@ -60,4 +60,8 @@ export class AuthService {
 
     return true;
   }
+
+  getAccessToken() {
+    return localStorage.getItem("accessToken");
+  }
 }
