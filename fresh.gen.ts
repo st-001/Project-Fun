@@ -24,6 +24,7 @@ import * as $users_id_groups_index from "./routes/users/[id]/groups/index.ts";
 import * as $users_id_index from "./routes/users/[id]/index.ts";
 import * as $users_id_password from "./routes/users/[id]/password.ts";
 import * as $users_index from "./routes/users/index.ts";
+import * as $verify_token_index from "./routes/verify-token/index.ts";
 
 import { type Manifest } from "$fresh/server.ts";
 
@@ -51,6 +52,7 @@ const manifest = {
     "./routes/users/[id]/index.ts": $users_id_index,
     "./routes/users/[id]/password.ts": $users_id_password,
     "./routes/users/index.ts": $users_index,
+    "./routes/verify-token/index.ts": $verify_token_index,
   },
   islands: {},
   baseUrl: import.meta.url,
