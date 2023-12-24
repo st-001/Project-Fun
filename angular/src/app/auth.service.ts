@@ -15,14 +15,8 @@ export interface LoginResponse {
 })
 export class AuthService {
   private authUrl = "/api/authenticate";
-  private loggedInSubject = new BehaviorSubject<boolean>(
-    this.checkInitialLoginStatus(),
-  );
+  private loggedInSubject = new BehaviorSubject<boolean>(false);
   public loggedIn$ = this.loggedInSubject.asObservable();
-
-  private checkInitialLoginStatus(): boolean {
-    return !!localStorage.getItem("accessToken");
-  }
 
   async login(loginBody: LoginBody) {
     const response = await fetch(this.authUrl, {
@@ -48,5 +42,25 @@ export class AuthService {
   async logout() {
     localStorage.removeItem("accessToken");
     this.loggedInSubject.next(false);
+  }
+
+  async verifyAuthentication() {
+    if (!localStorage.getItem("accessToken")) {
+      this.loggedInSubject.next(false);
+      return false;
+    }
+    const response = await fetch("/api/verify-token", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+
+    if (!response.ok) {
+      return false;
+    }
+
+    this.loggedInSubject.next(true);
+
+    return true;
   }
 }
