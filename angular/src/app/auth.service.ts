@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { inject, Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 
 export interface LoginBody {
   email: string;
@@ -15,8 +15,7 @@ export interface LoginResponse {
 })
 export class AuthService {
   private authUrl = "/api/authenticate";
-  private loggedInSubject = new BehaviorSubject<boolean>(false);
-  public loggedIn$ = this.loggedInSubject.asObservable();
+  private router = inject(Router);
 
   async login(loginBody: LoginBody) {
     const response = await fetch(this.authUrl, {
@@ -32,24 +31,24 @@ export class AuthService {
     }
 
     const accessToken = (await response.json()).accessToken;
-
     localStorage.setItem("accessToken", accessToken);
-    this.loggedInSubject.next(true);
+
+    this.router.navigate([""]);
 
     return true;
   }
 
   async logout() {
     localStorage.removeItem("accessToken");
-    this.loggedInSubject.next(false);
+    this.router.navigate(["/login"]);
   }
 
-  async verifyAuthentication() {
+  async verifyAccessToken() {
     if (!localStorage.getItem("accessToken")) {
-      this.loggedInSubject.next(false);
+      this.router.navigate(["/login"]);
       return false;
     }
-    const response = await fetch("/api/verify-token", {
+    const response = await fetch("/api/verify-access-token", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
@@ -58,8 +57,6 @@ export class AuthService {
     if (!response.ok) {
       return false;
     }
-
-    this.loggedInSubject.next(true);
 
     return true;
   }

@@ -6,13 +6,35 @@ import { GroupsComponent } from "./groups/groups.component";
 import { TasksComponent } from "./tasks/tasks.component";
 import { ContactsComponent } from "./contacts/contacts.component";
 import { LoginComponent } from "./login/login.component";
+import { AuthGuard } from "./auth.guard";
+import { LayoutComponent } from "./layout/layout.component";
 
 export const routes: Routes = [
+  {
+    path: "",
+    component: LayoutComponent,
+    children: [
+      { path: "", redirectTo: "/clients", pathMatch: "full" },
+      {
+        path: "clients",
+        component: ClientsComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "projects",
+        component: ProjectsComponent,
+        canActivate: [AuthGuard],
+      },
+      { path: "users", component: UsersComponent, canActivate: [AuthGuard] },
+      { path: "groups", component: GroupsComponent, canActivate: [AuthGuard] },
+      { path: "tasks", component: TasksComponent, canActivate: [AuthGuard] },
+      {
+        path: "contacts",
+        component: ContactsComponent,
+        canActivate: [AuthGuard],
+      },
+    ],
+  },
   { path: "login", component: LoginComponent },
-  { path: "clients", component: ClientsComponent },
-  { path: "projects", component: ProjectsComponent },
-  { path: "users", component: UsersComponent },
-  { path: "groups", component: GroupsComponent },
-  { path: "tasks", component: TasksComponent },
-  { path: "contacts", component: ContactsComponent },
+  { path: "**", redirectTo: "/clients" },
 ];
