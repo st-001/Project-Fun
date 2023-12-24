@@ -1,8 +1,19 @@
 @if (loggedIn) {
-<mat-sidenav-container class="container">
-  <mat-sidenav mode="side" opened>Sidenav content</mat-sidenav>
-  <mat-sidenav-content>Main content</mat-sidenav-content>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/clients">Clients</a>
+      <a mat-list-item routerLink="/projects">Projects</a>
+      <a mat-list-item routerLink="/users">Users</a>
+      <a mat-list-item routerLink="/groups">Groups</a>
+      <a mat-list-item (click)="authService.logout()">Logout</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
 </mat-sidenav-container>
+
 }
 @else {
 <app-login></app-login>

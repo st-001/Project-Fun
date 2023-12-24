@@ -15,8 +15,14 @@ export interface LoginResponse {
 })
 export class AuthService {
   private authUrl = "/api/authenticate";
-  private loggedInSubject = new BehaviorSubject<boolean>(false);
+  private loggedInSubject = new BehaviorSubject<boolean>(
+    this.checkInitialLoginStatus(),
+  );
   public loggedIn$ = this.loggedInSubject.asObservable();
+
+  private checkInitialLoginStatus(): boolean {
+    return !!localStorage.getItem("accessToken");
+  }
 
   async login(loginBody: LoginBody) {
     const response = await fetch(this.authUrl, {
@@ -37,5 +43,10 @@ export class AuthService {
     this.loggedInSubject.next(true);
 
     return true;
+  }
+
+  async logout() {
+    localStorage.removeItem("accessToken");
+    this.loggedInSubject.next(false);
   }
 }

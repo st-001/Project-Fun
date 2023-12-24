@@ -8,7 +8,8 @@
     "build": "deno run -A dev.ts build",
     "preview": "deno run -A main.ts",
     "update": "deno run -A -r https://fresh.deno.dev/update .",
-    "setup": "deno run -A setup.ts"
+    "setup": "deno run -A setup.ts",
+    "angular": "cd angular && ng serve --proxy-config proxy.conf.json"
   },
   "lint": {
     "rules": {
