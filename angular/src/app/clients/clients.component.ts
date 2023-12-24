@@ -1,4 +1,10 @@
-import { Component, inject, OnInit } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { Client, ClientService } from "../_services/client/client.service";
 import { firstValueFrom } from "rxjs";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
@@ -6,15 +12,10 @@ import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from "@angular/material/button";
 import { DatePipe } from "@angular/common";
-
-// export interface Client {
-//   id: number;
-//   name: string;
-//   isEnabled: boolean;
-//   createdAt: string;
-//   updatedAt: string;
-//   deletedAt: string | null;
-// }
+import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
+import { MatSort, MatSortModule } from "@angular/material/sort";
+import { MatDialog } from "@angular/material/dialog";
+import { CreateNewClientDialogComponent } from "../create-new-client-dialog/create-new-client-dialog.component";
 
 @Component({
   selector: "app-clients",
@@ -25,13 +26,25 @@ import { DatePipe } from "@angular/common";
     MatTableModule,
     DatePipe,
     MatButtonModule,
+    MatPaginatorModule,
+    MatSortModule,
   ],
   templateUrl: "./clients.component.html",
   styleUrl: "./clients.component.scss",
 })
 export class ClientsComponent implements OnInit {
-  refreshClients() {
-    throw new Error("Method not implemented.");
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+
+  @ViewChild(MatSort)
+  sort!: MatSort;
+
+  @ViewChild("input")
+  inputElement!: ElementRef;
+
+  async refreshClients() {
+    const clients = await this.getAllClients();
+    this.dataSource.data = clients;
   }
   exportClients() {
     throw new Error("Method not implemented.");
@@ -48,11 +61,16 @@ export class ClientsComponent implements OnInit {
     "updatedAt",
     "deletedAt",
   ];
-  constructor() {}
+  constructor(public dialog: MatDialog) {}
 
   async getAllClients() {
     const clients = await firstValueFrom(this.clientService.getAll());
     return clients;
+  }
+
+  private setupTableFeatures() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   async ngOnInit() {
@@ -63,5 +81,23 @@ export class ClientsComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  ngAfterViewInit() {
+    this.setupTableFeatures();
+  }
+
+  async openCreateNewClientDialog() {
+    const dialogRef = this.dialog.open(CreateNewClientDialogComponent, {
+      width: "500px",
+      position: {
+        top: "10%",
+      },
+    });
+
+    const result = await firstValueFrom(dialogRef.afterClosed()) as Client;
+    if (result) {
+      await this.refreshClients();
+    }
   }
 }

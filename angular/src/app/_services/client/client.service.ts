@@ -15,6 +15,12 @@ export interface Client {
 export class ClientService {
   constructor(private http: HttpClient) {}
 
+  createNewClient(
+    client: { name: string; isEnabled: boolean },
+  ): Observable<Client> {
+    return this.http.post<Client>(`/api/clients`, client);
+  }
+
   getAll(): Observable<Client[]> {
     return this.http.get<Client[]>(`/api/clients`);
   }
