@@ -38,9 +38,7 @@ import { Router, RouterOutlet } from "@angular/router";
 export class ProjectsComponent implements OnInit {
   router = inject(Router);
   onRowDblClick(project: Project) {
-    this.router.navigate(["/projects", project.id], {
-      state: { project: project },
-    });
+    this.router.navigate(["/projects", project.id]);
   }
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
