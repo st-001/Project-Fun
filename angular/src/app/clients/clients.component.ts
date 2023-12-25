@@ -16,6 +16,7 @@ import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { MatSort, MatSortModule } from "@angular/material/sort";
 import { MatDialog } from "@angular/material/dialog";
 import { CreateNewClientDialogComponent } from "../create-new-client-dialog/create-new-client-dialog.component";
+import { defaultMatDialogTop } from "../util";
 
 @Component({
   selector: "app-clients",
@@ -91,7 +92,7 @@ export class ClientsComponent implements OnInit {
     const dialogRef = this.dialog.open(CreateNewClientDialogComponent, {
       width: "500px",
       position: {
-        top: "10%",
+        top: defaultMatDialogTop,
       },
     });
 

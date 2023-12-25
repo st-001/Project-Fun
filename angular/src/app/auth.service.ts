@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 
 export interface LoginBody {
-  email: string;
+  emailAddress: string;
   password: string;
 }
 

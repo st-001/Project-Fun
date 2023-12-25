@@ -15,13 +15,13 @@ import {
 } from "@angular/forms";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { ClientService } from "../_services/client/client.service";
+import { ProjectService } from "../_services/project/project.service";
 import { firstValueFrom } from "rxjs";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
-  selector: "app-create-new-client-dialog",
+  selector: "app-create-new-project-dialog",
   standalone: true,
   imports: [
     MatFormFieldModule,
@@ -34,30 +34,30 @@ import { MatSnackBar } from "@angular/material/snack-bar";
     MatDialogContent,
     MatCheckboxModule,
   ],
-  templateUrl: "./create-new-client-dialog.component.html",
-  styleUrl: "./create-new-client-dialog.component.scss",
+  templateUrl: "./create-new-project-dialog.component.html",
+  styleUrl: "./create-new-project-dialog.component.scss",
 })
-export class CreateNewClientDialogComponent {
-  clientService: ClientService = inject(ClientService);
-  createNewClientForm = new FormGroup({
+export class CreateNewProjectDialogComponent {
+  projectService: ProjectService = inject(ProjectService);
+  createNewProjectForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
     isEnabled: new FormControl(true),
   });
   constructor(
-    public dialogRef: MatDialogRef<CreateNewClientDialogComponent>,
+    public dialogRef: MatDialogRef<CreateNewProjectDialogComponent>,
     private _snackBar: MatSnackBar,
   ) {}
 
   async submitForm() {
     let result;
     try {
-      result = await firstValueFrom(this.clientService.createNewClient({
-        name: this.createNewClientForm.value.name!,
-        isEnabled: this.createNewClientForm.value.isEnabled!,
+      result = await firstValueFrom(this.projectService.createNewProject({
+        name: this.createNewProjectForm.value.name!,
+        isEnabled: this.createNewProjectForm.value.isEnabled!,
       }));
       this.dialogRef.close(result);
     } catch (error) {
-      this._snackBar.open("Error creating client", "Dismiss", {
+      this._snackBar.open("Error creating project", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
@@ -65,7 +65,7 @@ export class CreateNewClientDialogComponent {
       return;
     }
 
-    this._snackBar.open("Client created", "Dismiss", {
+    this._snackBar.open("Project created", "Dismiss", {
       duration: 5000,
     });
   }

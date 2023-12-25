@@ -5,7 +5,7 @@ import { getGroupById, type Group } from "./group.ts";
 export interface User {
   id: number;
   name: string;
-  email: string;
+  emailAddress: string;
   password?: string;
   passwordHash?: string;
   primaryGroupId?: number;
@@ -18,7 +18,7 @@ export interface User {
 
 export async function insertUser(
   name: string,
-  email: string,
+  emailAddress: string,
   password: string,
   primaryGroupId: number,
   isEnabled: boolean,
@@ -27,13 +27,13 @@ export async function insertUser(
   const result = await sql.begin(async (sql) => {
     const [user] = await sql`
       insert into users
-        (name, email, password_hash, primary_group_id, is_enabled)
+        (name, email_address, password_hash, primary_group_id, is_enabled)
       values
-        (${name}, ${email}, ${passwordHash}, ${primaryGroupId}, ${isEnabled})
+        (${name}, ${emailAddress}, ${passwordHash}, ${primaryGroupId}, ${isEnabled})
       returning 
         id,
         name,
-        email,
+        email_address as "emailAddress",
         is_enabled as "isEnabled",
         created_at as "createdAt",
         updated_at as "updatedAt",
@@ -61,7 +61,7 @@ export async function insertUser(
 export async function updateUser(
   userId: number | string,
   name: string,
-  email: string,
+  emailAddress: string,
   primaryGroupId: number,
   isEnabled: boolean,
 ): Promise<User | null> {
@@ -77,7 +77,7 @@ export async function updateUser(
       UPDATE users
       SET
         name = ${name},
-        email = ${email},
+        email_address = ${emailAddress},
         primary_group_id = ${primaryGroupId},
         is_enabled = ${isEnabled},
         updated_at = now()
@@ -85,7 +85,7 @@ export async function updateUser(
       RETURNING 
         id,
         name,
-        email,
+        email_address as "emailAddress",
         primary_group_id as "primaryGroupId",
         is_enabled as "isEnabled",
         created_at as "createdAt",
@@ -121,7 +121,7 @@ export async function getUserById(id: number | string) {
     SELECT
     id,
     name,
-    email,
+    email_address AS "emailAddress",
     primary_group_id AS "primaryGroupId",
     is_enabled AS "isEnabled",
     created_at AS "createdAt",
@@ -145,7 +145,7 @@ export async function getAllUsers() {
     SELECT
       users.id,
       users.name,
-      users.email,
+      users.email_address as "emailAddress",
       users.is_enabled AS "isEnabled",
       users.created_at AS "createdAt",
       users.updated_at AS "updatedAt",
@@ -168,7 +168,7 @@ export async function getUserByEmail(email: string) {
     SELECT
     id,
     name,
-    email,
+    email_address AS "emailAddress",
     password_hash AS "passwordHash",
     primary_group_id AS "primaryGroupId",
     is_enabled AS "isEnabled",
@@ -176,7 +176,7 @@ export async function getUserByEmail(email: string) {
     updated_at AS "updatedAt",
     deleted_at AS "deletedAt"
     FROM users
-    WHERE email = ${email}
+    WHERE email_address = ${email}
   ` as User[];
 
   if (!user) {

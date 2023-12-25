@@ -13,7 +13,7 @@ export const GET_RESPONSE_SCHEMA = {
     properties: {
       id: { type: "integer" },
       name: { type: "string" },
-      email: { type: "string", format: "email" },
+      emailAddress: { type: "string", format: "email" },
       isEnabled: { type: "boolean" },
       createdAt: { type: "string", format: "date-time" },
       updatedAt: { type: "string", format: "date-time" },
@@ -30,7 +30,7 @@ export const GET_RESPONSE_SCHEMA = {
     required: [
       "id",
       "name",
-      "email",
+      "emailAddress",
       "isEnabled",
       "createdAt",
       "updatedAt",
@@ -43,12 +43,12 @@ export const POST_REQUEST_SCHEMA = {
   type: "object",
   properties: {
     name: { type: "string", maxLength: 255, minLength: 1 },
-    email: { type: "string", format: "email" },
+    emailAddress: { type: "string", format: "email" },
     password: { type: "string", minLength: 6 },
     primaryGroupId: { type: "number" },
     isEnabled: { type: "boolean" },
   },
-  required: ["name", "email", "password", "primaryGroupId", "isEnabled"],
+  required: ["name", "emailAddress", "password", "primaryGroupId", "isEnabled"],
   additionalProperties: false,
 };
 
@@ -113,7 +113,7 @@ export const handler: Handlers = {
     try {
       const user = await req.json() as {
         name: string;
-        email: string;
+        emailAddress: string;
         password: string;
         primaryGroupId: number;
         isEnabled: boolean;
@@ -126,7 +126,7 @@ export const handler: Handlers = {
 
       const result = await insertUser(
         user.name,
-        user.email,
+        user.emailAddress,
         user.password,
         user.primaryGroupId,
         user.isEnabled,

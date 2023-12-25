@@ -12,10 +12,10 @@ import ajv from "../../ajv.ts";
 export const POST_REQUEST_SCHEMA = {
   type: "object",
   properties: {
-    email: { type: "string", format: "email" },
+    emailAddress: { type: "string", format: "email" },
     password: { type: "string" },
   },
-  required: ["email", "password"],
+  required: ["emailAddress", "password"],
   additionalProperties: false,
 };
 
@@ -35,13 +35,16 @@ const postRequestValidator = ajv.compile(POST_REQUEST_SCHEMA);
 export const handler: Handlers = {
   async POST(req, _ctx) {
     try {
-      const body = await req.json() as { password: string; email: string };
+      const body = await req.json() as {
+        password: string;
+        emailAddress: string;
+      };
 
       if (!postRequestValidator(body)) {
         return httpJsonResponse(postRequestValidator.errors, 400);
       }
 
-      const user = await getUserByEmail(body.email);
+      const user = await getUserByEmail(body.emailAddress);
       if (!user) {
         return httpResponse401Unauthorized();
       }
@@ -60,7 +63,7 @@ export const handler: Handlers = {
       }
 
       const accessToken = await signJwt(
-        { id: user.id, email: user.email },
+        { id: user.id, email: user.emailAddress },
         Deno.env.get("JWT_SECRET")!,
       );
 

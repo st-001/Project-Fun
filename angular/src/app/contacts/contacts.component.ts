@@ -16,6 +16,7 @@ import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { MatSort, MatSortModule } from "@angular/material/sort";
 import { MatDialog } from "@angular/material/dialog";
 import { CreateNewContactDialogComponent } from "../create-new-contact-dialog/create-new-contact-dialog.component";
+import { defaultMatDialogTop } from "../util";
 
 @Component({
   selector: "app-contacts",
@@ -50,7 +51,7 @@ export class ContactsComponent implements OnInit {
     throw new Error("Method not implemented.");
   }
 
-  private clientService = inject(ContactService);
+  private contactService = inject(ContactService);
   dataSource = new MatTableDataSource<Contact>();
   displayedColumns: string[] = [
     "name",
@@ -63,7 +64,7 @@ export class ContactsComponent implements OnInit {
   constructor(public dialog: MatDialog) {}
 
   async getAllContacts() {
-    const contacts = await firstValueFrom(this.clientService.getAll());
+    const contacts = await firstValueFrom(this.contactService.getAll());
     return contacts;
   }
 
@@ -90,7 +91,7 @@ export class ContactsComponent implements OnInit {
     const dialogRef = this.dialog.open(CreateNewContactDialogComponent, {
       width: "500px",
       position: {
-        top: "10%",
+        top: defaultMatDialogTop,
       },
     });
 

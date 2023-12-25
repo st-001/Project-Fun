@@ -12,7 +12,7 @@ CREATE TABLE groups (
 CREATE TABLE users (
     id serial NOT NULL,
     name varchar(255) NOT NULL,
-    email varchar(255) NOT NULL,
+    email_address varchar(255) NOT NULL,
     password_hash varchar(255) NOT NULL,
     primary_group_id int NOT NULL,
     is_enabled boolean NOT NULL DEFAULT true,
@@ -32,15 +32,29 @@ CREATE TABLE user_group (
     FOREIGN KEY (group_id) REFERENCES groups(id)
 );
 
+CREATE TABLE contact (
+    id serial NOT NULL,
+    name varchar(255) NOT NULL,
+    email_address varchar(255) NOT NULL,
+    is_enabled boolean NOT NULL DEFAULT true,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    updated_at timestamp with time zone NOT NULL DEFAULT now(),
+    deleted_at timestamp with time zone,
+    UNIQUE (email_address),
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE client (
     id serial NOT NULL,
     name varchar(255) NOT NULL,
+    primary_contact_id int NOT NULL,
     is_enabled boolean NOT NULL DEFAULT true,
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     deleted_at timestamp with time zone,
     UNIQUE (name),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (primary_contact_id) REFERENCES contact(id)
 );
 
 CREATE TABLE project (
@@ -54,14 +68,3 @@ CREATE TABLE project (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE contact (
-    id serial NOT NULL,
-    name varchar(255) NOT NULL,
-    email_address varchar(255) NOT NULL,
-    is_enabled boolean NOT NULL DEFAULT true,
-    created_at timestamp with time zone NOT NULL DEFAULT now(),
-    updated_at timestamp with time zone NOT NULL DEFAULT now(),
-    deleted_at timestamp with time zone,
-    UNIQUE (email_address),
-    PRIMARY KEY (id)
-);

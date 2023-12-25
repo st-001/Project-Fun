@@ -27,13 +27,13 @@ import { AuthService } from "../auth.service";
 export class LoginComponent {
   authService: AuthService = inject(AuthService);
   loginForm = new FormGroup({
-    email: new FormControl("", [Validators.required, Validators.email]),
+    emailAddress: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [Validators.required]),
   });
 
   async login() {
     const result = await this.authService.login({
-      email: this.loginForm.value.email!,
+      emailAddress: this.loginForm.value.emailAddress!,
       password: this.loginForm.value.password!,
     });
   }

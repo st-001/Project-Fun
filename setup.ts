@@ -26,7 +26,7 @@ await sql.begin(async (sql) => {
   await sql`CREATE TABLE users (
         id serial NOT NULL,
         name varchar(255) NOT NULL,
-        email varchar(255) NOT NULL,
+        email_address varchar(255) NOT NULL,
         password_hash varchar(255) NOT NULL,
         primary_group_id int NOT NULL,
         is_enabled boolean NOT NULL DEFAULT true,
