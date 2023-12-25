@@ -1,0 +1,27 @@
+@if (project) {
+<div class="button-bar">
+  <button mat-raised-button color="primary" [routerLink]="['/projects']">Back To Projects</button>
+  <button mat-raised-button color="primary" (click)="openEditProjectDialog()">Edit Project</button>
+  <button mat-raised-button color="primary" (click)="refreshProject()">Refresh</button>
+</div>
+<div style="padding: 0 10px 10px 10px;"><mat-card class="data-card">
+    <mat-card-header>
+      <mat-card-title>Project - {{ project.name }}</mat-card-title>
+      <mat-card-subtitle>
+        ID: {{ project.id }} |
+        Status: <span [class.enabled]="project.isEnabled">{{ project.isEnabled ? 'Enabled' : 'Disabled' }}</span>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+    </mat-card-content>
+  </mat-card></div>
+<mat-tab-group animationDuration="0ms">
+  <mat-tab label="Notes">
+    <div class="button-bar">
+      <button mat-raised-button color="primary" (click)="openEditProjectDialog()">Add Note</button>
+      <button mat-raised-button color="primary" (click)="refreshNotes()">Refresh</button>
+    </div>
+  </mat-tab>
+  <mat-tab label="Tasks"> Tasks </mat-tab>
+</mat-tab-group>
+}

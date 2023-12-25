@@ -21,7 +21,11 @@ export class ProjectService {
     return this.http.post<Project>(`/api/projects`, project);
   }
 
-  getAll(): Observable<Project[]> {
+  getAllProjects(): Observable<Project[]> {
     return this.http.get<Project[]>(`/api/projects`);
+  }
+
+  getProjectById(id: number): Observable<Project> {
+    return this.http.get<Project>(`/api/projects/${id}`);
   }
 }

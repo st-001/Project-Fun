@@ -8,6 +8,7 @@ import { ContactsComponent } from "./contacts/contacts.component";
 import { LoginComponent } from "./login/login.component";
 import { AuthGuard } from "./auth.guard";
 import { LayoutComponent } from "./layout/layout.component";
+import { ProjectComponent } from "./project/project.component";
 
 export const routes: Routes = [
   {
@@ -28,6 +29,11 @@ export const routes: Routes = [
       {
         path: "projects",
         component: ProjectsComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "projects/:id",
+        component: ProjectComponent,
         canActivate: [AuthGuard],
       },
       { path: "users", component: UsersComponent, canActivate: [AuthGuard] },

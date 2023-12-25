@@ -8,7 +8,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(catchError((error) => {
     console.log(error);
     if (error.status === 401) {
-      console.log("Hitting Interceptor");
       authService.logout();
     }
     return throwError(() => error);

@@ -17,6 +17,7 @@ import { MatSort, MatSortModule } from "@angular/material/sort";
 import { MatDialog } from "@angular/material/dialog";
 import { CreateNewProjectDialogComponent } from "../create-new-project-dialog/create-new-project-dialog.component";
 import { defaultMatDialogTop } from "../util";
+import { Router, RouterOutlet } from "@angular/router";
 
 @Component({
   selector: "app-projects",
@@ -29,11 +30,18 @@ import { defaultMatDialogTop } from "../util";
     MatButtonModule,
     MatPaginatorModule,
     MatSortModule,
+    RouterOutlet,
   ],
   templateUrl: "./projects.component.html",
   styleUrl: "./projects.component.scss",
 })
 export class ProjectsComponent implements OnInit {
+  router = inject(Router);
+  onRowDblClick(project: Project) {
+    this.router.navigate(["/projects", project.id], {
+      state: { project: project },
+    });
+  }
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
@@ -63,7 +71,7 @@ export class ProjectsComponent implements OnInit {
   constructor(public dialog: MatDialog) {}
 
   async getAllProjects() {
-    const projects = await firstValueFrom(this.projectService.getAll());
+    const projects = await firstValueFrom(this.projectService.getAllProjects());
     return projects;
   }
 

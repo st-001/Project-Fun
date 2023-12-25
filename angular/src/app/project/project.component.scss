@@ -1,0 +1,28 @@
+.data-card {
+
+  .mat-card-title {
+    font-size: 1.2em;
+  }
+
+  .mat-card-subtitle {
+    font-size: 1em;
+    color: #666;
+  }
+
+  mat-card-content {
+    p {
+      margin: 5px 0;
+      font-size: 0.9em;
+    }
+
+    strong {
+      font-weight: 600;
+    }
+  }
+}
+
+.button-bar {
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+}

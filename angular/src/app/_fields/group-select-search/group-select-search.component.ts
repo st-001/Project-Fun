@@ -33,7 +33,7 @@ export class GroupSelectSearchComponent {
   async ngOnInit() {
     this.groups = await firstValueFrom(this.groupService.getAll());
 
-    this.filteredGroups.next(this.groups.slice());
+    this.filteredGroups.next(this.groups.slice(10));
 
     this.groupFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
