@@ -22,6 +22,10 @@ import * as $projects_id_disable from "./routes/projects/[id]/disable.ts";
 import * as $projects_id_enable from "./routes/projects/[id]/enable.ts";
 import * as $projects_id_index from "./routes/projects/[id]/index.ts";
 import * as $projects_index from "./routes/projects/index.ts";
+import * as $tasks_id_disable from "./routes/tasks/[id]/disable.ts";
+import * as $tasks_id_enable from "./routes/tasks/[id]/enable.ts";
+import * as $tasks_id_index from "./routes/tasks/[id]/index.ts";
+import * as $tasks_index from "./routes/tasks/index.ts";
 import * as $users_id_disable from "./routes/users/[id]/disable.ts";
 import * as $users_id_enable from "./routes/users/[id]/enable.ts";
 import * as $users_id_groups_index from "./routes/users/[id]/groups/index.ts";
@@ -54,6 +58,10 @@ const manifest = {
     "./routes/projects/[id]/enable.ts": $projects_id_enable,
     "./routes/projects/[id]/index.ts": $projects_id_index,
     "./routes/projects/index.ts": $projects_index,
+    "./routes/tasks/[id]/disable.ts": $tasks_id_disable,
+    "./routes/tasks/[id]/enable.ts": $tasks_id_enable,
+    "./routes/tasks/[id]/index.ts": $tasks_id_index,
+    "./routes/tasks/index.ts": $tasks_index,
     "./routes/users/[id]/disable.ts": $users_id_disable,
     "./routes/users/[id]/enable.ts": $users_id_enable,
     "./routes/users/[id]/groups/index.ts": $users_id_groups_index,
