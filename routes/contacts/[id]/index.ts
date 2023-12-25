@@ -104,6 +104,7 @@ export const handler: Handlers = {
         updateData.name ?? contactToUpdate.name,
         updateData.emailAddress ?? contactToUpdate.emailAddress,
         updateData.isEnabled ?? contactToUpdate.isEnabled,
+        ctx.state.userId as number,
       );
 
       if (!updatedContact) {

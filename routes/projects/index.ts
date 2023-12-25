@@ -81,7 +81,7 @@ export const handler: Handlers = {
     }
   },
 
-  async POST(req, _ctx) {
+  async POST(req, ctx) {
     try {
       const project = await req.json() as Project;
 
@@ -92,6 +92,7 @@ export const handler: Handlers = {
       const result = await insertProject(
         project.name,
         project.isEnabled,
+        ctx.state.userId as number,
       );
 
       return httpJsonResponse(result, 201);

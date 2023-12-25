@@ -10,12 +10,16 @@ export interface Group {
   deletedAt: Date | null;
 }
 
-export async function insertGroup(name: string, isEnabled: boolean) {
+export async function insertGroup(
+  name: string,
+  isEnabled: boolean,
+  createdById: number,
+) {
   const result = await sql`
     insert into groups
-      (name, is_enabled)
+      (name, is_enabled, created_by, updated_by)
     values
-      (${name}, ${isEnabled})
+      (${name}, ${isEnabled}, ${createdById}, ${createdById})
     returning 
     id, 
     name,
@@ -31,13 +35,15 @@ export async function updateGroup(
   groupId: number | string,
   name: string,
   isEnabled: boolean,
+  updatedById: number,
 ) {
   const result = await sql`
     update groups
     set
       name = ${name},
       is_enabled = ${isEnabled},
-      updated_at = now()
+      updated_at = now(),
+      updated_by = ${updatedById}
     where
       id = ${groupId}
     returning 
@@ -139,20 +145,28 @@ export async function removeUserFromGroup(userId: number, groupId: number) {
   `;
 }
 
-export async function enableGroup(groupId: number | string) {
+export async function enableGroup(
+  groupId: number | string,
+  updatedById: number,
+) {
   await sql`
     UPDATE groups
     SET is_enabled = true,
-    updated_at = now()
+    updated_at = now(),
+    updated_by = ${updatedById}
     WHERE id = ${groupId}
   `;
 }
 
-export async function disableGroup(groupId: number | string) {
+export async function disableGroup(
+  groupId: number | string,
+  updatedById: number,
+) {
   await sql`
     UPDATE groups
     SET is_enabled = false,
-    updated_at = now()
+    updated_at = now(),
+    updated_by = ${updatedById}
     WHERE id = ${groupId}
   `;
 }

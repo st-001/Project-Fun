@@ -13,7 +13,7 @@ export const handler: Handlers = {
       if (!client) {
         return httpResponse404NotFound();
       }
-      await enableClient(ctx.params.id);
+      await enableClient(ctx.params.id, ctx.state.userId as number);
       return httpResponse204NoContent();
     } catch (error) {
       return httpResponse500InternalServerError(error);

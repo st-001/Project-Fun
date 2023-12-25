@@ -98,6 +98,7 @@ export const handler: Handlers = {
         clientId,
         updateData.name ?? clientToUpdate.name,
         updateData.isEnabled ?? clientToUpdate.isEnabled,
+        ctx.state.userId as number,
       );
 
       if (!updatedClient) {

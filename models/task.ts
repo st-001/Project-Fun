@@ -9,12 +9,16 @@ export interface Task {
   deletedAt: Date | null;
 }
 
-export async function insertTask(name: string, isEnabled: boolean) {
+export async function insertTask(
+  name: string,
+  isEnabled: boolean,
+  createdById: number,
+) {
   const result = await sql`
     insert into task
-      (name, is_enabled)
+      (name, is_enabled, created_by, updated_by)
     values
-      (${name}, ${isEnabled})
+      (${name}, ${isEnabled}, ${createdById}, ${createdById})
     returning 
     id, 
     name,
@@ -30,13 +34,15 @@ export async function updateTask(
   taskId: number | string,
   name: string,
   isEnabled: boolean,
+  updatedById: number,
 ) {
   const result = await sql`
     update task
     set
       name = ${name},
       is_enabled = ${isEnabled},
-      updated_at = now()
+      updated_at = now(),
+      updated_by = ${updatedById}
     where
       id = ${taskId}
     returning 
@@ -80,19 +86,24 @@ export async function getAllTasks() {
   return result.map((x) => x as Task);
 }
 
-export async function enableTask(taskId: number | string) {
+export async function enableTask(taskId: number | string, updatedById: number) {
   await sql`
     UPDATE task
     SET is_enabled = true,
+    updated_by = ${updatedById},
     updated_at = now()
     WHERE id = ${taskId}
   `;
 }
 
-export async function disableTask(taskId: number | string) {
+export async function disableTask(
+  taskId: number | string,
+  updatedById: number,
+) {
   await sql`
     UPDATE task
     SET is_enabled = false,
+    updated_by = ${updatedById},
     updated_at = now()
     WHERE id = ${taskId}
   `;

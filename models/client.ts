@@ -9,12 +9,16 @@ export interface Client {
   deletedAt: Date | null;
 }
 
-export async function insertClient(name: string, isEnabled: boolean) {
+export async function insertClient(
+  name: string,
+  isEnabled: boolean,
+  createdById: number,
+) {
   const result = await sql`
     insert into client
-      (name , is_enabled)
+      (name, is_enabled, created_by, updated_by)
     values
-      (${name}, ${isEnabled})
+      (${name}, ${isEnabled}, ${createdById}, ${createdById})
     returning 
     id, 
     name,
@@ -30,13 +34,15 @@ export async function updateClient(
   clientId: number | string,
   name: string,
   isEnabled: boolean,
+  updatedById: number,
 ) {
   const result = await sql`
     update client
     set
       name = ${name},
       is_enabled = ${isEnabled},
-      updated_at = now()
+      updated_at = now(),
+      updated_by = ${updatedById}
     where
       id = ${clientId}
     returning 
@@ -80,19 +86,27 @@ export async function getAllClients() {
   return result.map((x) => x as Client);
 }
 
-export async function enableClient(clientId: number | string) {
+export async function enableClient(
+  clientId: number | string,
+  updatedById: number,
+) {
   await sql`
     UPDATE client
     SET is_enabled = true,
+    updated_by = ${updatedById},
     updated_at = now()
     WHERE id = ${clientId}
   `;
 }
 
-export async function disableClient(clientId: number | string) {
+export async function disableClient(
+  clientId: number | string,
+  updatedById: number,
+) {
   await sql`
     UPDATE client
     SET is_enabled = false,
+    updated_by = ${updatedById},
     updated_at = now()
     WHERE id = ${clientId}
   `;

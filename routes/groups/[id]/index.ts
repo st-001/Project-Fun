@@ -100,6 +100,7 @@ export const handler: Handlers = {
         typeof updateData.isEnabled === "boolean"
           ? updateData.isEnabled
           : groupToUpdate.isEnabled,
+        ctx.state.userId as number,
       );
 
       if (!updatedGroup) {

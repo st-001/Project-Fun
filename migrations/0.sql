@@ -5,6 +5,9 @@ CREATE TABLE groups (
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     deleted_at timestamp with time zone,
+    created_by int NOT NULL,
+    updated_by int NOT NULL,
+    deleted_by int,
     UNIQUE (name),
     PRIMARY KEY (id)
 );
@@ -19,10 +22,23 @@ CREATE TABLE users (
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     deleted_at timestamp with time zone,
+    created_by int NOT NULL,
+    updated_by int NOT NULL,
+    deleted_by int,
     PRIMARY KEY (id),
     UNIQUE (email),
     FOREIGN KEY (primary_group_id) REFERENCES groups(id)
 );
+
+ALTER TABLE groups
+ADD FOREIGN KEY (created_by) REFERENCES users(id);
+ADD FOREIGN KEY (updated_by) REFERENCES users(id);
+ADD FOREIGN KEY (deleted_by) REFERENCES users(id);
+
+ALTER TABLE users
+ADD FOREIGN KEY (created_by) REFERENCES users(id);
+ADD FOREIGN KEY (updated_by) REFERENCES users(id);
+ADD FOREIGN KEY (deleted_by) REFERENCES users(id);
 
 CREATE TABLE user_group (
     user_id int NOT NULL,
@@ -40,21 +56,31 @@ CREATE TABLE contact (
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     deleted_at timestamp with time zone,
+    created_by int NOT NULL,
+    updated_by int NOT NULL,
+    deleted_by int,
     UNIQUE (email_address),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (created_by) REFERENCES users(id),
+    FOREIGN KEY (updated_by) REFERENCES users(id),
+    FOREIGN KEY (deleted_by) REFERENCES users(id)
 );
 
 CREATE TABLE client (
     id serial NOT NULL,
     name varchar(255) NOT NULL,
-    primary_contact_id int NOT NULL,
     is_enabled boolean NOT NULL DEFAULT true,
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     deleted_at timestamp with time zone,
+    created_by int NOT NULL,
+    updated_by int NOT NULL,
+    deleted_by int,
     UNIQUE (name),
     PRIMARY KEY (id),
-    FOREIGN KEY (primary_contact_id) REFERENCES contact(id)
+    FOREIGN KEY (created_by) REFERENCES users(id),
+    FOREIGN KEY (updated_by) REFERENCES users(id),
+    FOREIGN KEY (deleted_by) REFERENCES users(id)
 );
 
 CREATE TABLE project (
@@ -64,8 +90,14 @@ CREATE TABLE project (
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     deleted_at timestamp with time zone,
+    created_by int NOT NULL,
+    updated_by int NOT NULL,
+    deleted_by int,
     UNIQUE (name),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (created_by) REFERENCES users(id),
+    FOREIGN KEY (updated_by) REFERENCES users(id),
+    FOREIGN KEY (deleted_by) REFERENCES users(id)
 );
 
 CREATE TABLE task (
@@ -75,7 +107,13 @@ CREATE TABLE task (
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     deleted_at timestamp with time zone,
+    created_by int NOT NULL,
+    updated_by int NOT NULL,
+    deleted_by int,
     UNIQUE (name),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (created_by) REFERENCES users(id),
+    FOREIGN KEY (updated_by) REFERENCES users(id),
+    FOREIGN KEY (deleted_by) REFERENCES users(id)
 );
 

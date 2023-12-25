@@ -77,7 +77,7 @@ export const handler: Handlers = {
     }
   },
 
-  async POST(req, _ctx) {
+  async POST(req, ctx) {
     try {
       const group = await req.json() as Group;
       const validRequest = postRequestValidator(group);
@@ -89,6 +89,7 @@ export const handler: Handlers = {
       const result = await insertGroup(
         group.name,
         group.isEnabled,
+        ctx.state.userId as number,
       );
 
       return httpJsonResponse(result, 201);

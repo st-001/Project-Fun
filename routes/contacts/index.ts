@@ -86,7 +86,7 @@ export const handler: Handlers = {
     }
   },
 
-  async POST(req, _ctx) {
+  async POST(req, ctx) {
     try {
       const contact = await req.json() as Contact;
 
@@ -98,6 +98,7 @@ export const handler: Handlers = {
         contact.name,
         contact.isEnabled,
         contact.emailAddress,
+        ctx.state.userId as number,
       );
 
       return httpJsonResponse(result, 201);

@@ -14,12 +14,13 @@ export async function insertContact(
   name: string,
   isEnabled: boolean,
   emailAddress: string,
+  createdById: number,
 ) {
   const result = await sql`
     insert into contact
-      (name , is_enabled, email_address)
+      (name , is_enabled, email_address, created_by, updated_by)
     values
-      (${name}, ${isEnabled}, ${emailAddress})
+      (${name}, ${isEnabled}, ${emailAddress}, ${createdById}, ${createdById})
     returning 
     id, 
     name,
@@ -37,6 +38,7 @@ export async function updateContact(
   name: string,
   emailAddress: string,
   isEnabled: boolean,
+  updatedById: number,
 ) {
   const result = await sql`
     update contact
@@ -44,7 +46,8 @@ export async function updateContact(
       name = ${name},
       email_address = ${emailAddress},
       is_enabled = ${isEnabled},
-      updated_at = now()
+      updated_at = now(),
+      updated_by = ${updatedById}
     where
       id = ${contactId}
     returning 
@@ -91,19 +94,27 @@ export async function getAllContacts() {
   return result.map((x) => x as Contact);
 }
 
-export async function enableContact(contactId: number | string) {
+export async function enableContact(
+  contactId: number | string,
+  updatedById: number,
+) {
   await sql`
     UPDATE contact
     SET is_enabled = true,
+    updated_by = ${updatedById},
     updated_at = now()
     WHERE id = ${contactId}
   `;
 }
 
-export async function disableContact(contactId: number | string) {
+export async function disableContact(
+  contactId: number | string,
+  updatedById: number,
+) {
   await sql`
     UPDATE contact
     SET is_enabled = false,
+    updated_by = ${updatedById},
     updated_at = now()
     WHERE id = ${contactId}
   `;

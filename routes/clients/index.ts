@@ -81,7 +81,7 @@ export const handler: Handlers = {
     }
   },
 
-  async POST(req, _ctx) {
+  async POST(req, ctx) {
     try {
       const client = await req.json() as Client;
 
@@ -92,6 +92,7 @@ export const handler: Handlers = {
       const result = await insertClient(
         client.name,
         client.isEnabled,
+        ctx.state.userId as number,
       );
 
       return httpJsonResponse(result, 201);

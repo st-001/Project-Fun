@@ -13,7 +13,7 @@ export const handler: Handlers = {
       if (!group) {
         return httpResponse404NotFound();
       }
-      await disableGroup(ctx.params.id);
+      await disableGroup(ctx.params.id, ctx.state.userId as number);
       return httpResponse204NoContent();
     } catch (error) {
       return httpResponse500InternalServerError(error);

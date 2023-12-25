@@ -13,7 +13,7 @@ export const handler: Handlers = {
       if (!contact) {
         return httpResponse404NotFound();
       }
-      await disableContact(ctx.params.id);
+      await disableContact(ctx.params.id, ctx.state.userId as number);
       return httpResponse204NoContent();
     } catch (error) {
       return httpResponse500InternalServerError(error);

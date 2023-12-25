@@ -98,6 +98,7 @@ export const handler: Handlers = {
         projectId,
         updateData.name ?? projectToUpdate.name,
         updateData.isEnabled ?? projectToUpdate.isEnabled,
+        ctx.state.userid as number,
       );
 
       if (!updatedProject) {
