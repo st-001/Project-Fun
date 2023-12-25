@@ -1,0 +1,12 @@
+<div [formGroup]="form">
+  <mat-form-field>
+    <mat-select formControlName="primaryGroupId" placeholder="Primary Group" #groupSelect>
+      <mat-option>
+        <ngx-mat-select-search placeholderLabel="Find group" [formControl]="groupFilterCtrl"></ngx-mat-select-search>
+      </mat-option>
+      @for (group of filteredGroups | async; track group) {
+      <mat-option [value]="group.id">{{group.name}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
