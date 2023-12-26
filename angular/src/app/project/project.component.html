@@ -4,17 +4,18 @@
   <button mat-raised-button color="primary" (click)="openEditProjectDialog()">Edit Project</button>
   <button mat-raised-button color="primary" (click)="refreshProject()">Refresh</button>
 </div>
-<div style="padding: 0 10px 10px 10px;"><mat-card class="data-card">
+<div style="padding: 0 10px 10px 10px;">
+  <mat-card>
     <mat-card-header>
       <mat-card-title>Project - {{ project.name }}</mat-card-title>
-      <mat-card-subtitle>
-        ID: {{ project.id }} |
-        Status: <span [class.enabled]="project.isEnabled">{{ project.isEnabled ? 'Enabled' : 'Disabled' }}</span>
-      </mat-card-subtitle>
+      <mat-card-title>Client - {{project.client.name}}</mat-card-title>
+      <mat-card-title>ID - {{project.id}}</mat-card-title>
+      <mat-card-title>{{project.isEnabled ? 'Enabled' : 'Disabled' }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
     </mat-card-content>
-  </mat-card></div>
+  </mat-card>
+</div>
 <mat-tab-group animationDuration="0ms">
   <mat-tab label="Notes">
     <div class="button-bar">

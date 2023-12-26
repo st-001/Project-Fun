@@ -17,6 +17,7 @@ import { MatSort, MatSortModule } from "@angular/material/sort";
 import { MatDialog } from "@angular/material/dialog";
 import { CreateNewClientDialogComponent } from "../create-new-client-dialog/create-new-client-dialog.component";
 import { defaultMatDialogTop } from "../util";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-clients",
@@ -34,6 +35,7 @@ import { defaultMatDialogTop } from "../util";
   styleUrl: "./clients.component.scss",
 })
 export class ClientsComponent implements OnInit {
+  router = inject(Router);
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
@@ -42,6 +44,10 @@ export class ClientsComponent implements OnInit {
 
   @ViewChild("input")
   inputElement!: ElementRef;
+
+  onRowClick(client: Client) {
+    this.router.navigate(["/clients", client.id]);
+  }
 
   async refreshClients() {
     const clients = await this.getAllClients();

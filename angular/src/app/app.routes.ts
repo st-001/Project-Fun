@@ -9,6 +9,7 @@ import { LoginComponent } from "./login/login.component";
 import { AuthGuard } from "./auth.guard";
 import { LayoutComponent } from "./layout/layout.component";
 import { ProjectComponent } from "./project/project.component";
+import { ClientComponent } from "./client/client.component";
 
 export const routes: Routes = [
   {
@@ -34,6 +35,11 @@ export const routes: Routes = [
       {
         path: "projects/:id",
         component: ProjectComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "clients/:id",
+        component: ClientComponent,
         canActivate: [AuthGuard],
       },
       { path: "users", component: UsersComponent, canActivate: [AuthGuard] },
