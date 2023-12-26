@@ -24,4 +24,8 @@ export class GroupService {
   getAll(): Observable<Group[]> {
     return this.http.get<Group[]>(`/api/groups`);
   }
+
+  getGroupById(id: number): Observable<Group> {
+    return this.http.get<Group>(`/api/groups/${id}`);
+  }
 }

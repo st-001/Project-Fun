@@ -17,6 +17,7 @@ import { MatSort, MatSortModule } from "@angular/material/sort";
 import { MatDialog } from "@angular/material/dialog";
 import { CreateNewUserDialogComponent } from "../create-new-user-dialog/create-new-user-dialog.component";
 import { defaultMatDialogTop } from "../util";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-users",
@@ -34,6 +35,10 @@ import { defaultMatDialogTop } from "../util";
   styleUrl: "./users.component.scss",
 })
 export class UsersComponent implements OnInit {
+  router = inject(Router);
+  onRowClick(user: User) {
+    this.router.navigate(["/users", user.id]);
+  }
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
