@@ -50,7 +50,6 @@ export async function updateProject(
   isEnabled: boolean,
   updatedById: number,
 ) {
-  console.log(clientId);
   const updateResult = await sql`
     update project
     set

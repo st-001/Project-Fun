@@ -118,14 +118,6 @@ export const handler: Handlers = {
         return httpJsonResponse(putRequestValidator.errors, 400);
       }
 
-      console.log(
-        projectId,
-        updateData.name ?? projectToUpdate.name,
-        updateData.clientId ?? projectToUpdate.client.id,
-        updateData.isEnabled ?? projectToUpdate.isEnabled,
-        ctx.state.userId as number,
-      );
-
       const updatedProject = await updateProject(
         projectId,
         updateData.name ?? projectToUpdate.name,
