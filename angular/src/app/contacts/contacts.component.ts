@@ -17,6 +17,7 @@ import { MatSort, MatSortModule } from "@angular/material/sort";
 import { MatDialog } from "@angular/material/dialog";
 import { CreateNewContactDialogComponent } from "../create-new-contact-dialog/create-new-contact-dialog.component";
 import { defaultMatDialogTop } from "../util";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-contacts",
@@ -34,6 +35,7 @@ import { defaultMatDialogTop } from "../util";
   styleUrl: "./contacts.component.scss",
 })
 export class ContactsComponent implements OnInit {
+  router = inject(Router);
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
@@ -42,6 +44,10 @@ export class ContactsComponent implements OnInit {
 
   @ViewChild("input")
   inputElement!: ElementRef;
+
+  onRowClick(contact: Contact) {
+    this.router.navigate(["/contacts", contact.id]);
+  }
 
   async refreshContacts() {
     const contacts = await this.getAllContacts();

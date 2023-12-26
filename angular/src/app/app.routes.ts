@@ -10,6 +10,7 @@ import { AuthGuard } from "./auth.guard";
 import { LayoutComponent } from "./layout/layout.component";
 import { ProjectComponent } from "./project/project.component";
 import { ClientComponent } from "./client/client.component";
+import { ContactComponent } from "./contact/contact.component";
 
 export const routes: Routes = [
   {
@@ -40,6 +41,11 @@ export const routes: Routes = [
       {
         path: "clients/:id",
         component: ClientComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "contacts/:id",
+        component: ContactComponent,
         canActivate: [AuthGuard],
       },
       { path: "users", component: UsersComponent, canActivate: [AuthGuard] },

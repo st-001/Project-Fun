@@ -2,18 +2,17 @@
   <mat-sidenav mode="side" opened>
     <mat-nav-list>
       <a mat-list-item routerLink="/clients" routerLinkActive="active"
-        [routerLinkActiveOptions]="{exact: true}">Clients</a>
-
+        [routerLinkActiveOptions]="{exact: false}">Clients</a>
       <a mat-list-item routerLink="/contacts" routerLinkActive="active"
-        [routerLinkActiveOptions]="{exact: true}">Contacts</a>
-
-
+        [routerLinkActiveOptions]="{exact: false}">Contacts</a>
       <a mat-list-item routerLink="/projects" routerLinkActive="active"
         [routerLinkActiveOptions]="{exact: false}">Projects</a>
-      <a mat-list-item routerLink="/tasks" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Tasks</a>
-      <a mat-list-item routerLink="/users" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Users</a>
+      <a mat-list-item routerLink="/tasks" routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: false}">Tasks</a>
+      <a mat-list-item routerLink="/users" routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact: false}">Users</a>
       <a mat-list-item routerLink="/groups" routerLinkActive="active"
-        [routerLinkActiveOptions]="{exact: true}">Groups</a>
+        [routerLinkActiveOptions]="{exact: false}">Groups</a>
       <a mat-list-item (click)="authService.logout()">Logout</a>
     </mat-nav-list>
   </mat-sidenav>
