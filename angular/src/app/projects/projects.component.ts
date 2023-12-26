@@ -61,6 +61,7 @@ export class ProjectsComponent implements OnInit {
   dataSource = new MatTableDataSource<Project>();
   displayedColumns: string[] = [
     "name",
+    "clientName",
     "isEnabled",
     "createdAt",
     "updatedAt",

@@ -19,6 +19,19 @@ export const GET_RESPONSE_SCHEMA = {
     isEnabled: {
       type: "boolean",
     },
+    client: {
+      type: "object",
+      properties: {
+        id: {
+          type: "integer",
+        },
+        name: {
+          type: "string",
+        },
+      },
+      required: ["id", "name"],
+      additionalProperties: false,
+    },
     createdAt: {
       type: "string",
       format: "date-time",
@@ -32,16 +45,17 @@ export const GET_RESPONSE_SCHEMA = {
       format: "date-time",
     },
   },
-  required: ["id", "name", "isEnabled", "createdAt", "updatedAt"],
+  required: ["id", "name", "client", "isEnabled", "createdAt", "updatedAt"],
 };
 
 export const PUT_REQUEST_SCHEMA = {
   type: "object",
   properties: {
     name: { type: "string", maxLength: 255, minLength: 1 },
+    clientId: { type: "number" },
     isEnabled: { type: "boolean" },
   },
-  required: ["name", "isEnabled"],
+  required: ["name", "clientId", "isEnabled"],
   additionalProperties: false,
 };
 
@@ -51,6 +65,15 @@ export const PUT_RESPONSE_SCHEMA = {
     id: { type: "number" },
     name: { type: "string" },
     isEnabled: { type: "boolean" },
+    client: {
+      type: "object",
+      properties: {
+        id: { type: "number" },
+        name: { type: "string" },
+      },
+      required: ["id", "name"],
+      additionalProperties: false,
+    },
     createdAt: { type: "string", format: "date-time" },
     updatedAt: { type: "string", format: "date-time" },
     deletedAt: {
@@ -58,7 +81,7 @@ export const PUT_RESPONSE_SCHEMA = {
       format: "date-time",
     },
   },
-  required: ["id", "name", "isEnabled", "createdAt", "updatedAt"],
+  required: ["id", "name", "client", "isEnabled", "createdAt", "updatedAt"],
   additionalProperties: false,
 };
 
@@ -88,17 +111,27 @@ export const handler: Handlers = {
       const updateData = await req.json() as {
         name?: string;
         isEnabled?: boolean;
+        clientId?: number;
       };
 
       if (!putRequestValidator(updateData)) {
         return httpJsonResponse(putRequestValidator.errors, 400);
       }
 
+      console.log(
+        projectId,
+        updateData.name ?? projectToUpdate.name,
+        updateData.clientId ?? projectToUpdate.client.id,
+        updateData.isEnabled ?? projectToUpdate.isEnabled,
+        ctx.state.userId as number,
+      );
+
       const updatedProject = await updateProject(
         projectId,
         updateData.name ?? projectToUpdate.name,
+        updateData.clientId ?? projectToUpdate.client.id,
         updateData.isEnabled ?? projectToUpdate.isEnabled,
-        ctx.state.userid as number,
+        ctx.state.userId as number,
       );
 
       if (!updatedProject) {

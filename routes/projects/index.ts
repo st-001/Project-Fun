@@ -21,6 +21,19 @@ export const GET_RESPONSE_SCHEMA = {
       name: {
         type: "string",
       },
+      client: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+          },
+          name: {
+            type: "string",
+          },
+        },
+        required: ["id", "name"],
+        additionalProperties: false,
+      },
       isEnabled: {
         type: "boolean",
       },
@@ -37,7 +50,7 @@ export const GET_RESPONSE_SCHEMA = {
         format: "date-time",
       },
     },
-    required: ["id", "name", "isEnabled", "createdAt", "updatedAt"],
+    required: ["id", "name", "client", "isEnabled", "createdAt", "updatedAt"],
     additionalProperties: false,
   },
 };
@@ -46,9 +59,10 @@ export const POST_REQUEST_SCHEMA = {
   type: "object",
   properties: {
     name: { type: "string", maxLength: 255, minLength: 1 },
+    clientId: { type: "number" },
     isEnabled: { type: "boolean" },
   },
-  required: ["name", "isEnabled"],
+  required: ["name", "clientId", "isEnabled"],
   additionalProperties: false,
 };
 
@@ -60,12 +74,21 @@ export const POST_RESPONSE_SCHEMA = {
     isEnabled: { type: "boolean" },
     createdAt: { type: "string", format: "date-time" },
     updatedAt: { type: "string", format: "date-time" },
+    client: {
+      type: "object",
+      properties: {
+        id: { type: "number" },
+        name: { type: "string" },
+      },
+      required: ["id", "name"],
+      additionalProperties: false,
+    },
     deletedAt: {
       type: ["string", "null"],
       format: "date-time",
     },
   },
-  required: ["id", "name", "isEnabled", "createdAt", "updatedAt"],
+  required: ["id", "name", "client", "isEnabled", "createdAt", "updatedAt"],
   additionalProperties: false,
 };
 
@@ -83,7 +106,11 @@ export const handler: Handlers = {
 
   async POST(req, ctx) {
     try {
-      const project = await req.json() as Project;
+      const project = await req.json() as {
+        name: string;
+        isEnabled: boolean;
+        clientId: number;
+      };
 
       if (!postRequestValidator(project)) {
         return httpJsonResponse(postRequestValidator.errors, 400);
@@ -92,6 +119,7 @@ export const handler: Handlers = {
       const result = await insertProject(
         project.name,
         project.isEnabled,
+        project.clientId,
         ctx.state.userId as number,
       );
 

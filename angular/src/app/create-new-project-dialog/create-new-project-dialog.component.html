@@ -3,6 +3,8 @@
     <mat-label>Name</mat-label>
     <input matInput formControlName="name">
   </mat-form-field>
+  <app-client-select-search [control]="$any(createNewProjectForm).controls['clientId']"
+    [placeholder]="'Client'"></app-client-select-search>
   <mat-checkbox class="form-element" formControlName="isEnabled">Enabled</mat-checkbox>
   <div>
     <button [disabled]="!createNewProjectForm.valid" style="margin: 0 auto; width: 100%" mat-flat-button color="primary"

@@ -1,11 +1,13 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { Client } from "../client/client.service";
 
 export interface Project {
   id: number;
   name: string;
   isEnabled: boolean;
+  client: Client;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
@@ -16,7 +18,7 @@ export class ProjectService {
   constructor(private http: HttpClient) {}
 
   createNewProject(
-    project: { name: string; isEnabled: boolean },
+    project: { name: string; isEnabled: boolean; clientId: number },
   ): Observable<Project> {
     return this.http.post<Project>(`/api/projects`, project);
   }

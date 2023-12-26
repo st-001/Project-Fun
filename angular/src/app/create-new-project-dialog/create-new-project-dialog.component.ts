@@ -19,6 +19,7 @@ import { ProjectService } from "../_services/project/project.service";
 import { firstValueFrom } from "rxjs";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { ClientSelectSearchComponent } from "../_fields/client-select-search/client-select-search.component";
 
 @Component({
   selector: "app-create-new-project-dialog",
@@ -33,6 +34,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
     MatDialogTitle,
     MatDialogContent,
     MatCheckboxModule,
+    ClientSelectSearchComponent,
   ],
   templateUrl: "./create-new-project-dialog.component.html",
   styleUrl: "./create-new-project-dialog.component.scss",
@@ -41,6 +43,7 @@ export class CreateNewProjectDialogComponent {
   projectService: ProjectService = inject(ProjectService);
   createNewProjectForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
+    clientId: new FormControl(null, [Validators.required]),
     isEnabled: new FormControl(true),
   });
   constructor(
@@ -53,6 +56,7 @@ export class CreateNewProjectDialogComponent {
     try {
       result = await firstValueFrom(this.projectService.createNewProject({
         name: this.createNewProjectForm.value.name!,
+        clientId: this.createNewProjectForm.value.clientId!,
         isEnabled: this.createNewProjectForm.value.isEnabled!,
       }));
       this.dialogRef.close(result);
