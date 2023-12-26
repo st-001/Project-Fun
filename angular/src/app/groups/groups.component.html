@@ -42,7 +42,7 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="no-text-selection"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)" class="no-text-selection"></tr>
 
 </table>
 <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons>

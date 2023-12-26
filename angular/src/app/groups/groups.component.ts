@@ -17,6 +17,7 @@ import { MatSort, MatSortModule } from "@angular/material/sort";
 import { MatDialog } from "@angular/material/dialog";
 import { CreateNewGroupDialogComponent } from "../create-new-group-dialog/create-new-group-dialog.component";
 import { defaultMatDialogTop } from "../util";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-groups",
@@ -34,6 +35,10 @@ import { defaultMatDialogTop } from "../util";
   styleUrl: "./groups.component.scss",
 })
 export class GroupsComponent implements OnInit {
+  router = inject(Router);
+  onRowClick(group: Group) {
+    this.router.navigate(["/groups", group.id]);
+  }
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
