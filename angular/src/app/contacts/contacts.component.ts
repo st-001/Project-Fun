@@ -56,6 +56,7 @@ export class ContactsComponent implements OnInit {
   displayedColumns: string[] = [
     "name",
     "isEnabled",
+    "clientName",
     "emailAddress",
     "createdAt",
     "updatedAt",

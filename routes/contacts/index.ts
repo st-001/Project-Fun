@@ -1,9 +1,5 @@
 import { Handlers } from "$fresh/server.ts";
-import {
-  type Contact,
-  getAllContacts,
-  insertContact,
-} from "../../models/contact.ts";
+import { getAllContacts, insertContact } from "../../models/contact.ts";
 import {
   httpJsonResponse,
   httpResponse500InternalServerError,
@@ -39,8 +35,21 @@ export const GET_RESPONSE_SCHEMA = {
         type: ["string", "null"],
         format: "date-time",
       },
+      client: {
+        type: "object",
+        properties: {
+          id: {
+            type: "integer",
+          },
+          name: {
+            type: "string",
+          },
+        },
+        required: ["id", "name"],
+        additionalProperties: false,
+      },
     },
-    required: ["id", "name", "isEnabled", "createdAt", "updatedAt"],
+    required: ["id", "name", "isEnabled", "createdAt", "updatedAt", "client"],
     additionalProperties: false,
   },
 };
@@ -50,9 +59,10 @@ export const POST_REQUEST_SCHEMA = {
   properties: {
     name: { type: "string", maxLength: 255, minLength: 1 },
     emailAddress: { type: "string", maxLength: 255, minLength: 1 },
+    clientId: { type: "number" },
     isEnabled: { type: "boolean" },
   },
-  required: ["name", "isEnabled"],
+  required: ["name", "emailAddress", "clientId", "isEnabled"],
   additionalProperties: false,
 };
 
@@ -69,8 +79,21 @@ export const POST_RESPONSE_SCHEMA = {
       type: ["string", "null"],
       format: "date-time",
     },
+    client: {
+      type: "object",
+      properties: {
+        id: {
+          type: "integer",
+        },
+        name: {
+          type: "string",
+        },
+      },
+      required: ["id", "name"],
+      additionalProperties: false,
+    },
   },
-  required: ["id", "name", "isEnabled", "createdAt", "updatedAt"],
+  required: ["id", "name", "isEnabled", "createdAt", "updatedAt", "client"],
   additionalProperties: false,
 };
 
@@ -88,7 +111,12 @@ export const handler: Handlers = {
 
   async POST(req, ctx) {
     try {
-      const contact = await req.json() as Contact;
+      const contact = await req.json() as {
+        name: string;
+        emailAddress: string;
+        clientId: number;
+        isEnabled: boolean;
+      };
 
       if (!postRequestValidator(contact)) {
         return httpJsonResponse(postRequestValidator.errors, 400);
@@ -98,6 +126,7 @@ export const handler: Handlers = {
         contact.name,
         contact.isEnabled,
         contact.emailAddress,
+        contact.clientId,
         ctx.state.userId as number,
       );
 

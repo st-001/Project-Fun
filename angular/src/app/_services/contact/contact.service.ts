@@ -17,7 +17,12 @@ export class ContactService {
   constructor(private http: HttpClient) {}
 
   createNewContact(
-    contact: { name: string; emailAddress: string; isEnabled: boolean },
+    contact: {
+      name: string;
+      emailAddress: string;
+      clientId: number;
+      isEnabled: boolean;
+    },
   ): Observable<Contact> {
     return this.http.post<Contact>(`/api/contacts`, contact);
   }

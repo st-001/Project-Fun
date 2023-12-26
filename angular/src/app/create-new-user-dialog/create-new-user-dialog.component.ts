@@ -19,7 +19,6 @@ import { UserService } from "../_services/user/user.service";
 import { firstValueFrom } from "rxjs";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { GroupSelectSearchComponent } from "../_fields/group-select-search/group-select-search.component";
 
 @Component({
   selector: "app-create-new-user-dialog",
@@ -36,7 +35,6 @@ import { GroupSelectSearchComponent } from "../_fields/group-select-search/group
     MatDialogTitle,
     MatDialogContent,
     MatCheckboxModule,
-    GroupSelectSearchComponent,
   ],
 })
 export class CreateNewUserDialogComponent {

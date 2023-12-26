@@ -1,0 +1,10 @@
+<mat-form-field>
+  <mat-select [placeholder]="placeholder" [formControl]="control" #clientSelect>
+    <mat-option>
+      <ngx-mat-select-search placeholderLabel="Find client" [formControl]="clientFilterCtrl"></ngx-mat-select-search>
+    </mat-option>
+    @for (client of filteredClients | async; track client) {
+    <mat-option [value]="client.id">{{client.name}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>

@@ -1,9 +1,12 @@
 import sql from "../db.ts";
+import { Client, getClientById } from "./client.ts";
 
 export interface Contact {
   id: number;
   name: string;
   emailAddress: string;
+  client: Client;
+  clientId?: number | string;
   isEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -14,84 +17,134 @@ export async function insertContact(
   name: string,
   isEnabled: boolean,
   emailAddress: string,
+  clientId: number | string,
   createdById: number,
 ) {
-  const result = await sql`
-    insert into contact
-      (name , is_enabled, email_address, created_by, updated_by)
-    values
-      (${name}, ${isEnabled}, ${emailAddress}, ${createdById}, ${createdById})
-    returning 
-    id, 
-    name,
-    email_address as "emailAddress",
-    is_enabled as "isEnabled",
-    created_at as "createdAt",
-    updated_at as "updatedAt",
-    deleted_at as "deletedAt"
+  const insertResult = await sql`
+    INSERT INTO contact
+      (name, is_enabled, email_address, client_id, created_by, updated_by)
+    VALUES
+      (${name}, ${isEnabled}, ${emailAddress}, ${clientId}, ${createdById}, ${createdById})
+    RETURNING 
+      id, 
+      name,
+      email_address AS "emailAddress",
+      client_id AS "clientId",
+      is_enabled AS "isEnabled",
+      created_at AS "createdAt",
+      updated_at AS "updatedAt",
+      deleted_at AS "deletedAt"
   `;
-  return result[0] as Contact;
+
+  const contact = insertResult[0] as Contact;
+  if (contact) {
+    const client = await getClientById(clientId);
+    return { ...contact, client };
+  }
+
+  return null;
 }
 
 export async function updateContact(
   contactId: number | string,
   name: string,
   emailAddress: string,
+  clientId: number | string,
   isEnabled: boolean,
   updatedById: number,
 ) {
-  const result = await sql`
-    update contact
-    set
+  const updateResult = await sql`
+    UPDATE contact
+    SET
       name = ${name},
       email_address = ${emailAddress},
+      client_id = ${clientId},
       is_enabled = ${isEnabled},
       updated_at = now(),
       updated_by = ${updatedById}
-    where
+    WHERE
       id = ${contactId}
-    returning 
+    RETURNING 
       id,
       name,
-      email_address as "emailAddress",
-      is_enabled as "isEnabled",
-      created_at as "createdAt",
-      updated_at as "updatedAt",
-      deleted_at as "deletedAt"
+      email_address AS "emailAddress",
+      client_id AS "clientId",
+      is_enabled AS "isEnabled",
+      created_at AS "createdAt",
+      updated_at AS "updatedAt",
+      deleted_at AS "deletedAt"
   `;
-  return result[0] as Contact;
+
+  const contact = updateResult[0] as Contact;
+  if (contact) {
+    const client = await getClientById(clientId);
+    return { ...contact, client };
+  }
+
+  return null;
 }
 
 export async function getContactById(id: number | string) {
   const result = await sql`
     SELECT
-    id,
-    name,
-    email_address AS "emailAddress",
-    is_enabled AS "isEnabled",
-    created_at AS "createdAt",
-    updated_at AS "updatedAt",
-    deleted_at AS "deletedAt"
-    FROM contact
-    WHERE id = ${id}
+      contact.id,
+      contact.name,
+      contact.email_address AS "emailAddress",
+      contact.is_enabled AS "isEnabled",
+      contact.created_at AS "createdAt",
+      contact.updated_at AS "updatedAt",
+      contact.deleted_at AS "deletedAt",
+      client.id AS "clientId",
+      client.name AS "clientName"
+    FROM
+      contact
+    INNER JOIN client ON contact.client_id = client.id
+    WHERE contact.id = ${id}
   `;
-  return result[0] as Contact;
+
+  if (result.length === 0) {
+    return null;
+  }
+
+  return {
+    id: result[0].id,
+    name: result[0].name,
+    emailAddress: result[0].emailAddress,
+    isEnabled: result[0].isEnabled,
+    createdAt: result[0].createdAt,
+    updatedAt: result[0].updatedAt,
+    deletedAt: result[0].deletedAt,
+    client: {
+      id: result[0].clientId,
+      name: result[0].clientName,
+    },
+  } as Contact;
 }
 
 export async function getAllContacts() {
   const result = await sql`
     SELECT
-    id,
-    name,
-    email_address AS "emailAddress",
-    is_enabled AS "isEnabled",
-    created_at AS "createdAt",
-    updated_at AS "updatedAt",
-    deleted_at AS "deletedAt"
-    FROM contact
+      contact.id,
+      contact.name,
+      contact.email_address AS "emailAddress",
+      contact.is_enabled AS "isEnabled",
+      contact.created_at AS "createdAt",
+      contact.updated_at AS "updatedAt",
+      contact.deleted_at AS "deletedAt",
+      client.id AS "clientId",
+      client.name AS "clientName"
+    FROM
+      contact
+    INNER JOIN client ON contact.client_id = client.id
   `;
 
-  return result.map((x) => x as Contact);
+  return result.map((contact) => ({
+    ...contact,
+    client: {
+      id: contact.clientId,
+      name: contact.clientName,
+    } as Contact,
+  }));
 }
 
 export async function enableContact(

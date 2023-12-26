@@ -21,7 +21,12 @@ import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 })
 export class GroupSelectSearchComponent {
   @Input()
-  public form!: FormGroup;
+  public placeholder!: string;
+  @Input()
+  public control!: FormControl;
+
+  @Input()
+  public formControlName!: string;
   groupService = inject(GroupService);
   groups: Group[] = [];
   groupFilterCtrl: FormControl = new FormControl("");

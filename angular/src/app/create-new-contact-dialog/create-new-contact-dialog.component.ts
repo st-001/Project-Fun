@@ -20,6 +20,7 @@ import { ContactService } from "../_services/contact/contact.service";
 import { firstValueFrom } from "rxjs";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { ClientSelectSearchComponent } from "../_fields/client-select-search/client-select-search.component";
 
 @Component({
   selector: "app-create-new-contact-dialog",
@@ -34,6 +35,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
     MatDialogTitle,
     MatDialogContent,
     MatCheckboxModule,
+    ClientSelectSearchComponent,
   ],
   templateUrl: "./create-new-contact-dialog.component.html",
   styleUrl: "./create-new-contact-dialog.component.scss",
@@ -43,6 +45,7 @@ export class CreateNewContactDialogComponent {
   createNewContactForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
     emailAddress: new FormControl("", [Validators.required]),
+    clientId: new FormControl(null, [Validators.required]),
     isEnabled: new FormControl(true),
   });
   constructor(
@@ -57,6 +60,7 @@ export class CreateNewContactDialogComponent {
         name: this.createNewContactForm.value.name!,
         isEnabled: this.createNewContactForm.value.isEnabled!,
         emailAddress: this.createNewContactForm.value.emailAddress!,
+        clientId: this.createNewContactForm.value.clientId!,
       }));
       this.dialogRef.close(result);
     } catch (error) {
