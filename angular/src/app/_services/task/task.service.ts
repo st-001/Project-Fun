@@ -24,4 +24,8 @@ export class TaskService {
   getAll(): Observable<Task[]> {
     return this.http.get<Task[]>(`/api/tasks`);
   }
+
+  getTaskById(id: number): Observable<Task> {
+    return this.http.get<Task>(`/api/tasks/${id}`);
+  }
 }

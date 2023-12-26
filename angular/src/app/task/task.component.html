@@ -1,0 +1,37 @@
+@if (task) {
+<div class="button-bar">
+  <button mat-raised-button color="primary" [routerLink]="['/tasks']">Back To Tasks</button>
+  <button mat-raised-button color="primary" (click)="openEditTaskDialog()">Edit Task</button>
+  <button mat-raised-button color="primary" (click)="refreshTask()">Refresh</button>
+</div>
+<div style="padding: 0 10px 10px 10px;">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Task - {{ task.name }}</mat-card-title>
+      <mat-card-title>ID - {{task.id}}</mat-card-title>
+      <mat-card-title>{{task.isEnabled ? 'Enabled' : 'Disabled' }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+    </mat-card-content>
+  </mat-card>
+</div>
+<mat-tab-group animationDuration="0ms">
+  <mat-tab label="Assistant">
+    <div style="padding: 10px; font-size: large;">
+      <mat-card>
+        <mat-card-content>
+          <p>How may I help you with this task?</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-tab>
+  <mat-tab label="Notes">
+    <div class="button-bar">
+      <button mat-raised-button color="primary" (click)="openEditTaskDialog()">Add Note</button>
+      <button mat-raised-button color="primary" (click)="refreshNotes()">Refresh</button>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Tasks"> Tasks </mat-tab>
+</mat-tab-group>
+}

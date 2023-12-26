@@ -6,7 +6,7 @@
 
 <mat-form-field>
   <mat-label>Filter</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Search for contacts" #input>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Search for users" #input>
 </mat-form-field>
 
 <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
@@ -48,7 +48,7 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="no-text-selection"></tr>
 
 </table>
 <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons>

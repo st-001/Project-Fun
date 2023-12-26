@@ -17,6 +17,7 @@ import { MatSort, MatSortModule } from "@angular/material/sort";
 import { MatDialog } from "@angular/material/dialog";
 import { CreateNewTaskDialogComponent } from "../create-new-task-dialog/create-new-task-dialog.component";
 import { defaultMatDialogTop } from "../util";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-tasks",
@@ -34,6 +35,10 @@ import { defaultMatDialogTop } from "../util";
   styleUrl: "./tasks.component.scss",
 })
 export class TasksComponent implements OnInit {
+  router = inject(Router);
+  onRowClick(task: Task) {
+    this.router.navigate(["/tasks", task.id]);
+  }
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 

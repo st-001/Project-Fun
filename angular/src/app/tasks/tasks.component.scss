@@ -1,3 +1,8 @@
+.mat-mdc-row:hover {
+  background-color: #919191;
+  cursor: pointer;
+}
+
 table {
   width: 100%;
 }
@@ -11,4 +16,11 @@ table {
   padding: 10px;
   display: flex;
   gap: 10px;
+}
+
+.no-text-selection {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }

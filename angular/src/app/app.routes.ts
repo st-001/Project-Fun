@@ -11,6 +11,7 @@ import { LayoutComponent } from "./layout/layout.component";
 import { ProjectComponent } from "./project/project.component";
 import { ClientComponent } from "./client/client.component";
 import { ContactComponent } from "./contact/contact.component";
+import { TaskComponent } from "./task/task.component";
 
 export const routes: Routes = [
   {
@@ -51,6 +52,11 @@ export const routes: Routes = [
       { path: "users", component: UsersComponent, canActivate: [AuthGuard] },
       { path: "groups", component: GroupsComponent, canActivate: [AuthGuard] },
       { path: "tasks", component: TasksComponent, canActivate: [AuthGuard] },
+      {
+        path: "tasks/:id",
+        component: TaskComponent,
+        canActivate: [AuthGuard],
+      },
     ],
   },
   { path: "login", component: LoginComponent },
