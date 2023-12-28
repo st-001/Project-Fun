@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, ElementRef, inject, ViewChild } from "@angular/core";
 import { Contact, ContactService } from "../_services/contact/contact.service";
 import { firstValueFrom } from "rxjs";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
@@ -34,8 +28,20 @@ import { Router } from "@angular/router";
   templateUrl: "./contacts.component.html",
   styleUrl: "./contacts.component.scss",
 })
-export class ContactsComponent implements OnInit {
+export class ContactsComponent {
   router = inject(Router);
+  dialog = inject(MatDialog);
+  contactService = inject(ContactService);
+  dataSource = new MatTableDataSource<Contact>();
+  displayedColumns: string[] = [
+    "name",
+    "isEnabled",
+    "clientName",
+    "emailAddress",
+    "createdAt",
+    "updatedAt",
+    "deletedAt",
+  ];
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
@@ -49,40 +55,8 @@ export class ContactsComponent implements OnInit {
     this.router.navigate(["/contacts", contact.id]);
   }
 
-  async refreshContacts() {
-    const contacts = await this.getAllContacts();
-    this.dataSource.data = contacts;
-  }
   exportContacts() {
     throw new Error("Method not implemented.");
-  }
-
-  private contactService = inject(ContactService);
-  dataSource = new MatTableDataSource<Contact>();
-  displayedColumns: string[] = [
-    "name",
-    "isEnabled",
-    "clientName",
-    "emailAddress",
-    "createdAt",
-    "updatedAt",
-    "deletedAt",
-  ];
-  constructor(public dialog: MatDialog) {}
-
-  async getAllContacts() {
-    const contacts = await firstValueFrom(this.contactService.getAll());
-    return contacts;
-  }
-
-  private setupTableFeatures() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  async ngOnInit() {
-    const contacts = await this.getAllContacts();
-    this.dataSource.data = contacts;
   }
 
   applyFilter(event: Event) {
@@ -90,8 +64,14 @@ export class ContactsComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  ngAfterViewInit() {
-    this.setupTableFeatures();
+  async getAllContacts() {
+    this.dataSource.data = await firstValueFrom(this.contactService.getAll());
+  }
+
+  async ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    await this.getAllContacts();
   }
 
   async openCreateNewContactDialog() {
@@ -104,7 +84,7 @@ export class ContactsComponent implements OnInit {
 
     const result = await firstValueFrom(dialogRef.afterClosed()) as Contact;
     if (result) {
-      await this.refreshContacts();
+      await this.getAllContacts();
     }
   }
 }

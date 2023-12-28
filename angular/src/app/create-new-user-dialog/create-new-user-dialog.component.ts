@@ -39,16 +39,14 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class CreateNewUserDialogComponent {
   userService = inject(UserService);
+  dialogRef: MatDialogRef<CreateNewUserDialogComponent> = inject(MatDialogRef);
+  snackBar: MatSnackBar = inject(MatSnackBar);
   createNewUserForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
     isEnabled: new FormControl(true),
     emailAddress: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [Validators.required]),
   });
-  constructor(
-    public dialogRef: MatDialogRef<CreateNewUserDialogComponent>,
-    private _snackBar: MatSnackBar,
-  ) {}
 
   async submitForm() {
     let result;
@@ -59,11 +57,11 @@ export class CreateNewUserDialogComponent {
         emailAddress: this.createNewUserForm.value.emailAddress!,
         password: this.createNewUserForm.value.password!,
       }));
-      this._snackBar.open("User created", "Dismiss", {
+      this.snackBar.open("User created", "Dismiss", {
         duration: 5000,
       });
     } catch (error) {
-      this._snackBar.open("Error creating user", "Dismiss", {
+      this.snackBar.open("Error creating user", "Dismiss", {
         duration: 5000,
       });
       console.error(error);

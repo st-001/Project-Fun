@@ -42,13 +42,11 @@ import { ClientSelectSearchComponent } from "../_fields/client-select-search/cli
 })
 export class EditClientDialogComponent {
   clientService: ClientService = inject(ClientService);
+  dialogRef: MatDialogRef<EditClientDialogComponent> = inject(MatDialogRef);
+  snackBar: MatSnackBar = inject(MatSnackBar);
+  dialogInputData: { clientId: number } = inject(MAT_DIALOG_DATA);
   client: Client | undefined;
   editClientForm: FormGroup | undefined;
-  constructor(
-    public dialogRef: MatDialogRef<EditClientDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public dialogInputData: { clientId: number },
-    private _snackBar: MatSnackBar,
-  ) {}
 
   async ngOnInit() {
     this.client = await firstValueFrom(
@@ -69,11 +67,11 @@ export class EditClientDialogComponent {
           isEnabled: this.editClientForm!.value.isEnabled!,
         }),
       );
-      this._snackBar.open("Client updated.", "Dismiss", {
+      this.snackBar.open("Client updated.", "Dismiss", {
         duration: 5000,
       });
     } catch (error) {
-      this._snackBar.open("Error updating client.", "Dismiss", {
+      this.snackBar.open("Error updating client.", "Dismiss", {
         duration: 5000,
       });
       console.error(error);

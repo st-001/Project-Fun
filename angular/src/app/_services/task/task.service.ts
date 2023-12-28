@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 export interface Task {
@@ -13,7 +13,7 @@ export interface Task {
 
 @Injectable({ providedIn: "root" })
 export class TaskService {
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
 
   createNewTask(
     task: { name: string; isEnabled: boolean },

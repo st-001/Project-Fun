@@ -31,10 +31,7 @@ export class ClientComponent {
   dialog = inject(MatDialog);
   clientService = inject(ClientService);
   client: Client | undefined;
-  clientId: number;
-  constructor() {
-    this.clientId = Number(this.route.snapshot.paramMap.get("id"));
-  }
+  clientId = Number(this.route.snapshot.paramMap.get("id"));
 
   async ngOnInit() {
     await this.getClient();
@@ -50,9 +47,6 @@ export class ClientComponent {
         this.router.navigate(["/clients"]);
       }
     }
-  }
-  refreshNotes() {
-    throw new Error("Method not implemented.");
   }
 
   async openEditClientDialog() {

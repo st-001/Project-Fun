@@ -42,13 +42,11 @@ import { ClientSelectSearchComponent } from "../_fields/client-select-search/cli
 })
 export class EditProjectDialogComponent {
   projectService: ProjectService = inject(ProjectService);
+  dialogRef: MatDialogRef<EditProjectDialogComponent> = inject(MatDialogRef);
+  snackBar: MatSnackBar = inject(MatSnackBar);
+  dialogInputData: { projectId: number } = inject(MAT_DIALOG_DATA);
   project: Project | undefined;
   editProjectForm: FormGroup | undefined;
-  constructor(
-    public dialogRef: MatDialogRef<EditProjectDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public dialogInputData: { projectId: number },
-    private _snackBar: MatSnackBar,
-  ) {}
 
   async ngOnInit() {
     this.project = await firstValueFrom(
@@ -71,11 +69,11 @@ export class EditProjectDialogComponent {
           clientId: this.editProjectForm!.value.clientId!,
         }),
       );
-      this._snackBar.open("Project updated.", "Dismiss", {
+      this.snackBar.open("Project updated.", "Dismiss", {
         duration: 5000,
       });
     } catch (error) {
-      this._snackBar.open("Error updating project.", "Dismiss", {
+      this.snackBar.open("Error updating project.", "Dismiss", {
         duration: 5000,
       });
       console.error(error);

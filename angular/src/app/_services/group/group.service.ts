@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 export interface Group {
@@ -13,7 +13,7 @@ export interface Group {
 
 @Injectable({ providedIn: "root" })
 export class GroupService {
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
 
   createNewGroup(
     group: { name: string; isEnabled: boolean },

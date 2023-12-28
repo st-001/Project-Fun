@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, ElementRef, inject, ViewChild } from "@angular/core";
 import { Project, ProjectService } from "../_services/project/project.service";
 import { firstValueFrom } from "rxjs";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
@@ -17,7 +11,7 @@ import { MatSort, MatSortModule } from "@angular/material/sort";
 import { MatDialog } from "@angular/material/dialog";
 import { CreateNewProjectDialogComponent } from "../create-new-project-dialog/create-new-project-dialog.component";
 import { defaultMatDialogTop } from "../util";
-import { Router, RouterOutlet } from "@angular/router";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-projects",
@@ -30,34 +24,14 @@ import { Router, RouterOutlet } from "@angular/router";
     MatButtonModule,
     MatPaginatorModule,
     MatSortModule,
-    RouterOutlet,
   ],
   templateUrl: "./projects.component.html",
   styleUrl: "./projects.component.scss",
 })
-export class ProjectsComponent implements OnInit {
+export class ProjectsComponent {
   router = inject(Router);
-  onRowClick(project: Project) {
-    this.router.navigate(["/projects", project.id]);
-  }
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
-
-  @ViewChild(MatSort)
-  sort!: MatSort;
-
-  @ViewChild("input")
-  inputElement!: ElementRef;
-
-  async refreshProjects() {
-    const projects = await this.getAllProjects();
-    this.dataSource.data = projects;
-  }
-  exportProjects() {
-    throw new Error("Method not implemented.");
-  }
-
-  private projectService = inject(ProjectService);
+  projectService = inject(ProjectService);
+  dialog = inject(MatDialog);
   dataSource = new MatTableDataSource<Project>();
   displayedColumns: string[] = [
     "name",
@@ -67,21 +41,22 @@ export class ProjectsComponent implements OnInit {
     "updatedAt",
     "deletedAt",
   ];
-  constructor(public dialog: MatDialog) {}
 
-  async getAllProjects() {
-    const projects = await firstValueFrom(this.projectService.getAllProjects());
-    return projects;
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+
+  @ViewChild(MatSort)
+  sort!: MatSort;
+
+  @ViewChild("input")
+  inputElement!: ElementRef;
+
+  exportProjects() {
+    throw new Error("Method not implemented.");
   }
 
-  private setupTableFeatures() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  async ngOnInit() {
-    const projects = await this.getAllProjects();
-    this.dataSource.data = projects;
+  onRowClick(project: Project) {
+    this.router.navigate(["/projects", project.id]);
   }
 
   applyFilter(event: Event) {
@@ -89,8 +64,16 @@ export class ProjectsComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  ngAfterViewInit() {
-    this.setupTableFeatures();
+  async getAllProjects() {
+    this.dataSource.data = await firstValueFrom(
+      this.projectService.getAllProjects(),
+    );
+  }
+
+  async ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    await this.getAllProjects();
   }
 
   async openCreateNewProjectDialog() {
@@ -103,7 +86,7 @@ export class ProjectsComponent implements OnInit {
 
     const result = await firstValueFrom(dialogRef.afterClosed()) as Project;
     if (result) {
-      await this.refreshProjects();
+      await this.getAllProjects();
     }
   }
 }

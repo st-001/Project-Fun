@@ -42,16 +42,16 @@ import { ClientSelectSearchComponent } from "../_fields/client-select-search/cli
 })
 export class CreateNewContactDialogComponent {
   contactService: ContactService = inject(ContactService);
+  dialogRef: MatDialogRef<CreateNewContactDialogComponent> = inject(
+    MatDialogRef,
+  );
+  snackBar: MatSnackBar = inject(MatSnackBar);
   createNewContactForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
     emailAddress: new FormControl("", [Validators.required, Validators.email]),
     clientId: new FormControl(null, [Validators.required]),
     isEnabled: new FormControl(true),
   });
-  constructor(
-    public dialogRef: MatDialogRef<CreateNewContactDialogComponent>,
-    private _snackBar: MatSnackBar,
-  ) {}
 
   async submitForm() {
     let result;
@@ -62,11 +62,11 @@ export class CreateNewContactDialogComponent {
         emailAddress: this.createNewContactForm.value.emailAddress!,
         clientId: this.createNewContactForm.value.clientId!,
       }));
-      this._snackBar.open("Contact created", "Dismiss", {
+      this.snackBar.open("Contact created", "Dismiss", {
         duration: 5000,
       });
     } catch (error) {
-      this._snackBar.open("Error creating contact", "Dismiss", {
+      this.snackBar.open("Error creating contact", "Dismiss", {
         duration: 5000,
       });
       console.error(error);

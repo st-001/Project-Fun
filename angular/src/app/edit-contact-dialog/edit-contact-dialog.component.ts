@@ -42,13 +42,11 @@ import { ClientSelectSearchComponent } from "../_fields/client-select-search/cli
 })
 export class EditContactDialogComponent {
   contactService: ContactService = inject(ContactService);
+  dialogRef: MatDialogRef<EditContactDialogComponent> = inject(MatDialogRef);
+  snackBar: MatSnackBar = inject(MatSnackBar);
+  dialogInputData: { contactId: number } = inject(MAT_DIALOG_DATA);
   contact: Contact | undefined;
   editContactForm: FormGroup | undefined;
-  constructor(
-    public dialogRef: MatDialogRef<EditContactDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public dialogInputData: { contactId: number },
-    private _snackBar: MatSnackBar,
-  ) {}
 
   async ngOnInit() {
     this.contact = await firstValueFrom(
@@ -76,11 +74,11 @@ export class EditContactDialogComponent {
           clientId: this.editContactForm!.value.clientId!,
         }),
       );
-      this._snackBar.open("Contact updated.", "Dismiss", {
+      this.snackBar.open("Contact updated.", "Dismiss", {
         duration: 5000,
       });
     } catch (error) {
-      this._snackBar.open("Error updating contact.", "Dismiss", {
+      this.snackBar.open("Error updating contact.", "Dismiss", {
         duration: 5000,
       });
       console.error(error);

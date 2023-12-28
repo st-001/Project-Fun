@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, ElementRef, inject, ViewChild } from "@angular/core";
 import { User, UserService } from "../_services/user/user.service";
 import { firstValueFrom } from "rxjs";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
@@ -34,29 +28,10 @@ import { Router } from "@angular/router";
   templateUrl: "./users.component.html",
   styleUrl: "./users.component.scss",
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent {
   router = inject(Router);
-  onRowClick(user: User) {
-    this.router.navigate(["/users", user.id]);
-  }
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
-
-  @ViewChild(MatSort)
-  sort!: MatSort;
-
-  @ViewChild("input")
-  inputElement!: ElementRef;
-
-  async refreshUsers() {
-    const users = await this.getAllUsers();
-    this.dataSource.data = users;
-  }
-  exportUsers() {
-    throw new Error("Method not implemented.");
-  }
-
-  private userService = inject(UserService);
+  dialog = inject(MatDialog);
+  userService = inject(UserService);
   dataSource = new MatTableDataSource<User>();
   displayedColumns: string[] = [
     "name",
@@ -66,21 +41,26 @@ export class UsersComponent implements OnInit {
     "updatedAt",
     "deletedAt",
   ];
-  constructor(public dialog: MatDialog) {}
+
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+
+  @ViewChild(MatSort)
+  sort!: MatSort;
+
+  @ViewChild("input")
+  inputElement!: ElementRef;
+
+  exportUsers() {
+    throw new Error("Method not implemented.");
+  }
+
+  onRowClick(user: User) {
+    this.router.navigate(["/users", user.id]);
+  }
 
   async getAllUsers() {
-    const users = await firstValueFrom(this.userService.getAll());
-    return users;
-  }
-
-  private setupTableFeatures() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  async ngOnInit() {
-    const users = await this.getAllUsers();
-    this.dataSource.data = users;
+    this.dataSource.data = await firstValueFrom(this.userService.getAll());
   }
 
   applyFilter(event: Event) {
@@ -88,8 +68,10 @@ export class UsersComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  ngAfterViewInit() {
-    this.setupTableFeatures();
+  async ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    await this.getAllUsers();
   }
 
   async openCreateNewUserDialog() {
@@ -102,7 +84,7 @@ export class UsersComponent implements OnInit {
 
     const result = await firstValueFrom(dialogRef.afterClosed()) as User;
     if (result) {
-      await this.refreshUsers();
+      await this.getAllUsers();
     }
   }
 }

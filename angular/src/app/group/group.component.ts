@@ -31,17 +31,10 @@ export class GroupComponent {
   dialog = inject(MatDialog);
   groupService = inject(GroupService);
   group: Group | undefined;
-  groupId: number;
-  constructor() {
-    this.groupId = Number(this.route.snapshot.paramMap.get("id"));
-  }
+  groupId = Number(this.route.snapshot.paramMap.get("id"));
 
   async ngOnInit() {
     await this.getGroup();
-  }
-
-  refreshNotes() {
-    throw new Error("Method not implemented.");
   }
 
   async getGroup() {

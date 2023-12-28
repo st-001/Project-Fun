@@ -40,13 +40,11 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class EditGroupDialogComponent {
   groupService: GroupService = inject(GroupService);
+  dialogRef: MatDialogRef<EditGroupDialogComponent> = inject(MatDialogRef);
+  snackBar: MatSnackBar = inject(MatSnackBar);
+  dialogInputData: { groupId: number } = inject(MAT_DIALOG_DATA);
   group: Group | undefined;
   editGroupForm: FormGroup | undefined;
-  constructor(
-    public dialogRef: MatDialogRef<EditGroupDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public dialogInputData: { groupId: number },
-    private _snackBar: MatSnackBar,
-  ) {}
 
   async ngOnInit() {
     this.group = await firstValueFrom(
@@ -67,11 +65,11 @@ export class EditGroupDialogComponent {
           isEnabled: this.editGroupForm!.value.isEnabled!,
         }),
       );
-      this._snackBar.open("Group updated.", "Dismiss", {
+      this.snackBar.open("Group updated.", "Dismiss", {
         duration: 5000,
       });
     } catch (error) {
-      this._snackBar.open("Error updating group.", "Dismiss", {
+      this.snackBar.open("Error updating group.", "Dismiss", {
         duration: 5000,
       });
       console.error(error);

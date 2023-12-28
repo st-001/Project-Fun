@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 export interface User {
@@ -15,7 +15,7 @@ export interface User {
 
 @Injectable({ providedIn: "root" })
 export class UserService {
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
 
   createNewUser(
     user: {

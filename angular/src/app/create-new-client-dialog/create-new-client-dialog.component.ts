@@ -39,14 +39,14 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class CreateNewClientDialogComponent {
   clientService: ClientService = inject(ClientService);
+  dialogRef: MatDialogRef<CreateNewClientDialogComponent> = inject(
+    MatDialogRef,
+  );
+  snackBar: MatSnackBar = inject(MatSnackBar);
   createNewClientForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
     isEnabled: new FormControl(true),
   });
-  constructor(
-    public dialogRef: MatDialogRef<CreateNewClientDialogComponent>,
-    private _snackBar: MatSnackBar,
-  ) {}
 
   async submitForm() {
     let result;
@@ -55,11 +55,11 @@ export class CreateNewClientDialogComponent {
         name: this.createNewClientForm.value.name!,
         isEnabled: this.createNewClientForm.value.isEnabled!,
       }));
-      this._snackBar.open("Client created", "Dismiss", {
+      this.snackBar.open("Client created", "Dismiss", {
         duration: 5000,
       });
     } catch (error) {
-      this._snackBar.open("Error creating client", "Dismiss", {
+      this.snackBar.open("Error creating client", "Dismiss", {
         duration: 5000,
       });
       console.error(error);

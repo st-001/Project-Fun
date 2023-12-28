@@ -40,13 +40,11 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class EditTaskDialogComponent {
   taskService: TaskService = inject(TaskService);
+  dialogRef: MatDialogRef<EditTaskDialogComponent> = inject(MatDialogRef);
+  snackBar: MatSnackBar = inject(MatSnackBar);
+  dialogInputData: { taskId: number } = inject(MAT_DIALOG_DATA);
   task: Task | undefined;
   editTaskForm: FormGroup | undefined;
-  constructor(
-    public dialogRef: MatDialogRef<EditTaskDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public dialogInputData: { taskId: number },
-    private _snackBar: MatSnackBar,
-  ) {}
 
   async ngOnInit() {
     this.task = await firstValueFrom(
@@ -67,11 +65,11 @@ export class EditTaskDialogComponent {
           isEnabled: this.editTaskForm!.value.isEnabled!,
         }),
       );
-      this._snackBar.open("Task updated.", "Dismiss", {
+      this.snackBar.open("Task updated.", "Dismiss", {
         duration: 5000,
       });
     } catch (error) {
-      this._snackBar.open("Error updating task.", "Dismiss", {
+      this.snackBar.open("Error updating task.", "Dismiss", {
         duration: 5000,
       });
       console.error(error);

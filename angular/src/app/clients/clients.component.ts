@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, ElementRef, inject, ViewChild } from "@angular/core";
 import { Client, ClientService } from "../_services/client/client.service";
 import { firstValueFrom } from "rxjs";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
@@ -34,8 +28,18 @@ import { Router } from "@angular/router";
   templateUrl: "./clients.component.html",
   styleUrl: "./clients.component.scss",
 })
-export class ClientsComponent implements OnInit {
+export class ClientsComponent {
   router = inject(Router);
+  dialog = inject(MatDialog);
+  clientService = inject(ClientService);
+  dataSource = new MatTableDataSource<Client>();
+  displayedColumns: string[] = [
+    "name",
+    "isEnabled",
+    "createdAt",
+    "updatedAt",
+    "deletedAt",
+  ];
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
@@ -49,49 +53,22 @@ export class ClientsComponent implements OnInit {
     this.router.navigate(["/clients", client.id]);
   }
 
-  async refreshClients() {
-    const clients = await this.getAllClients();
-    this.dataSource.data = clients;
-  }
   exportClients() {
     throw new Error("Method not implemented.");
-  }
-  createNewClient() {
-    throw new Error("Method not implemented.");
-  }
-  private clientService = inject(ClientService);
-  dataSource = new MatTableDataSource<Client>();
-  displayedColumns: string[] = [
-    "name",
-    "isEnabled",
-    "createdAt",
-    "updatedAt",
-    "deletedAt",
-  ];
-  constructor(public dialog: MatDialog) {}
-
-  async getAllClients() {
-    const clients = await firstValueFrom(this.clientService.getAll());
-    return clients;
-  }
-
-  private setupTableFeatures() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  async ngOnInit() {
-    const clients = await this.getAllClients();
-    this.dataSource.data = clients;
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+  async getAllClients() {
+    this.dataSource.data = await firstValueFrom(this.clientService.getAll());
+  }
 
-  ngAfterViewInit() {
-    this.setupTableFeatures();
+  async ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    await this.getAllClients();
   }
 
   async openCreateNewClientDialog() {
@@ -104,7 +81,7 @@ export class ClientsComponent implements OnInit {
 
     const result = await firstValueFrom(dialogRef.afterClosed()) as Client;
     if (result) {
-      await this.refreshClients();
+      await this.getAllClients();
     }
   }
 }

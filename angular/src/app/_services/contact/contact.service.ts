@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Client } from "../client/client.service";
 
@@ -16,7 +16,7 @@ export interface Contact {
 
 @Injectable({ providedIn: "root" })
 export class ContactService {
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
 
   createNewContact(
     contact: {

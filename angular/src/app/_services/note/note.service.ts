@@ -27,8 +27,6 @@ export interface Note {
 export class NoteService {
   http = inject(HttpClient);
 
-  constructor() {}
-
   getNotesByEntityAndId(
     entityType: string,
     entityId: number,

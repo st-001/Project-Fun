@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 export interface Client {
@@ -13,7 +13,7 @@ export interface Client {
 
 @Injectable({ providedIn: "root" })
 export class ClientService {
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
 
   createNewClient(
     client: { name: string; isEnabled: boolean },

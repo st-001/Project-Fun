@@ -39,14 +39,14 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class CreateNewTaskDialogComponent {
   taskService: TaskService = inject(TaskService);
+  dialogRef: MatDialogRef<CreateNewTaskDialogComponent> = inject(
+    MatDialogRef,
+  );
+  snackBar: MatSnackBar = inject(MatSnackBar);
   createNewTaskForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
     isEnabled: new FormControl(true),
   });
-  constructor(
-    public dialogRef: MatDialogRef<CreateNewTaskDialogComponent>,
-    private _snackBar: MatSnackBar,
-  ) {}
 
   async submitForm() {
     let result;
@@ -55,11 +55,11 @@ export class CreateNewTaskDialogComponent {
         name: this.createNewTaskForm.value.name!,
         isEnabled: this.createNewTaskForm.value.isEnabled!,
       }));
-      this._snackBar.open("Task created", "Dismiss", {
+      this.snackBar.open("Task created", "Dismiss", {
         duration: 5000,
       });
     } catch (error) {
-      this._snackBar.open("Error creating task", "Dismiss", {
+      this.snackBar.open("Error creating task", "Dismiss", {
         duration: 5000,
       });
       console.error(error);

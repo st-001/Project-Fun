@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, ElementRef, inject, ViewChild } from "@angular/core";
 import { Group, GroupService } from "../_services/group/group.service";
 import { firstValueFrom } from "rxjs";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
@@ -34,30 +28,10 @@ import { Router } from "@angular/router";
   templateUrl: "./groups.component.html",
   styleUrl: "./groups.component.scss",
 })
-export class GroupsComponent implements OnInit {
+export class GroupsComponent {
   router = inject(Router);
   dialog = inject(MatDialog);
-  onRowClick(group: Group) {
-    this.router.navigate(["/groups", group.id]);
-  }
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
-
-  @ViewChild(MatSort)
-  sort!: MatSort;
-
-  @ViewChild("input")
-  inputElement!: ElementRef;
-
-  async refreshGroups() {
-    const groups = await this.getAllGroups();
-    this.dataSource.data = groups;
-  }
-  exportGroups() {
-    throw new Error("Method not implemented.");
-  }
-
-  private groupService = inject(GroupService);
+  groupService = inject(GroupService);
   dataSource = new MatTableDataSource<Group>();
   displayedColumns: string[] = [
     "name",
@@ -67,19 +41,21 @@ export class GroupsComponent implements OnInit {
     "deletedAt",
   ];
 
-  async getAllGroups() {
-    const groups = await firstValueFrom(this.groupService.getAll());
-    return groups;
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+
+  @ViewChild(MatSort)
+  sort!: MatSort;
+
+  @ViewChild("input")
+  inputElement!: ElementRef;
+
+  exportGroups() {
+    throw new Error("Method not implemented.");
   }
 
-  private setupTableFeatures() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  async ngOnInit() {
-    const groups = await this.getAllGroups();
-    this.dataSource.data = groups;
+  onRowClick(group: Group) {
+    this.router.navigate(["/groups", group.id]);
   }
 
   applyFilter(event: Event) {
@@ -87,8 +63,14 @@ export class GroupsComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  ngAfterViewInit() {
-    this.setupTableFeatures();
+  async getAllGroups() {
+    this.dataSource.data = await firstValueFrom(this.groupService.getAll());
+  }
+
+  async ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    await this.getAllGroups();
   }
 
   async openCreateNewGroupDialog() {
@@ -101,7 +83,7 @@ export class GroupsComponent implements OnInit {
 
     const result = await firstValueFrom(dialogRef.afterClosed()) as Group;
     if (result) {
-      await this.refreshGroups();
+      await this.getAllGroups();
     }
   }
 }

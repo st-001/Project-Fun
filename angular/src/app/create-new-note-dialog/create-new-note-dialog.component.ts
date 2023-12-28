@@ -39,17 +39,14 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 export class CreateNewNoteDialogComponent {
   noteService = inject(NoteService);
   dialogRef = inject(MatDialogRef<CreateNewNoteDialogComponent>);
-  _snackBar = inject(MatSnackBar);
+  snackBar = inject(MatSnackBar);
+  dialogInputData: {
+    entityType: string;
+    entityId: number;
+  } = inject(MAT_DIALOG_DATA);
   createNewNoteForm = new FormGroup({
     content: new FormControl("", [Validators.required]),
   });
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public dialogInputData: {
-      entityType: string;
-      entityId: number;
-    },
-  ) {}
 
   async submitForm() {
     let result;
@@ -59,11 +56,11 @@ export class CreateNewNoteDialogComponent {
         entityType: this.dialogInputData.entityType,
         entityId: this.dialogInputData.entityId,
       }));
-      this._snackBar.open("Note created", "Dismiss", {
+      this.snackBar.open("Note created", "Dismiss", {
         duration: 5000,
       });
     } catch (error) {
-      this._snackBar.open("Error creating note", "Dismiss", {
+      this.snackBar.open("Error creating note", "Dismiss", {
         duration: 5000,
       });
       console.error(error);

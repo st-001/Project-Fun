@@ -39,14 +39,14 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class CreateNewGroupDialogComponent {
   groupService: GroupService = inject(GroupService);
+  dialogRef: MatDialogRef<CreateNewGroupDialogComponent> = inject(
+    MatDialogRef,
+  );
+  snackBar: MatSnackBar = inject(MatSnackBar);
   createNewGroupForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
     isEnabled: new FormControl(true),
   });
-  constructor(
-    public dialogRef: MatDialogRef<CreateNewGroupDialogComponent>,
-    private _snackBar: MatSnackBar,
-  ) {}
 
   async submitForm() {
     let result;
@@ -55,11 +55,11 @@ export class CreateNewGroupDialogComponent {
         name: this.createNewGroupForm.value.name!,
         isEnabled: this.createNewGroupForm.value.isEnabled!,
       }));
-      this._snackBar.open("Group created", "Dismiss", {
+      this.snackBar.open("Group created", "Dismiss", {
         duration: 5000,
       });
     } catch (error) {
-      this._snackBar.open("Error creating group", "Dismiss", {
+      this.snackBar.open("Error creating group", "Dismiss", {
         duration: 5000,
       });
       console.error(error);

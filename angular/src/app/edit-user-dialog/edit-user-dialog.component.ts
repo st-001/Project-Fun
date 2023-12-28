@@ -40,13 +40,11 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class EditUserDialogComponent {
   userService: UserService = inject(UserService);
+  dialogRef: MatDialogRef<EditUserDialogComponent> = inject(MatDialogRef);
+  snackBar: MatSnackBar = inject(MatSnackBar);
+  dialogInputData: { userId: number } = inject(MAT_DIALOG_DATA);
   user: User | undefined;
   editUserForm: FormGroup | undefined;
-  constructor(
-    public dialogRef: MatDialogRef<EditUserDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public dialogInputData: { userId: number },
-    private _snackBar: MatSnackBar,
-  ) {}
 
   async ngOnInit() {
     this.user = await firstValueFrom(
@@ -72,11 +70,11 @@ export class EditUserDialogComponent {
           emailAddress: this.editUserForm!.value.emailAddress,
         }),
       );
-      this._snackBar.open("User updated.", "Dismiss", {
+      this.snackBar.open("User updated.", "Dismiss", {
         duration: 5000,
       });
     } catch (error) {
-      this._snackBar.open("Error updating user.", "Dismiss", {
+      this.snackBar.open("Error updating user.", "Dismiss", {
         duration: 5000,
       });
       console.error(error);

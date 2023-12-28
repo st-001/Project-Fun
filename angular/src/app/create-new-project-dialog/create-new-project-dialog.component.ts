@@ -41,15 +41,15 @@ import { ClientSelectSearchComponent } from "../_fields/client-select-search/cli
 })
 export class CreateNewProjectDialogComponent {
   projectService: ProjectService = inject(ProjectService);
+  dialogRef: MatDialogRef<CreateNewProjectDialogComponent> = inject(
+    MatDialogRef,
+  );
+  snackBar: MatSnackBar = inject(MatSnackBar);
   createNewProjectForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
     clientId: new FormControl(null, [Validators.required]),
     isEnabled: new FormControl(true),
   });
-  constructor(
-    public dialogRef: MatDialogRef<CreateNewProjectDialogComponent>,
-    private _snackBar: MatSnackBar,
-  ) {}
 
   async submitForm() {
     let result;
@@ -59,11 +59,11 @@ export class CreateNewProjectDialogComponent {
         clientId: this.createNewProjectForm.value.clientId!,
         isEnabled: this.createNewProjectForm.value.isEnabled!,
       }));
-      this._snackBar.open("Project created", "Dismiss", {
+      this.snackBar.open("Project created", "Dismiss", {
         duration: 5000,
       });
     } catch (error) {
-      this._snackBar.open("Error creating project", "Dismiss", {
+      this.snackBar.open("Error creating project", "Dismiss", {
         duration: 5000,
       });
       console.error(error);

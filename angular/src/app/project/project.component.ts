@@ -31,17 +31,10 @@ export class ProjectComponent {
   dialog = inject(MatDialog);
   projectService = inject(ProjectService);
   project: Project | undefined;
-  projectId: number;
-  constructor() {
-    this.projectId = Number(this.route.snapshot.paramMap.get("id"));
-  }
+  projectId = Number(this.route.snapshot.paramMap.get("id"));
 
   async ngOnInit() {
     await this.getProject();
-  }
-
-  refreshNotes() {
-    throw new Error("Method not implemented.");
   }
 
   async getProject() {

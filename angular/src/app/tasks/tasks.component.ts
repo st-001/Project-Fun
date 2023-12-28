@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, ElementRef, inject, ViewChild } from "@angular/core";
 import { Task, TaskService } from "../_services/task/task.service";
 import { firstValueFrom } from "rxjs";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
@@ -34,11 +28,19 @@ import { Router } from "@angular/router";
   templateUrl: "./tasks.component.html",
   styleUrl: "./tasks.component.scss",
 })
-export class TasksComponent implements OnInit {
+export class TasksComponent {
   router = inject(Router);
-  onRowClick(task: Task) {
-    this.router.navigate(["/tasks", task.id]);
-  }
+  dialog = inject(MatDialog);
+  taskService = inject(TaskService);
+  dataSource = new MatTableDataSource<Task>();
+  displayedColumns: string[] = [
+    "name",
+    "isEnabled",
+    "createdAt",
+    "updatedAt",
+    "deletedAt",
+  ];
+
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
@@ -48,38 +50,12 @@ export class TasksComponent implements OnInit {
   @ViewChild("input")
   inputElement!: ElementRef;
 
-  async refreshTasks() {
-    const tasks = await this.getAllTasks();
-    this.dataSource.data = tasks;
-  }
   exportTasks() {
     throw new Error("Method not implemented.");
   }
 
-  private taskService = inject(TaskService);
-  dataSource = new MatTableDataSource<Task>();
-  displayedColumns: string[] = [
-    "name",
-    "isEnabled",
-    "createdAt",
-    "updatedAt",
-    "deletedAt",
-  ];
-  constructor(public dialog: MatDialog) {}
-
-  async getAllTasks() {
-    const tasks = await firstValueFrom(this.taskService.getAll());
-    return tasks;
-  }
-
-  private setupTableFeatures() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  async ngOnInit() {
-    const tasks = await this.getAllTasks();
-    this.dataSource.data = tasks;
+  onRowClick(task: Task) {
+    this.router.navigate(["/tasks", task.id]);
   }
 
   applyFilter(event: Event) {
@@ -87,8 +63,14 @@ export class TasksComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  ngAfterViewInit() {
-    this.setupTableFeatures();
+  async getAllTasks() {
+    this.dataSource.data = await firstValueFrom(this.taskService.getAll());
+  }
+
+  async ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    await this.getAllTasks();
   }
 
   async openCreateNewTaskDialog() {
@@ -101,7 +83,7 @@ export class TasksComponent implements OnInit {
 
     const result = await firstValueFrom(dialogRef.afterClosed()) as Task;
     if (result) {
-      await this.refreshTasks();
+      await this.getAllTasks();
     }
   }
 }

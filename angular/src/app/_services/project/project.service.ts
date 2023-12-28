@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Client } from "../client/client.service";
 
@@ -15,7 +15,7 @@ export interface Project {
 
 @Injectable({ providedIn: "root" })
 export class ProjectService {
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
 
   createNewProject(
     project: { name: string; isEnabled: boolean; clientId: number },

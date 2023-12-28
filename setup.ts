@@ -1,5 +1,6 @@
 // import sql from "./db.ts";
 // import { insertGroup } from "./models/group.ts";
+import { insertGroup } from "./models/group.ts";
 import { insertUser } from "./models/user.ts";
 // import { generateSecret } from "./jwt.ts";
 
@@ -82,14 +83,19 @@ import { insertUser } from "./models/user.ts";
 // });
 
 // const group = await insertGroup("Administrators", true);
-const user = await insertUser(
-  "Sam Tucker",
-  "sam.tucker.uk@example.com",
-  "password",
-  true,
-);
+// const user = await insertUser(
+//   "Sam Tucker",
+//   "sam.tucker.uk@example.com",
+//   "password",
+//   true,
+// );
 
-console.log("User: ", user);
+// console.log("User: ", user);
+
+// for 100 thousand times, add 100 groups
+for (let i = 0; i < 100000; i++) {
+  await insertGroup(`Group1 ${i}`, true, 1);
+}
 
 // const jwtSecret = await generateSecret();
 

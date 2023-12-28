@@ -31,10 +31,7 @@ export class TaskComponent {
   dialog = inject(MatDialog);
   taskService = inject(TaskService);
   task: Task | undefined;
-  taskId: number;
-  constructor() {
-    this.taskId = Number(this.route.snapshot.paramMap.get("id"));
-  }
+  taskId = Number(this.route.snapshot.paramMap.get("id"));
 
   async ngOnInit() {
     await this.getTask();
@@ -50,10 +47,6 @@ export class TaskComponent {
         this.router.navigate(["/tasks"]);
       }
     }
-  }
-
-  refreshNotes() {
-    throw new Error("Method not implemented.");
   }
 
   async openEditTaskDialog() {

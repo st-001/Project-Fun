@@ -31,10 +31,7 @@ export class ContactComponent {
   dialog = inject(MatDialog);
   contactService = inject(ContactService);
   contact: Contact | undefined;
-  contactId: number;
-  constructor() {
-    this.contactId = Number(this.route.snapshot.paramMap.get("id"));
-  }
+  contactId = Number(this.route.snapshot.paramMap.get("id"));
 
   async ngOnInit() {
     await this.getContact();

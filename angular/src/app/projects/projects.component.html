@@ -1,7 +1,7 @@
 <div class="button-bar">
   <button mat-raised-button color="primary" (click)="openCreateNewProjectDialog()">Create New Project</button>
   <button mat-raised-button color="primary" (click)="exportProjects()">Export Projects</button>
-  <button mat-raised-button color="primary" (click)="refreshProjects()">Refresh</button>
+  <button mat-raised-button color="primary" (click)="getAllProjects()">Refresh</button>
 </div>
 
 <mat-form-field>
@@ -25,26 +25,26 @@
 
   <!-- Enabled -->
   <ng-container matColumnDef="isEnabled">
-    <th mat-header-cell *matHeaderCellDef> Enabled </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Enabled </th>
     <td mat-cell *matCellDef="let element"> {{element.isEnabled}} </td>
   </ng-container>
 
   <!-- Created Date Column -->
   <ng-container matColumnDef="createdAt">
-    <th mat-header-cell *matHeaderCellDef> Created Date </th>
-    <td mat-cell *matCellDef="let element"> {{element.createdAt | date }} </td>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
+    <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'medium' }} </td>
   </ng-container>
 
   <!-- Updated Date Column -->
   <ng-container matColumnDef="updatedAt">
-    <th mat-header-cell *matHeaderCellDef> Updated Date </th>
-    <td mat-cell *matCellDef="let element"> {{element.updatedAt | date }} </td>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Updated Date </th>
+    <td mat-cell *matCellDef="let element"> {{element.updatedAt | date: 'medium' }} </td>
   </ng-container>
 
   <!-- Deleted Date Column -->
   <ng-container matColumnDef="deletedAt">
-    <th mat-header-cell *matHeaderCellDef> Deleted Date </th>
-    <td mat-cell *matCellDef="let element"> {{element.deletedAt | date }} </td>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Deleted Date </th>
+    <td mat-cell *matCellDef="let element"> {{element.deletedAt | date: 'medium' }} </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

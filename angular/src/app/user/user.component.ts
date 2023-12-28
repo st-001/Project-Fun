@@ -32,17 +32,10 @@ export class UserComponent {
   dialog = inject(MatDialog);
   userService = inject(UserService);
   user: User | undefined;
-  userId: number;
-  constructor() {
-    this.userId = Number(this.route.snapshot.paramMap.get("id"));
-  }
+  userId = Number(this.route.snapshot.paramMap.get("id"));
 
   async ngOnInit() {
     await this.getUser();
-  }
-
-  refreshNotes() {
-    throw new Error("Method not implemented.");
   }
 
   async getUser() {
