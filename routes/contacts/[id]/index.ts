@@ -114,10 +114,10 @@ export const handler: Handlers = {
       }
 
       const updateData = await req.json() as {
-        name?: string;
-        isEnabled?: boolean;
-        emailAddress?: string;
-        clientId?: number;
+        name: string;
+        isEnabled: boolean;
+        emailAddress: string;
+        clientId: number;
       };
 
       if (!putRequestValidator(updateData)) {
@@ -126,10 +126,10 @@ export const handler: Handlers = {
 
       const updatedContact = await updateContact(
         contactId,
-        updateData.name ?? contactToUpdate.name,
-        updateData.emailAddress ?? contactToUpdate.emailAddress,
-        updateData.clientId ?? contactToUpdate.client.id,
-        updateData.isEnabled ?? contactToUpdate.isEnabled,
+        updateData.name,
+        updateData.emailAddress,
+        updateData.clientId,
+        updateData.isEnabled,
         ctx.state.userId as number,
       );
 

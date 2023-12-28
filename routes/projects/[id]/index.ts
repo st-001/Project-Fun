@@ -109,9 +109,9 @@ export const handler: Handlers = {
       }
 
       const updateData = await req.json() as {
-        name?: string;
-        isEnabled?: boolean;
-        clientId?: number;
+        name: string;
+        isEnabled: boolean;
+        clientId: number;
       };
 
       if (!putRequestValidator(updateData)) {
@@ -120,9 +120,9 @@ export const handler: Handlers = {
 
       const updatedProject = await updateProject(
         projectId,
-        updateData.name ?? projectToUpdate.name,
-        updateData.clientId ?? projectToUpdate.client.id,
-        updateData.isEnabled ?? projectToUpdate.isEnabled,
+        updateData.name,
+        updateData.clientId,
+        updateData.isEnabled,
         ctx.state.userId as number,
       );
 

@@ -88,9 +88,9 @@ export const handler: Handlers = {
       }
 
       const updateData = await req.json() as {
-        name?: string;
-        emailAddress?: string;
-        isEnabled?: boolean;
+        name: string;
+        emailAddress: string;
+        isEnabled: boolean;
       };
 
       if (!putRequestValidator(updateData)) {
@@ -99,11 +99,9 @@ export const handler: Handlers = {
 
       const updatedUser = await updateUser(
         userId,
-        updateData.name ?? userToUpdate.name,
-        updateData.emailAddress ?? userToUpdate.emailAddress,
-        typeof updateData.isEnabled === "boolean"
-          ? updateData.isEnabled
-          : userToUpdate.isEnabled,
+        updateData.name,
+        updateData.emailAddress,
+        updateData.isEnabled,
       );
 
       if (!updatedUser) {

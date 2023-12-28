@@ -86,8 +86,8 @@ export const handler: Handlers = {
       }
 
       const updateData = await req.json() as {
-        name?: string;
-        isEnabled?: boolean;
+        name: string;
+        isEnabled: boolean;
       };
 
       if (!putRequestValidator(updateData)) {
@@ -96,10 +96,8 @@ export const handler: Handlers = {
 
       const updatedGroup = await updateGroup(
         groupId,
-        updateData.name ?? groupToUpdate.name,
-        typeof updateData.isEnabled === "boolean"
-          ? updateData.isEnabled
-          : groupToUpdate.isEnabled,
+        updateData.name,
+        updateData.isEnabled,
         ctx.state.userId as number,
       );
 

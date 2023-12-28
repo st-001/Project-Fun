@@ -86,8 +86,8 @@ export const handler: Handlers = {
       }
 
       const updateData = await req.json() as {
-        name?: string;
-        isEnabled?: boolean;
+        name: string;
+        isEnabled: boolean;
       };
 
       if (!putRequestValidator(updateData)) {
@@ -96,8 +96,8 @@ export const handler: Handlers = {
 
       const updatedTask = await updateTask(
         taskId,
-        updateData.name ?? taskToUpdate.name,
-        updateData.isEnabled ?? taskToUpdate.isEnabled,
+        updateData.name,
+        updateData.isEnabled,
         ctx.state.userId as number,
       );
 
