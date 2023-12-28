@@ -55,18 +55,16 @@ export class CreateNewTaskDialogComponent {
         name: this.createNewTaskForm.value.name!,
         isEnabled: this.createNewTaskForm.value.isEnabled!,
       }));
-      this.dialogRef.close(result);
+      this._snackBar.open("Task created", "Dismiss", {
+        duration: 5000,
+      });
     } catch (error) {
       this._snackBar.open("Error creating task", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
-      this.dialogRef.close();
-      return;
+    } finally {
+      this.dialogRef.close(result);
     }
-
-    this._snackBar.open("Task created", "Dismiss", {
-      duration: 5000,
-    });
   }
 }

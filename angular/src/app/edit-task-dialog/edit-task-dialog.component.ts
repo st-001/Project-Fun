@@ -67,18 +67,16 @@ export class EditTaskDialogComponent {
           isEnabled: this.editTaskForm!.value.isEnabled!,
         }),
       );
-      this.dialogRef.close(result);
+      this._snackBar.open("Task updated.", "Dismiss", {
+        duration: 5000,
+      });
     } catch (error) {
       this._snackBar.open("Error updating task.", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
-      this.dialogRef.close();
-      return;
+    } finally {
+      this.dialogRef.close(result);
     }
-
-    this._snackBar.open("Task updated.", "Dismiss", {
-      duration: 5000,
-    });
   }
 }

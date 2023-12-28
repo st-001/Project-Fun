@@ -59,18 +59,16 @@ export class CreateNewUserDialogComponent {
         emailAddress: this.createNewUserForm.value.emailAddress!,
         password: this.createNewUserForm.value.password!,
       }));
-      this.dialogRef.close(result);
+      this._snackBar.open("User created", "Dismiss", {
+        duration: 5000,
+      });
     } catch (error) {
       this._snackBar.open("Error creating user", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
-      this.dialogRef.close();
-      return;
+    } finally {
+      this.dialogRef.close(result);
     }
-
-    this._snackBar.open("User created", "Dismiss", {
-      duration: 5000,
-    });
   }
 }

@@ -67,18 +67,16 @@ export class EditGroupDialogComponent {
           isEnabled: this.editGroupForm!.value.isEnabled!,
         }),
       );
-      this.dialogRef.close(result);
+      this._snackBar.open("Group updated.", "Dismiss", {
+        duration: 5000,
+      });
     } catch (error) {
       this._snackBar.open("Error updating group.", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
-      this.dialogRef.close();
-      return;
+    } finally {
+      this.dialogRef.close(result);
     }
-
-    this._snackBar.open("Group updated.", "Dismiss", {
-      duration: 5000,
-    });
   }
 }

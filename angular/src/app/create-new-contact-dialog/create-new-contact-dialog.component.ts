@@ -62,18 +62,16 @@ export class CreateNewContactDialogComponent {
         emailAddress: this.createNewContactForm.value.emailAddress!,
         clientId: this.createNewContactForm.value.clientId!,
       }));
-      this.dialogRef.close(result);
+      this._snackBar.open("Contact created", "Dismiss", {
+        duration: 5000,
+      });
     } catch (error) {
       this._snackBar.open("Error creating contact", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
-      this.dialogRef.close();
-      return;
+    } finally {
+      this.dialogRef.close(result);
     }
-
-    this._snackBar.open("Contact created", "Dismiss", {
-      duration: 5000,
-    });
   }
 }

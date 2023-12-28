@@ -59,18 +59,16 @@ export class CreateNewProjectDialogComponent {
         clientId: this.createNewProjectForm.value.clientId!,
         isEnabled: this.createNewProjectForm.value.isEnabled!,
       }));
-      this.dialogRef.close(result);
+      this._snackBar.open("Project created", "Dismiss", {
+        duration: 5000,
+      });
     } catch (error) {
       this._snackBar.open("Error creating project", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
-      this.dialogRef.close();
-      return;
+    } finally {
+      this.dialogRef.close(result);
     }
-
-    this._snackBar.open("Project created", "Dismiss", {
-      duration: 5000,
-    });
   }
 }

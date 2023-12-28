@@ -55,18 +55,16 @@ export class CreateNewClientDialogComponent {
         name: this.createNewClientForm.value.name!,
         isEnabled: this.createNewClientForm.value.isEnabled!,
       }));
-      this.dialogRef.close(result);
+      this._snackBar.open("Client created", "Dismiss", {
+        duration: 5000,
+      });
     } catch (error) {
       this._snackBar.open("Error creating client", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
-      this.dialogRef.close();
-      return;
+    } finally {
+      this.dialogRef.close(result);
     }
-
-    this._snackBar.open("Client created", "Dismiss", {
-      duration: 5000,
-    });
   }
 }

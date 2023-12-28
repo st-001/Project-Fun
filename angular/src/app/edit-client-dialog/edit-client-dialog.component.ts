@@ -69,18 +69,16 @@ export class EditClientDialogComponent {
           isEnabled: this.editClientForm!.value.isEnabled!,
         }),
       );
-      this.dialogRef.close(result);
+      this._snackBar.open("Client updated.", "Dismiss", {
+        duration: 5000,
+      });
     } catch (error) {
       this._snackBar.open("Error updating client.", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
-      this.dialogRef.close();
-      return;
+    } finally {
+      this.dialogRef.close(result);
     }
-
-    this._snackBar.open("Client updated.", "Dismiss", {
-      duration: 5000,
-    });
   }
 }

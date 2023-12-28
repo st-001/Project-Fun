@@ -71,18 +71,16 @@ export class EditProjectDialogComponent {
           clientId: this.editProjectForm!.value.clientId!,
         }),
       );
-      this.dialogRef.close(result);
+      this._snackBar.open("Project updated.", "Dismiss", {
+        duration: 5000,
+      });
     } catch (error) {
       this._snackBar.open("Error updating project.", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
-      this.dialogRef.close();
-      return;
+    } finally {
+      this.dialogRef.close(result);
     }
-
-    this._snackBar.open("Project updated.", "Dismiss", {
-      duration: 5000,
-    });
   }
 }

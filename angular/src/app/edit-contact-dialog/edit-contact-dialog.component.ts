@@ -76,18 +76,16 @@ export class EditContactDialogComponent {
           clientId: this.editContactForm!.value.clientId!,
         }),
       );
-      this.dialogRef.close(result);
+      this._snackBar.open("Contact updated.", "Dismiss", {
+        duration: 5000,
+      });
     } catch (error) {
       this._snackBar.open("Error updating contact.", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
-      this.dialogRef.close();
-      return;
+    } finally {
+      this.dialogRef.close(result);
     }
-
-    this._snackBar.open("Contact updated.", "Dismiss", {
-      duration: 5000,
-    });
   }
 }

@@ -55,18 +55,16 @@ export class CreateNewGroupDialogComponent {
         name: this.createNewGroupForm.value.name!,
         isEnabled: this.createNewGroupForm.value.isEnabled!,
       }));
-      this.dialogRef.close(result);
+      this._snackBar.open("Group created", "Dismiss", {
+        duration: 5000,
+      });
     } catch (error) {
       this._snackBar.open("Error creating group", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
-      this.dialogRef.close();
-      return;
+    } finally {
+      this.dialogRef.close(result);
     }
-
-    this._snackBar.open("Group created", "Dismiss", {
-      duration: 5000,
-    });
   }
 }
