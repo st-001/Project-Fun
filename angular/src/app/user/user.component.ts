@@ -9,6 +9,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { EditUserDialogComponent } from "../edit-user-dialog/edit-user-dialog.component";
 import { defaultMatDialogTop } from "../util";
+import { ResetUserPasswordDialogComponent } from "../reset-user-password-dialog/reset-user-password-dialog.component";
 
 @Component({
   selector: "app-user",
@@ -56,6 +57,23 @@ export class UserComponent {
 
   async openEditUserDialog() {
     const dialogRef = this.dialog.open(EditUserDialogComponent, {
+      width: "500px",
+      position: {
+        top: defaultMatDialogTop,
+      },
+      data: {
+        userId: this.userId,
+      },
+    });
+
+    const result = await firstValueFrom(dialogRef.afterClosed()) as User;
+    if (result) {
+      await this.getUser();
+    }
+  }
+
+  async openResetUserPasswordDialog() {
+    const dialogRef = this.dialog.open(ResetUserPasswordDialogComponent, {
       width: "500px",
       position: {
         top: defaultMatDialogTop,

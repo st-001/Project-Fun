@@ -46,4 +46,8 @@ export class UserService {
   ): Observable<User> {
     return this.http.put<User>(`/api/users/${id}`, user);
   }
+
+  resetUserPassword(id: number, newPassword: string): Observable<void> {
+    return this.http.put<void>(`/api/users/${id}/password`, { newPassword });
+  }
 }

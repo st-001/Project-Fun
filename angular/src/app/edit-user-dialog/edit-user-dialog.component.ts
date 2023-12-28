@@ -67,23 +67,21 @@ export class EditUserDialogComponent {
     try {
       result = await firstValueFrom(
         this.userService.updateUserById(this.user!.id, {
-          name: this.editUserForm!.value.name!,
-          isEnabled: this.editUserForm!.value.isEnabled!,
-          emailAddress: this.editUserForm!.value.emailAddress!,
+          name: this.editUserForm!.value.name,
+          isEnabled: this.editUserForm!.value.isEnabled,
+          emailAddress: this.editUserForm!.value.emailAddress,
         }),
       );
-      this.dialogRef.close(result);
+      this._snackBar.open("User updated.", "Dismiss", {
+        duration: 5000,
+      });
     } catch (error) {
       this._snackBar.open("Error updating user.", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
-      this.dialogRef.close();
-      return;
+    } finally {
+      this.dialogRef.close(result);
     }
-
-    this._snackBar.open("User updated.", "Dismiss", {
-      duration: 5000,
-    });
   }
 }
