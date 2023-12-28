@@ -84,7 +84,7 @@ import { insertUser } from "./models/user.ts";
 // const group = await insertGroup("Administrators", true);
 const user = await insertUser(
   "Sam Tucker",
-  "sam.tucker.uk@outlook.com",
+  "sam.tucker.uk@example.com",
   "password",
   true,
 );

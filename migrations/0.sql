@@ -28,15 +28,15 @@ CREATE TABLE users (
     UNIQUE (email_address)
 );
 
-ALTER TABLE groups
-ADD FOREIGN KEY (created_by) REFERENCES users(id);
-ADD FOREIGN KEY (updated_by) REFERENCES users(id);
-ADD FOREIGN KEY (deleted_by) REFERENCES users(id);
+-- ALTER TABLE groups
+-- ADD FOREIGN KEY (created_by) REFERENCES users(id);
+-- ADD FOREIGN KEY (updated_by) REFERENCES users(id);
+-- ADD FOREIGN KEY (deleted_by) REFERENCES users(id);
 
-ALTER TABLE users
-ADD FOREIGN KEY (created_by) REFERENCES users(id);
-ADD FOREIGN KEY (updated_by) REFERENCES users(id);
-ADD FOREIGN KEY (deleted_by) REFERENCES users(id);
+-- ALTER TABLE users
+-- ADD FOREIGN KEY (created_by) REFERENCES users(id);
+-- ADD FOREIGN KEY (updated_by) REFERENCES users(id);
+-- ADD FOREIGN KEY (deleted_by) REFERENCES users(id);
 
 CREATE TABLE user_group (
     user_id int NOT NULL,
@@ -44,6 +44,19 @@ CREATE TABLE user_group (
     PRIMARY KEY (user_id, group_id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (group_id) REFERENCES groups(id)
+);
+
+CREATE TABLE note (
+  id serial PRIMARY KEY,
+  entity_type varchar(255) NOT NULL,
+  entity_id int NOT NULL,
+  content text NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  updated_at timestamp with time zone NOT NULL DEFAULT now(),
+  created_by int NOT NULL,
+  updated_by int,
+  FOREIGN KEY (created_by) REFERENCES users(id),
+  FOREIGN KEY (updated_by) REFERENCES users(id)
 );
 
 CREATE TABLE client (
@@ -81,6 +94,16 @@ CREATE TABLE contact (
     FOREIGN KEY (created_by) REFERENCES users(id),
     FOREIGN KEY (updated_by) REFERENCES users(id),
     FOREIGN KEY (deleted_by) REFERENCES users(id)
+);
+
+CREATE TABLE note (
+    id serial PRIMARY KEY,
+    entity_type varchar(255) NOT NULL,
+    entity_id int NOT NULL,
+    content text NOT NULL,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    created_by int NOT NULL,
+    FOREIGN KEY (created_by) REFERENCES users(id)
 );
 
 
