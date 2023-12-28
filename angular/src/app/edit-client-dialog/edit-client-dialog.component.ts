@@ -1,6 +1,6 @@
-import { Component, inject } from "@angular/core";
+import { Component, Inject, inject } from "@angular/core";
 import {
-  MatDialog,
+  MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
@@ -16,14 +16,14 @@ import {
 } from "@angular/forms";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { ContactService } from "../_services/contact/contact.service";
+import { Client, ClientService } from "../_services/client/client.service";
 import { firstValueFrom } from "rxjs";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ClientSelectSearchComponent } from "../_fields/client-select-search/client-select-search.component";
 
 @Component({
-  selector: "app-create-new-contact-dialog",
+  selector: "app-edit-client-dialog",
   standalone: true,
   imports: [
     MatFormFieldModule,
@@ -37,34 +37,41 @@ import { ClientSelectSearchComponent } from "../_fields/client-select-search/cli
     MatCheckboxModule,
     ClientSelectSearchComponent,
   ],
-  templateUrl: "./create-new-contact-dialog.component.html",
-  styleUrl: "./create-new-contact-dialog.component.scss",
+  templateUrl: "./edit-client-dialog.component.html",
+  styleUrl: "./edit-client-dialog.component.scss",
 })
-export class CreateNewContactDialogComponent {
-  contactService: ContactService = inject(ContactService);
-  createNewContactForm = new FormGroup({
-    name: new FormControl("", [Validators.required]),
-    emailAddress: new FormControl("", [Validators.required, Validators.email]),
-    clientId: new FormControl(null, [Validators.required]),
-    isEnabled: new FormControl(true),
-  });
+export class EditClientDialogComponent {
+  clientService: ClientService = inject(ClientService);
+  client: Client | undefined;
+  editClientForm: FormGroup | undefined;
   constructor(
-    public dialogRef: MatDialogRef<CreateNewContactDialogComponent>,
+    public dialogRef: MatDialogRef<EditClientDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public dialogInputData: { clientId: number },
     private _snackBar: MatSnackBar,
   ) {}
+
+  async ngOnInit() {
+    this.client = await firstValueFrom(
+      this.clientService.getClientById(this.dialogInputData.clientId),
+    );
+    this.editClientForm = new FormGroup({
+      name: new FormControl(this.client.name, [Validators.required]),
+      isEnabled: new FormControl(this.client.isEnabled),
+    });
+  }
 
   async submitForm() {
     let result;
     try {
-      result = await firstValueFrom(this.contactService.createNewContact({
-        name: this.createNewContactForm.value.name!,
-        isEnabled: this.createNewContactForm.value.isEnabled!,
-        emailAddress: this.createNewContactForm.value.emailAddress!,
-        clientId: this.createNewContactForm.value.clientId!,
-      }));
+      result = await firstValueFrom(
+        this.clientService.updateClientById(this.client!.id, {
+          name: this.editClientForm!.value.name!,
+          isEnabled: this.editClientForm!.value.isEnabled!,
+        }),
+      );
       this.dialogRef.close(result);
     } catch (error) {
-      this._snackBar.open("Error creating contact", "Dismiss", {
+      this._snackBar.open("Error updating client.", "Dismiss", {
         duration: 5000,
       });
       console.error(error);
@@ -72,7 +79,7 @@ export class CreateNewContactDialogComponent {
       return;
     }
 
-    this._snackBar.open("Contact created", "Dismiss", {
+    this._snackBar.open("Client updated.", "Dismiss", {
       duration: 5000,
     });
   }

@@ -1,6 +1,5 @@
 import sql from "../db.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
-import { getGroupById, type Group } from "./group.ts";
 
 export interface User {
   id: number;
@@ -8,8 +7,6 @@ export interface User {
   emailAddress: string;
   password?: string;
   passwordHash?: string;
-  primaryGroupId?: number;
-  primaryGroup: Group;
   isEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -20,49 +17,31 @@ export async function insertUser(
   name: string,
   emailAddress: string,
   password: string,
-  primaryGroupId: number,
   isEnabled: boolean,
 ) {
   const passwordHash = await bcrypt.hash(password);
-  const result = await sql.begin(async (sql) => {
-    const [user] = await sql`
-      insert into users
-        (name, email_address, password_hash, primary_group_id, is_enabled)
-      values
-        (${name}, ${emailAddress}, ${passwordHash}, ${primaryGroupId}, ${isEnabled})
-      returning 
-        id,
-        name,
-        email_address as "emailAddress",
-        is_enabled as "isEnabled",
-        created_at as "createdAt",
-        updated_at as "updatedAt",
-        deleted_at as "deletedAt"
-    `;
+  const insertResult = await sql`
+  insert into users
+    (name, email_address, password_hash, is_enabled)
+  values
+    (${name}, ${emailAddress}, ${passwordHash}, ${isEnabled})
+  returning 
+    id,
+    name,
+    email_address as "emailAddress",
+    is_enabled as "isEnabled",
+    created_at as "createdAt",
+    updated_at as "updatedAt",
+    deleted_at as "deletedAt"
+`;
 
-    await sql`
-      insert into user_group
-        (user_id, group_id)
-      values
-        (${user.id}, ${primaryGroupId})
-    `;
-
-    return user;
-  });
-
-  const group = await getGroupById(primaryGroupId);
-
-  return {
-    ...result,
-    primaryGroup: group,
-  } as User;
+  return insertResult[0] as User;
 }
 
 export async function updateUser(
   userId: number | string,
   name: string,
   emailAddress: string,
-  primaryGroupId: number,
   isEnabled: boolean,
 ): Promise<User | null> {
   const userToUpdate = await getUserById(userId);
@@ -70,50 +49,27 @@ export async function updateUser(
     return null;
   }
 
-  const oldPrimaryGroupId = userToUpdate.primaryGroupId;
-
-  const result = await sql.begin(async (sql) => {
-    const [updatedUser] = await sql`
-      UPDATE users
-      SET
-        name = ${name},
-        email_address = ${emailAddress},
-        primary_group_id = ${primaryGroupId},
-        is_enabled = ${isEnabled},
-        updated_at = now()
-      WHERE id = ${userId}
-      RETURNING 
-        id,
-        name,
-        email_address as "emailAddress",
-        primary_group_id as "primaryGroupId",
-        is_enabled as "isEnabled",
-        created_at as "createdAt",
-        updated_at as "updatedAt",
-        deleted_at as "deletedAt"
-    `;
-
-    if (oldPrimaryGroupId !== primaryGroupId) {
-      await sql`
-        INSERT INTO user_group
-          (user_id, group_id)
-        VALUES
-          (${userId}, ${primaryGroupId})
-        ON CONFLICT (user_id, group_id) 
-        DO NOTHING;
+  const updateResult = await sql`
+    UPDATE users
+    SET
+      name = ${name},
+      email_address = ${emailAddress},
+      is_enabled = ${isEnabled},
+      updated_at = now()
+    WHERE id = ${userId}
+    RETURNING 
+      id,
+      name,
+      email_address as "emailAddress",
+      is_enabled as "isEnabled",
+      created_at as "createdAt",
+      updated_at as "updatedAt",
+      deleted_at as "deletedAt"
       `;
-    }
 
-    return updatedUser;
-  });
+  const user = updateResult[0] as User;
 
-  if (!result) {
-    return null;
-  }
-
-  result.primaryGroup = await getGroupById(result.primaryGroupId!);
-
-  return result as User;
+  return user ? user : null;
 }
 
 export async function getUserById(id: number | string) {
@@ -122,7 +78,6 @@ export async function getUserById(id: number | string) {
     id,
     name,
     email_address AS "emailAddress",
-    primary_group_id AS "primaryGroupId",
     is_enabled AS "isEnabled",
     created_at AS "createdAt",
     updated_at AS "updatedAt",
@@ -134,8 +89,6 @@ export async function getUserById(id: number | string) {
   if (!user) {
     return null;
   }
-
-  user.primaryGroup = await getGroupById(user.primaryGroupId!);
 
   return user;
 }
@@ -149,15 +102,9 @@ export async function getAllUsers() {
       users.is_enabled AS "isEnabled",
       users.created_at AS "createdAt",
       users.updated_at AS "updatedAt",
-      users.deleted_at AS "deletedAt",
-      json_build_object(
-        'id', groups.id,
-        'name', groups.name
-      ) AS "primaryGroup"
+      users.deleted_at AS "deletedAt"
     FROM 
       users
-    INNER JOIN 
-      groups ON users.primary_group_id = groups.id
   ` as User[];
 
   return users;
@@ -170,7 +117,6 @@ export async function getUserByEmail(email: string) {
     name,
     email_address AS "emailAddress",
     password_hash AS "passwordHash",
-    primary_group_id AS "primaryGroupId",
     is_enabled AS "isEnabled",
     created_at AS "createdAt",
     updated_at AS "updatedAt",
@@ -182,8 +128,6 @@ export async function getUserByEmail(email: string) {
   if (!user) {
     return null;
   }
-
-  user.primaryGroup = await getGroupById(user.primaryGroupId!);
 
   return user;
 }

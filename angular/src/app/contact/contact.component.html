@@ -2,8 +2,8 @@
 <div class="button-bar">
   <button mat-raised-button color="primary" [routerLink]="['/contacts']">Back To Contacts</button>
   <button mat-raised-button color="primary" (click)="openEditContactDialog()">Edit Contact</button>
-  <button mat-raised-button color="primary" (click)="refreshContact()">Refresh</button>
-  <button mat-raised-button color="primary" (click)="refreshContact()">Go To Client {{contact.client.name}}</button>
+  <button mat-raised-button color="primary" (click)="getContact()">Refresh</button>
+  <button mat-raised-button color="primary" (click)="getContact()">Go To Client {{contact.client.name}}</button>
 </div>
 <div style="padding: 0 10px 10px 10px;">
   <mat-card>

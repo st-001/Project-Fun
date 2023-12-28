@@ -36,4 +36,16 @@ export class ContactService {
   getContactById(id: number): Observable<Contact> {
     return this.http.get<Contact>(`/api/contacts/${id}`);
   }
+
+  updateContactById(
+    id: number,
+    contact: {
+      name: string;
+      emailAddress: string;
+      clientId: number;
+      isEnabled: boolean;
+    },
+  ): Observable<Contact> {
+    return this.http.put<Contact>(`/api/contacts/${id}`, contact);
+  }
 }

@@ -28,4 +28,11 @@ export class ClientService {
   getClientById(id: number): Observable<Client> {
     return this.http.get<Client>(`/api/clients/${id}`);
   }
+
+  updateClientById(
+    id: number,
+    client: { name: string; isEnabled: boolean },
+  ): Observable<Client> {
+    return this.http.put<Client>(`/api/clients/${id}`, client);
+  }
 }

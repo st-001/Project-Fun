@@ -1,4 +1,5 @@
 <mat-form-field>
+  <mat-label>{{placeholder}}</mat-label>
   <mat-select [placeholder]="placeholder" [formControl]="control" #groupSelect>
     <mat-option>
       <ngx-mat-select-search placeholderLabel="Find group" [formControl]="groupFilterCtrl"></ngx-mat-select-search>

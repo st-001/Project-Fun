@@ -17,17 +17,15 @@ CREATE TABLE users (
     name varchar(255) NOT NULL,
     email_address varchar(255) NOT NULL,
     password_hash varchar(255) NOT NULL,
-    primary_group_id int NOT NULL,
     is_enabled boolean NOT NULL DEFAULT true,
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     deleted_at timestamp with time zone,
-    created_by int NOT NULL,
-    updated_by int NOT NULL,
+    created_by int,
+    updated_by int,
     deleted_by int,
     PRIMARY KEY (id),
-    UNIQUE (email),
-    FOREIGN KEY (primary_group_id) REFERENCES groups(id)
+    UNIQUE (email_address)
 );
 
 ALTER TABLE groups
@@ -97,7 +95,6 @@ CREATE TABLE project (
     created_by int NOT NULL,
     updated_by int NOT NULL,
     deleted_by int,
-    UNIQUE (name),
     PRIMARY KEY (id),
     FOREIGN KEY (client_id) REFERENCES client(id),
     FOREIGN KEY (created_by) REFERENCES users(id),
@@ -115,7 +112,6 @@ CREATE TABLE task (
     created_by int NOT NULL,
     updated_by int NOT NULL,
     deleted_by int,
-    UNIQUE (name),
     PRIMARY KEY (id),
     FOREIGN KEY (created_by) REFERENCES users(id),
     FOREIGN KEY (updated_by) REFERENCES users(id),

@@ -21,7 +21,6 @@ export class UserService {
     user: {
       name: string;
       emailAddress: string;
-      primaryGroupId: number;
       password: string;
       isEnabled: boolean;
     },
@@ -35,5 +34,16 @@ export class UserService {
 
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`/api/users/${id}`);
+  }
+
+  updateUserById(
+    id: number,
+    user: {
+      name: string;
+      emailAddress: string;
+      isEnabled: boolean;
+    },
+  ): Observable<User> {
+    return this.http.put<User>(`/api/users/${id}`, user);
   }
 }

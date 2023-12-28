@@ -12,34 +12,19 @@ export const GET_RESPONSE_SCHEMA = {
   properties: {
     id: { type: "integer" },
     name: { type: "string" },
-    email: { type: "string", format: "email" },
-    primaryGroupId: { type: "integer" },
+    emailAddress: { type: "string", format: "email" },
     isEnabled: { type: "boolean" },
     createdAt: { type: "string", format: "date-time" },
     updatedAt: { type: "string", format: "date-time" },
     deletedAt: { type: ["string", "null"], format: "date-time" },
-    primaryGroup: {
-      type: "object",
-      properties: {
-        id: { type: "integer" },
-        name: { type: "string" },
-        isEnabled: { type: "boolean" },
-        createdAt: { type: "string", format: "date-time" },
-        updatedAt: { type: "string", format: "date-time" },
-        deletedAt: { type: ["string", "null"], format: "date-time" },
-      },
-      required: ["id", "name", "isEnabled", "createdAt", "updatedAt"],
-    },
   },
   required: [
     "id",
     "name",
-    "email",
-    "primaryGroupId",
+    "emailAddress",
     "isEnabled",
     "createdAt",
     "updatedAt",
-    "primaryGroup",
   ],
 };
 
@@ -47,10 +32,10 @@ export const PUT_REQUEST_SCHEMA = {
   type: "object",
   properties: {
     name: { type: "string", maxLength: 255, minLength: 1 },
-    email: { type: "string", format: "email" },
-    primaryGroupId: { type: "number" },
+    emailAddress: { type: "string", format: "email" },
     isEnabled: { type: "boolean" },
   },
+  required: ["name", "emailAddress", "isEnabled"],
   additionalProperties: false,
 };
 
@@ -59,15 +44,7 @@ export const PUT_RESPONSE_SCHEMA = {
   properties: {
     id: { type: "number" },
     name: { type: "string" },
-    email: { type: "string" },
-    primaryGroup: {
-      type: "object",
-      properties: {
-        id: { type: "number" },
-        name: { type: "string" },
-      },
-      required: ["id", "name"],
-    },
+    emailAddress: { type: "string" },
     isEnabled: { type: "boolean" },
     createdAt: { type: "string", format: "date-time" },
     updatedAt: { type: "string", format: "date-time" },
@@ -79,8 +56,7 @@ export const PUT_RESPONSE_SCHEMA = {
   required: [
     "id",
     "name",
-    "email",
-    "primaryGroup",
+    "emailAddress",
     "isEnabled",
     "createdAt",
     "updatedAt",
@@ -113,8 +89,7 @@ export const handler: Handlers = {
 
       const updateData = await req.json() as {
         name?: string;
-        email?: string;
-        primaryGroupId?: number;
+        emailAddress?: string;
         isEnabled?: boolean;
       };
 
@@ -125,8 +100,7 @@ export const handler: Handlers = {
       const updatedUser = await updateUser(
         userId,
         updateData.name ?? userToUpdate.name,
-        updateData.email ?? userToUpdate.email,
-        updateData.primaryGroupId ?? userToUpdate.primaryGroupId!,
+        updateData.emailAddress ?? userToUpdate.emailAddress,
         typeof updateData.isEnabled === "boolean"
           ? updateData.isEnabled
           : userToUpdate.isEnabled,

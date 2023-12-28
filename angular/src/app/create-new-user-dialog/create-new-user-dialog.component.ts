@@ -42,8 +42,7 @@ export class CreateNewUserDialogComponent {
   createNewUserForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
     isEnabled: new FormControl(true),
-    emailAddress: new FormControl("", [Validators.required]),
-    primaryGroupId: new FormControl(null, [Validators.required]),
+    emailAddress: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [Validators.required]),
   });
   constructor(
@@ -58,7 +57,6 @@ export class CreateNewUserDialogComponent {
         name: this.createNewUserForm.value.name!,
         isEnabled: this.createNewUserForm.value.isEnabled!,
         emailAddress: this.createNewUserForm.value.emailAddress!,
-        primaryGroupId: this.createNewUserForm.value.primaryGroupId!,
         password: this.createNewUserForm.value.password!,
       }));
       this.dialogRef.close(result);

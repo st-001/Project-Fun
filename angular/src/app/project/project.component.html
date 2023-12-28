@@ -2,8 +2,8 @@
 <div class="button-bar">
   <button mat-raised-button color="primary" [routerLink]="['/projects']">Back To Projects</button>
   <button mat-raised-button color="primary" (click)="openEditProjectDialog()">Edit Project</button>
-  <button mat-raised-button color="primary" (click)="refreshProject()">Refresh</button>
-  <button mat-raised-button color="primary" (click)="refreshProject()">Go To Client {{ project.client.name }}</button>
+  <button mat-raised-button color="primary" (click)="getProject()">Refresh</button>
+  <button mat-raised-button color="primary" (click)="getProject()">Go To Client {{ project.client.name }}</button>
 </div>
 <div style="padding: 0 10px 10px 10px;">
   <mat-card>

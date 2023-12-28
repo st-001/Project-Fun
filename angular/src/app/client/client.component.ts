@@ -6,6 +6,9 @@ import { MatCardModule } from "@angular/material/card";
 import { DatePipe } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTabsModule } from "@angular/material/tabs";
+import { MatDialog } from "@angular/material/dialog";
+import { EditClientDialogComponent } from "../edit-client-dialog/edit-client-dialog.component";
+import { defaultMatDialogTop } from "../util";
 
 @Component({
   selector: "app-client",
@@ -21,31 +24,49 @@ import { MatTabsModule } from "@angular/material/tabs";
   styleUrl: "./client.component.scss",
 })
 export class ClientComponent {
-  refreshNotes() {
-    throw new Error("Method not implemented.");
-  }
-  refreshClient() {
-    throw new Error("Method not implemented.");
-  }
-  openEditClientDialog() {
-    throw new Error("Method not implemented.");
-  }
   router = inject(Router);
   route = inject(ActivatedRoute);
+  dialog = inject(MatDialog);
   clientService = inject(ClientService);
   client: Client | undefined;
-  constructor() {}
+  clientId: number;
+  constructor() {
+    this.clientId = Number(this.route.snapshot.paramMap.get("id"));
+  }
 
   async ngOnInit() {
-    const clientId = Number(this.route.snapshot.paramMap.get("id"));
+    await this.getClient();
+  }
+
+  async getClient() {
     try {
       this.client = await firstValueFrom(
-        this.clientService.getClientById(clientId),
+        this.clientService.getClientById(this.clientId),
       );
     } catch (error: any) {
       if (error.status === 404) {
         this.router.navigate(["/clients"]);
       }
+    }
+  }
+  refreshNotes() {
+    throw new Error("Method not implemented.");
+  }
+
+  async openEditClientDialog() {
+    const dialogRef = this.dialog.open(EditClientDialogComponent, {
+      width: "500px",
+      position: {
+        top: defaultMatDialogTop,
+      },
+      data: {
+        clientId: this.clientId,
+      },
+    });
+
+    const result = await firstValueFrom(dialogRef.afterClosed()) as Client;
+    if (result) {
+      await this.getClient();
     }
   }
 }

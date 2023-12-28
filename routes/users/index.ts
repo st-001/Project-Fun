@@ -18,14 +18,6 @@ export const GET_RESPONSE_SCHEMA = {
       createdAt: { type: "string", format: "date-time" },
       updatedAt: { type: "string", format: "date-time" },
       deletedAt: { type: ["string", "null"], format: "date-time" },
-      primaryGroup: {
-        type: "object",
-        properties: {
-          id: { type: "integer" },
-          name: { type: "string" },
-        },
-        required: ["id", "name"],
-      },
     },
     required: [
       "id",
@@ -34,7 +26,6 @@ export const GET_RESPONSE_SCHEMA = {
       "isEnabled",
       "createdAt",
       "updatedAt",
-      "primaryGroup",
     ],
   },
 };
@@ -45,10 +36,9 @@ export const POST_REQUEST_SCHEMA = {
     name: { type: "string", maxLength: 255, minLength: 1 },
     emailAddress: { type: "string", format: "email" },
     password: { type: "string", minLength: 6 },
-    primaryGroupId: { type: "number" },
     isEnabled: { type: "boolean" },
   },
-  required: ["name", "emailAddress", "password", "primaryGroupId", "isEnabled"],
+  required: ["name", "emailAddress", "password", "isEnabled"],
   additionalProperties: false,
 };
 
@@ -56,9 +46,8 @@ export const POST_RESPONSE_SCHEMA = {
   type: "object",
   properties: {
     id: { type: "number" },
-    name: { type: "string" },
+    emailAddress: { type: "string" },
     email: { type: "string" },
-    primaryGroupId: { type: "number" },
     isEnabled: { type: "boolean" },
     createdAt: { type: "string", format: "date-time" },
     updatedAt: { type: "string", format: "date-time" },
@@ -67,32 +56,14 @@ export const POST_RESPONSE_SCHEMA = {
       format: "date-time",
       nullable: true,
     },
-    primaryGroup: {
-      type: "object",
-      properties: {
-        id: { type: "number" },
-        name: { type: "string" },
-        isEnabled: { type: "boolean" },
-        createdAt: { type: "string", format: "date-time" },
-        updatedAt: { type: "string", format: "date-time" },
-        deletedAt: {
-          type: ["string", "null"],
-          format: "date-time",
-          nullable: true,
-        },
-      },
-      required: ["id", "name"],
-    },
   },
   required: [
     "id",
     "name",
-    "email",
-    "primaryGroupId",
+    "emailAddress",
     "isEnabled",
     "createdAt",
     "updatedAt",
-    "primaryGroup",
   ],
   additionalProperties: false,
 };
@@ -115,7 +86,6 @@ export const handler: Handlers = {
         name: string;
         emailAddress: string;
         password: string;
-        primaryGroupId: number;
         isEnabled: boolean;
       };
       const validRequest = postRequestValidator(user);
@@ -128,7 +98,6 @@ export const handler: Handlers = {
         user.name,
         user.emailAddress,
         user.password,
-        user.primaryGroupId,
         user.isEnabled,
       );
 

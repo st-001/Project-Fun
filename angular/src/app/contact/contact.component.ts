@@ -6,6 +6,9 @@ import { MatCardModule } from "@angular/material/card";
 import { DatePipe } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTabsModule } from "@angular/material/tabs";
+import { MatDialog } from "@angular/material/dialog";
+import { EditContactDialogComponent } from "../edit-contact-dialog/edit-contact-dialog.component";
+import { defaultMatDialogTop } from "../util";
 
 @Component({
   selector: "app-contact",
@@ -21,31 +24,50 @@ import { MatTabsModule } from "@angular/material/tabs";
   styleUrl: "./contact.component.scss",
 })
 export class ContactComponent {
-  refreshNotes() {
-    throw new Error("Method not implemented.");
-  }
-  refreshContact() {
-    throw new Error("Method not implemented.");
-  }
-  openEditContactDialog() {
-    throw new Error("Method not implemented.");
-  }
   router = inject(Router);
   route = inject(ActivatedRoute);
+  dialog = inject(MatDialog);
   contactService = inject(ContactService);
   contact: Contact | undefined;
-  constructor() {}
+  contactId: number;
+  constructor() {
+    this.contactId = Number(this.route.snapshot.paramMap.get("id"));
+  }
 
   async ngOnInit() {
-    const contactId = Number(this.route.snapshot.paramMap.get("id"));
+    await this.getContact();
+  }
+
+  async getContact() {
     try {
       this.contact = await firstValueFrom(
-        this.contactService.getContactById(contactId),
+        this.contactService.getContactById(this.contactId),
       );
     } catch (error: any) {
       if (error.status === 404) {
         this.router.navigate(["/contacts"]);
       }
+    }
+  }
+
+  refreshNotes() {
+    throw new Error("Method not implemented.");
+  }
+
+  async openEditContactDialog() {
+    const dialogRef = this.dialog.open(EditContactDialogComponent, {
+      width: "500px",
+      position: {
+        top: defaultMatDialogTop,
+      },
+      data: {
+        contactId: this.contactId,
+      },
+    });
+
+    const result = await firstValueFrom(dialogRef.afterClosed()) as Contact;
+    if (result) {
+      await this.getContact();
     }
   }
 }

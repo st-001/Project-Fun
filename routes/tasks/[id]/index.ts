@@ -98,6 +98,7 @@ export const handler: Handlers = {
         taskId,
         updateData.name ?? taskToUpdate.name,
         updateData.isEnabled ?? taskToUpdate.isEnabled,
+        ctx.state.userId as number,
       );
 
       if (!updatedTask) {

@@ -1,0 +1,20 @@
+@if(editContactForm) {
+<form [formGroup]="editContactForm" (ngSubmit)="submitForm()" class="form-wrapper">
+  <h2>Edit Contact</h2>
+  <mat-form-field class="form-element">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name">
+  </mat-form-field>
+  <mat-form-field class="form-element">
+    <mat-label>Email Address</mat-label>
+    <input matInput formControlName="emailAddress">
+  </mat-form-field>
+  <app-client-select-search [control]="$any(editContactForm).controls['clientId']"
+    [placeholder]="'Client'"></app-client-select-search>
+  <mat-checkbox class="form-element" formControlName="isEnabled">Enabled</mat-checkbox>
+  <div>
+    <button [disabled]="!editContactForm.valid" style="margin: 0 auto; width: 100%" mat-flat-button color="primary"
+      class="form-element">Submit</button>
+  </div>
+</form>
+}

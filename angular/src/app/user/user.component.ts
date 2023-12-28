@@ -6,6 +6,9 @@ import { MatCardModule } from "@angular/material/card";
 import { DatePipe } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTabsModule } from "@angular/material/tabs";
+import { MatDialog } from "@angular/material/dialog";
+import { EditUserDialogComponent } from "../edit-user-dialog/edit-user-dialog.component";
+import { defaultMatDialogTop } from "../util";
 
 @Component({
   selector: "app-user",
@@ -21,31 +24,50 @@ import { MatTabsModule } from "@angular/material/tabs";
   styleUrl: "./user.component.scss",
 })
 export class UserComponent {
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+  dialog = inject(MatDialog);
+  userService = inject(UserService);
+  user: User | undefined;
+  userId: number;
+  constructor() {
+    this.userId = Number(this.route.snapshot.paramMap.get("id"));
+  }
+
+  async ngOnInit() {
+    await this.getUser();
+  }
+
   refreshNotes() {
     throw new Error("Method not implemented.");
   }
-  refreshUser() {
-    throw new Error("Method not implemented.");
-  }
-  openEditUserDialog() {
-    throw new Error("Method not implemented.");
-  }
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-  userService = inject(UserService);
-  user: User | undefined;
-  constructor() {}
 
-  async ngOnInit() {
-    const userId = Number(this.route.snapshot.paramMap.get("id"));
+  async getUser() {
     try {
       this.user = await firstValueFrom(
-        this.userService.getUserById(userId),
+        this.userService.getUserById(this.userId),
       );
     } catch (error: any) {
       if (error.status === 404) {
         this.router.navigate(["/users"]);
       }
+    }
+  }
+
+  async openEditUserDialog() {
+    const dialogRef = this.dialog.open(EditUserDialogComponent, {
+      width: "500px",
+      position: {
+        top: defaultMatDialogTop,
+      },
+      data: {
+        userId: this.userId,
+      },
+    });
+
+    const result = await firstValueFrom(dialogRef.afterClosed()) as User;
+    if (result) {
+      await this.getUser();
     }
   }
 }

@@ -28,4 +28,11 @@ export class TaskService {
   getTaskById(id: number): Observable<Task> {
     return this.http.get<Task>(`/api/tasks/${id}`);
   }
+
+  updateTaskById(
+    id: number,
+    task: { name: string; isEnabled: boolean },
+  ): Observable<Task> {
+    return this.http.put<Task>(`/api/tasks/${id}`, task);
+  }
 }

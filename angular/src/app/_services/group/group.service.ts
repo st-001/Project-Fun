@@ -28,4 +28,11 @@ export class GroupService {
   getGroupById(id: number): Observable<Group> {
     return this.http.get<Group>(`/api/groups/${id}`);
   }
+
+  updateGroupById(
+    id: number,
+    group: { name: string; isEnabled: boolean },
+  ): Observable<Group> {
+    return this.http.put<Group>(`/api/groups/${id}`, group);
+  }
 }

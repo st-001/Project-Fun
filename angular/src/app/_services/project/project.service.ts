@@ -30,4 +30,11 @@ export class ProjectService {
   getProjectById(id: number): Observable<Project> {
     return this.http.get<Project>(`/api/projects/${id}`);
   }
+
+  updateProjectById(
+    id: number,
+    project: { name: string; isEnabled: boolean; clientId: number },
+  ): Observable<Project> {
+    return this.http.put<Project>(`/api/projects/${id}`, project);
+  }
 }
