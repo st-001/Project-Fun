@@ -36,6 +36,7 @@ import { Router } from "@angular/router";
 })
 export class GroupsComponent implements OnInit {
   router = inject(Router);
+  dialog = inject(MatDialog);
   onRowClick(group: Group) {
     this.router.navigate(["/groups", group.id]);
   }
@@ -65,7 +66,6 @@ export class GroupsComponent implements OnInit {
     "updatedAt",
     "deletedAt",
   ];
-  constructor(public dialog: MatDialog) {}
 
   async getAllGroups() {
     const groups = await firstValueFrom(this.groupService.getAll());

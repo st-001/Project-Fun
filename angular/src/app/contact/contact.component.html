@@ -29,10 +29,7 @@
     </div>
   </mat-tab>
   <mat-tab label="Notes">
-    <div class="button-bar">
-      <button mat-raised-button color="primary" (click)="openEditContactDialog()">Add Note</button>
-      <button mat-raised-button color="primary" (click)="refreshNotes()">Refresh</button>
-    </div>
+    <app-notes [entityType]="'contact'" [entityId]="contactId"></app-notes>
   </mat-tab>
 </mat-tab-group>
 }

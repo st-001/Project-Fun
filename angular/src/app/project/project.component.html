@@ -28,12 +28,8 @@
     </div>
   </mat-tab>
   <mat-tab label="Notes">
-    <div class="button-bar">
-      <button mat-raised-button color="primary" (click)="openEditProjectDialog()">Add Note</button>
-      <button mat-raised-button color="primary" (click)="refreshNotes()">Refresh</button>
-    </div>
+    <app-notes [entityType]="'project'" [entityId]="projectId"></app-notes>
   </mat-tab>
-
   <mat-tab label="Tasks"> Tasks </mat-tab>
 </mat-tab-group>
 }

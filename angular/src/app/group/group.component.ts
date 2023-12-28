@@ -9,6 +9,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { EditGroupDialogComponent } from "../edit-group-dialog/edit-group-dialog.component";
 import { defaultMatDialogTop } from "../util";
+import { NotesComponent } from "../notes/notes.component";
 
 @Component({
   selector: "app-group",
@@ -19,6 +20,7 @@ import { defaultMatDialogTop } from "../util";
     MatButtonModule,
     RouterLink,
     MatTabsModule,
+    NotesComponent,
   ],
   templateUrl: "./group.component.html",
   styleUrl: "./group.component.scss",
@@ -29,7 +31,7 @@ export class GroupComponent {
   dialog = inject(MatDialog);
   groupService = inject(GroupService);
   group: Group | undefined;
-  groupId: number | undefined;
+  groupId: number;
   constructor() {
     this.groupId = Number(this.route.snapshot.paramMap.get("id"));
   }

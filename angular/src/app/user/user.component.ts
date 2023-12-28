@@ -10,6 +10,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { EditUserDialogComponent } from "../edit-user-dialog/edit-user-dialog.component";
 import { defaultMatDialogTop } from "../util";
 import { ResetUserPasswordDialogComponent } from "../reset-user-password-dialog/reset-user-password-dialog.component";
+import { NotesComponent } from "../notes/notes.component";
 
 @Component({
   selector: "app-user",
@@ -20,6 +21,7 @@ import { ResetUserPasswordDialogComponent } from "../reset-user-password-dialog/
     MatButtonModule,
     RouterLink,
     MatTabsModule,
+    NotesComponent,
   ],
   templateUrl: "./user.component.html",
   styleUrl: "./user.component.scss",

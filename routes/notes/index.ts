@@ -4,7 +4,7 @@ import {
   httpResponse500InternalServerError,
 } from "../../utils.ts";
 import ajv from "../../ajv.ts";
-import { insertNote, Note } from "../../models/note.ts";
+import { getNotesByEntityAndId, insertNote, Note } from "../../models/note.ts";
 
 export const GET_QUERY_SCHEMA = {
   type: "object",
@@ -14,7 +14,8 @@ export const GET_QUERY_SCHEMA = {
       enum: ["user", "group", "project", "task", "client", "contact"],
     },
     entityId: {
-      type: "number",
+      type: "string",
+      pattern: "^[0-9]+$",
     },
   },
   required: ["entityType", "entityId"],
@@ -79,11 +80,8 @@ export const POST_REQUEST_SCHEMA = {
     content: {
       type: "string",
     },
-    createdById: {
-      type: "number",
-    },
   },
-  required: ["entityType", "entityId", "content", "createdById"],
+  required: ["entityType", "entityId", "content"],
   additionalProperties: false,
 };
 
@@ -137,7 +135,12 @@ export const handler: Handlers = {
         return httpJsonResponse(getQueryValidator.errors, 400);
       }
 
-      return httpJsonResponse({}, 200);
+      const notes = await getNotesByEntityAndId(
+        queryParams.entityType as Note["entityType"],
+        Number(queryParams.entityId),
+      );
+
+      return httpJsonResponse(notes, 200);
     } catch (error) {
       return httpResponse500InternalServerError(error);
     }

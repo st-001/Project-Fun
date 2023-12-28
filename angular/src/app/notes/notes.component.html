@@ -1,0 +1,19 @@
+<div class="button-bar">
+  <button mat-raised-button color="primary" (click)="openCreateNoteDialog()">Add Note</button>
+  <button mat-raised-button color="primary" (click)="getNotesByEntityAndId()">Refresh Notes</button>
+</div>
+@for (note of notes; track note) {
+<div style="padding: 10px">
+  <mat-card class="note-card">
+    <mat-card-header>
+      <mat-card-subtitle>
+        {{note.createdBy.name + " | " + (note.createdAt | date: 'medium') }}
+      </mat-card-subtitle>
+    </mat-card-header>
+    <div style="height: 10px;"></div>
+    <mat-card-content>
+      <p>{{note.content}}</p>
+    </mat-card-content>
+  </mat-card>
+</div>
+}

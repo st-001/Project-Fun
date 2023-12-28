@@ -9,6 +9,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { EditClientDialogComponent } from "../edit-client-dialog/edit-client-dialog.component";
 import { defaultMatDialogTop } from "../util";
+import { NotesComponent } from "../notes/notes.component";
 
 @Component({
   selector: "app-client",
@@ -19,6 +20,7 @@ import { defaultMatDialogTop } from "../util";
     MatButtonModule,
     RouterLink,
     MatTabsModule,
+    NotesComponent,
   ],
   templateUrl: "./client.component.html",
   styleUrl: "./client.component.scss",

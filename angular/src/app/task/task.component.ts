@@ -9,6 +9,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { EditTaskDialogComponent } from "../edit-task-dialog/edit-task-dialog.component";
 import { defaultMatDialogTop } from "../util";
+import { NotesComponent } from "../notes/notes.component";
 
 @Component({
   selector: "app-task",
@@ -19,6 +20,7 @@ import { defaultMatDialogTop } from "../util";
     MatButtonModule,
     RouterLink,
     MatTabsModule,
+    NotesComponent,
   ],
   templateUrl: "./task.component.html",
   styleUrl: "./task.component.scss",

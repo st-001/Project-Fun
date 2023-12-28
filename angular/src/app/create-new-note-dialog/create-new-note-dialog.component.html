@@ -1,0 +1,11 @@
+<form [formGroup]="createNewNoteForm" (ngSubmit)="submitForm()" class="form-wrapper">
+  <h2>Create New Note</h2>
+  <mat-form-field class="form-element">
+    <mat-label>Note</mat-label>
+    <textarea matInput formControlName="content"></textarea>
+  </mat-form-field>
+  <div>
+    <button [disabled]="!createNewNoteForm.valid" style="margin: 0 auto; width: 100%" mat-flat-button color="primary"
+      class="form-element">Submit</button>
+  </div>
+</form>

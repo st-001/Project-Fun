@@ -9,6 +9,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { EditContactDialogComponent } from "../edit-contact-dialog/edit-contact-dialog.component";
 import { defaultMatDialogTop } from "../util";
+import { NotesComponent } from "../notes/notes.component";
 
 @Component({
   selector: "app-contact",
@@ -19,6 +20,7 @@ import { defaultMatDialogTop } from "../util";
     MatButtonModule,
     RouterLink,
     MatTabsModule,
+    NotesComponent,
   ],
   templateUrl: "./contact.component.html",
   styleUrl: "./contact.component.scss",
