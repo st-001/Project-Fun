@@ -5,6 +5,8 @@
     <mat-label>Name</mat-label>
     <input matInput formControlName="name">
   </mat-form-field>
+  <app-project-select-search [control]="$any(editTaskForm).controls['projectId']"
+    [placeholder]="'Project'"></app-project-select-search>
   <mat-checkbox class="form-element" formControlName="isEnabled">Enabled</mat-checkbox>
   <div>
     <button [disabled]="!editTaskForm.valid" style="margin: 0 auto; width: 100%" mat-flat-button color="primary"

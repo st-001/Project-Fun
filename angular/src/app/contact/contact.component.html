@@ -9,6 +9,7 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>Contact - {{ contact.name }}</mat-card-title>
+      <mat-card-title>Job Title - {{ contact.jobTitle }}</mat-card-title>
       <mat-card-title>Client - {{contact.client.name}}</mat-card-title>
       <mat-card-title>Email Address - {{contact.emailAddress}}</mat-card-title>
       <mat-card-title>ID - {{contact.id}}</mat-card-title>
@@ -18,15 +19,10 @@
     </mat-card-content>
   </mat-card>
 </div>
-<mat-tab-group animationDuration="0ms">
+<mat-tab-group mat-stretch-tabs="false" animationDuration="0ms">
   <mat-tab label="Assistant">
-    <div style="padding: 10px; font-size: large;">
-      <mat-card>
-        <mat-card-content>
-          <p>How may I help you with this contact?</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
+    <app-assistant [entityType]="'contact'" [entityId]="contactId"
+      [introMessage]="'Hey, how may I help you with this contact?'"></app-assistant>
   </mat-tab>
   <mat-tab label="Notes">
     <app-notes [entityType]="'contact'" [entityId]="contactId"></app-notes>

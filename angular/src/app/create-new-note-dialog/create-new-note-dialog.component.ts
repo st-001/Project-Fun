@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { NoteService } from "../_services/note/note.service";
 import {
   MAT_DIALOG_DATA,

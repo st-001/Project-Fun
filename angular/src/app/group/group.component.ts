@@ -10,6 +10,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { EditGroupDialogComponent } from "../edit-group-dialog/edit-group-dialog.component";
 import { defaultMatDialogTop } from "../util";
 import { NotesComponent } from "../notes/notes.component";
+import { AssistantComponent } from "../assistant/assistant.component";
 
 @Component({
   selector: "app-group",
@@ -21,6 +22,7 @@ import { NotesComponent } from "../notes/notes.component";
     RouterLink,
     MatTabsModule,
     NotesComponent,
+    AssistantComponent,
   ],
   templateUrl: "./group.component.html",
   styleUrl: "./group.component.scss",

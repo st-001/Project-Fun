@@ -1,9 +1,18 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { inject, Injectable } from "@angular/core";
+import { Observable } from "rxjs";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AssistantService {
+  http = inject(HttpClient);
 
-  constructor() { }
+  startConversation(payload: {
+    entityType: string;
+    entityId: string;
+    message: string;
+  }): Observable<any> {
+    return this.http.post<any>(`/api/assistant`, payload);
+  }
 }

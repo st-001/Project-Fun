@@ -11,6 +11,7 @@ import { EditUserDialogComponent } from "../edit-user-dialog/edit-user-dialog.co
 import { defaultMatDialogTop } from "../util";
 import { ResetUserPasswordDialogComponent } from "../reset-user-password-dialog/reset-user-password-dialog.component";
 import { NotesComponent } from "../notes/notes.component";
+import { AssistantComponent } from "../assistant/assistant.component";
 
 @Component({
   selector: "app-user",
@@ -22,6 +23,7 @@ import { NotesComponent } from "../notes/notes.component";
     RouterLink,
     MatTabsModule,
     NotesComponent,
+    AssistantComponent,
   ],
   templateUrl: "./user.component.html",
   styleUrl: "./user.component.scss",

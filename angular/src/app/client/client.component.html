@@ -15,15 +15,10 @@
     </mat-card-content>
   </mat-card>
 </div>
-<mat-tab-group animationDuration="0ms">
+<mat-tab-group mat-stretch-tabs="false" animationDuration="0ms">
   <mat-tab label="Assistant">
-    <div style="padding: 10px; font-size: large;">
-      <mat-card>
-        <mat-card-content>
-          <p>How may I help you with this client?</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
+    <app-assistant [entityType]="'client'" [entityId]="clientId"
+      [introMessage]="'Hey, how may I help you with this client?'"></app-assistant>
   </mat-tab>
   <mat-tab label="Notes">
     <app-notes [entityType]="'client'" [entityId]="clientId"></app-notes>

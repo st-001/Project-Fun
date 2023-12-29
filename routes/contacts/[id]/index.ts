@@ -19,6 +19,9 @@ export const GET_RESPONSE_SCHEMA = {
     emailAddress: {
       type: "string",
     },
+    jobTitle: {
+      type: "string",
+    },
     client: {
       type: "object",
       properties: {
@@ -48,7 +51,15 @@ export const GET_RESPONSE_SCHEMA = {
       format: "date-time",
     },
   },
-  required: ["id", "name", "isEnabled", "createdAt", "updatedAt"],
+  required: [
+    "id",
+    "name",
+    "isEnabled",
+    "emailAddress",
+    "jobTitle",
+    "createdAt",
+    "updatedAt",
+  ],
 };
 
 export const PUT_REQUEST_SCHEMA = {
@@ -56,10 +67,17 @@ export const PUT_REQUEST_SCHEMA = {
   properties: {
     name: { type: "string", maxLength: 255, minLength: 1 },
     emailAddress: { type: "string", maxLength: 255, minLength: 1 },
+    jobTitle: { type: "string", maxLength: 255, minLength: 1 },
     clientId: { type: "number" },
     isEnabled: { type: "boolean" },
   },
-  required: ["name", "isEnabled", "clientId", "emailAddress"],
+  required: [
+    "name",
+    "isEnabled",
+    "emailAddress",
+    "jobTitle",
+    "clientId",
+  ],
   additionalProperties: false,
 };
 
@@ -69,6 +87,7 @@ export const PUT_RESPONSE_SCHEMA = {
     id: { type: "number" },
     name: { type: "string" },
     emailAddress: { type: "string" },
+    jobTitle: { type: "string" },
     isEnabled: { type: "boolean" },
     createdAt: { type: "string", format: "date-time" },
     updatedAt: { type: "string", format: "date-time" },
@@ -86,7 +105,16 @@ export const PUT_RESPONSE_SCHEMA = {
       format: "date-time",
     },
   },
-  required: ["id", "name", "isEnabled", "createdAt", "updatedAt", "client"],
+  required: [
+    "id",
+    "name",
+    "isEnabled",
+    "emailAddress",
+    "jobTitle",
+    "createdAt",
+    "updatedAt",
+    "client",
+  ],
   additionalProperties: false,
 };
 
@@ -117,6 +145,7 @@ export const handler: Handlers = {
         name: string;
         isEnabled: boolean;
         emailAddress: string;
+        jobTitle: string;
         clientId: number;
       };
 
@@ -128,6 +157,7 @@ export const handler: Handlers = {
         contactId,
         updateData.name,
         updateData.emailAddress,
+        updateData.jobTitle,
         updateData.clientId,
         updateData.isEnabled,
         ctx.state.userId as number,

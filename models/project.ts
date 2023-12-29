@@ -113,19 +113,34 @@ export async function getProjectById(id: number | string) {
   } as Project;
 }
 
-export async function getAllProjects() {
+export async function getAllProjects(
+  options: {
+    clientId?: number;
+    isEnabled?: boolean;
+  } = {},
+) {
+  const { clientId, isEnabled } = options;
+
   const result = await sql`
     SELECT
-    project.id,
-    project.name,
-    project.is_enabled AS "isEnabled",
-    project.created_at AS "createdAt",
-    project.updated_at AS "updatedAt",
-    project.deleted_at AS "deletedAt",
-    client.id AS "clientId",
-    client.name AS "clientName"
+      project.id,
+      project.name,
+      project.is_enabled AS "isEnabled",
+      project.created_at AS "createdAt",
+      project.updated_at AS "updatedAt",
+      project.deleted_at AS "deletedAt",
+      client.id AS "clientId",
+      client.name AS "clientName"
     FROM project
     INNER JOIN client ON project.client_id = client.id
+    WHERE
+      1 = 1
+      ${clientId ? sql`AND project.client_id = ${clientId}` : sql``}
+      ${
+    typeof isEnabled !== "undefined"
+      ? sql`AND project.is_enabled = ${isEnabled}`
+      : sql``
+  }
   `;
 
   return result.map((project) => ({
@@ -133,8 +148,8 @@ export async function getAllProjects() {
     client: {
       id: project.clientId,
       name: project.clientName,
-    } as Project,
-  }));
+    },
+  } as Project));
 }
 
 export async function enableProject(

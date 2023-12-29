@@ -1,9 +1,12 @@
 import sql from "../db.ts";
+import { getProjectById, type Project } from "./project.ts";
 
 export interface Task {
   id: number;
   name: string;
   isEnabled: boolean;
+  project: Project;
+  projectId?: number | string;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
@@ -12,35 +15,45 @@ export interface Task {
 export async function insertTask(
   name: string,
   isEnabled: boolean,
+  projectId: number | string,
   createdById: number,
 ) {
-  const result = await sql`
+  const insertResult = await sql`
     insert into task
-      (name, is_enabled, created_by, updated_by)
+      (name, is_enabled, project_id, created_by, updated_by)
     values
-      (${name}, ${isEnabled}, ${createdById}, ${createdById})
+      (${name}, ${isEnabled}, ${projectId}, ${createdById}, ${createdById})
     returning 
     id, 
     name,
+    project_id as "projectId",
     is_enabled as "isEnabled",
     created_at as "createdAt",
     updated_at as "updatedAt",
     deleted_at as "deletedAt"
   `;
-  return result[0] as Task;
+
+  const task = insertResult[0] as Task;
+  if (task) {
+    const project = await getProjectById(projectId);
+    return { ...task, project };
+  }
+  return null;
 }
 
 export async function updateTask(
   taskId: number | string,
   name: string,
+  projectId: number | string,
   isEnabled: boolean,
   updatedById: number,
 ) {
-  const result = await sql`
+  const updateResult = await sql`
     update task
     set
       name = ${name},
       is_enabled = ${isEnabled},
+      project_id = ${projectId},
       updated_at = now(),
       updated_by = ${updatedById}
     where
@@ -48,42 +61,99 @@ export async function updateTask(
     returning 
       id,
       name,
+      project_id as "projectId",
       is_enabled as "isEnabled",
       created_at as "createdAt",
       updated_at as "updatedAt",
       deleted_at as "deletedAt"
   `;
-  return result[0] as Task;
+
+  const task = updateResult[0] as Task;
+
+  if (task) {
+    const project = await getProjectById(projectId);
+    return { ...task, project };
+  }
+  return null;
 }
 
 export async function getTaskById(id: number | string) {
   const result = await sql`
     SELECT
-    id,
-    name,
-    is_enabled AS "isEnabled",
-    created_at AS "createdAt",
-    updated_at AS "updatedAt",
-    deleted_at AS "deletedAt"
+    task.id,
+    task.name,
+    task.is_enabled AS "isEnabled",
+    task.created_at AS "createdAt",
+    task.updated_at AS "updatedAt",
+    task.deleted_at AS "deletedAt",
+    project.id AS "projectId",
+    project.name AS "projectName"
     FROM task
-    WHERE id = ${id}
+    INNER JOIN project ON task.project_id = project.id
+    WHERE task.id = ${id}
   `;
-  return result[0] as Task;
+
+  if (result.length === 0) {
+    return null;
+  }
+
+  const project = await getProjectById(result[0].projectId);
+
+  return {
+    id: result[0].id,
+    name: result[0].name,
+    isEnabled: result[0].isEnabled,
+    createdAt: result[0].createdAt,
+    updatedAt: result[0].updatedAt,
+    deletedAt: result[0].deletedAt,
+    project,
+  } as Task;
 }
 
-export async function getAllTasks() {
+export async function getAllTasks(
+  options: {
+    projectId?: number;
+    isEnabled?: boolean;
+  } = {},
+) {
+  const { projectId, isEnabled } = options;
   const result = await sql`
     SELECT
-    id,
-    name,
-    is_enabled AS "isEnabled",
-    created_at AS "createdAt",
-    updated_at AS "updatedAt",
-    deleted_at AS "deletedAt"
+    task.id,
+    task.name,
+    task.is_enabled AS "isEnabled",
+    task.project_id AS "projectId",
+    task.created_at AS "createdAt",
+    task.updated_at AS "updatedAt",
+    task.deleted_at AS "deletedAt",
+    project.id AS "projectId",
+    project.name AS "projectName",
+    client.id AS "clientId",
+    client.name AS "clientName"
     FROM task
+    INNER JOIN project ON task.project_id = project.id
+    INNER JOIN client ON project.client_id = client.id
+    WHERE
+    1 = 1
+    ${projectId ? sql`AND task.project_id = ${projectId}` : sql``}
+    ${
+    typeof isEnabled !== "undefined"
+      ? sql`AND task.is_enabled = ${isEnabled}`
+      : sql``
+  }
   `;
 
-  return result.map((x) => x as Task);
+  return result.map((task) => ({
+    ...task,
+    project: {
+      id: task.projectId,
+      name: task.projectName,
+      client: {
+        id: task.clientId,
+        name: task.clientName,
+      },
+    },
+  }));
 }
 
 export async function enableTask(taskId: number | string, updatedById: number) {

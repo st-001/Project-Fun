@@ -80,6 +80,7 @@ CREATE TABLE contact (
     id serial NOT NULL,
     name varchar(255) NOT NULL,
     email_address varchar(255) NOT NULL,
+    job_title varchar(255) NOT NULL,
     client_id int NOT NULL,
     is_enabled boolean NOT NULL DEFAULT true,
     created_at timestamp with time zone NOT NULL DEFAULT now(),
@@ -129,6 +130,7 @@ CREATE TABLE task (
     id serial NOT NULL,
     name varchar(255) NOT NULL,
     is_enabled boolean NOT NULL DEFAULT true,
+    project_id int NOT NULL,
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     deleted_at timestamp with time zone,
@@ -136,6 +138,7 @@ CREATE TABLE task (
     updated_by int NOT NULL,
     deleted_by int,
     PRIMARY KEY (id),
+    FOREIGN KEY (project_id) REFERENCES project(id),
     FOREIGN KEY (created_by) REFERENCES users(id),
     FOREIGN KEY (updated_by) REFERENCES users(id),
     FOREIGN KEY (deleted_by) REFERENCES users(id)

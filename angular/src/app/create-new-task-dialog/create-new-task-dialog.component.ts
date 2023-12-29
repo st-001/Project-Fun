@@ -1,5 +1,6 @@
 import { Component, inject } from "@angular/core";
 import {
+  MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
@@ -19,6 +20,7 @@ import { TaskService } from "../_services/task/task.service";
 import { firstValueFrom } from "rxjs";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { ProjectSelectSearchComponent } from "../_fields/project-select-search/project-select-search.component";
 
 @Component({
   selector: "app-create-new-task-dialog",
@@ -33,6 +35,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
     MatDialogTitle,
     MatDialogContent,
     MatCheckboxModule,
+    ProjectSelectSearchComponent,
   ],
   templateUrl: "./create-new-task-dialog.component.html",
   styleUrl: "./create-new-task-dialog.component.scss",
@@ -42,17 +45,30 @@ export class CreateNewTaskDialogComponent {
   dialogRef: MatDialogRef<CreateNewTaskDialogComponent> = inject(
     MatDialogRef,
   );
+  dialogInputData: { projectId: number | undefined } = inject(MAT_DIALOG_DATA);
+
   snackBar: MatSnackBar = inject(MatSnackBar);
   createNewTaskForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
+    projectId: new FormControl(this.dialogInputData.projectId, [
+      Validators.required,
+    ]),
     isEnabled: new FormControl(true),
   });
+
+  async ngOnInit() {
+    if (this.dialogInputData.projectId) {
+      this.createNewTaskForm.controls.projectId.disable();
+    }
+  }
 
   async submitForm() {
     let result;
     try {
+      console.log(this.createNewTaskForm.controls.projectId.value);
       result = await firstValueFrom(this.taskService.createNewTask({
         name: this.createNewTaskForm.value.name!,
+        projectId: this.createNewTaskForm.controls.projectId.value!,
         isEnabled: this.createNewTaskForm.value.isEnabled!,
       }));
       this.snackBar.open("Task created", "Dismiss", {

@@ -8,6 +8,8 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>Task - {{ task.name }}</mat-card-title>
+      <mat-card-title>Client - {{ task.project.client.name }}</mat-card-title>
+      <mat-card-title>Project - {{ task.project.name }}</mat-card-title>
       <mat-card-title>ID - {{task.id}}</mat-card-title>
       <mat-card-title>{{task.isEnabled ? 'Enabled' : 'Disabled' }}</mat-card-title>
     </mat-card-header>
@@ -15,19 +17,13 @@
     </mat-card-content>
   </mat-card>
 </div>
-<mat-tab-group animationDuration="0ms">
+<mat-tab-group mat-stretch-tabs="false" animationDuration="0ms">
   <mat-tab label="Assistant">
-    <div style="padding: 10px; font-size: large;">
-      <mat-card>
-        <mat-card-content>
-          <p>How may I help you with this task?</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
+    <app-assistant [entityType]="'task'" [entityId]="taskId"
+      [introMessage]="'Hey, how may I help you with this task?'"></app-assistant>
   </mat-tab>
   <mat-tab label="Notes">
     <app-notes [entityType]="'task'" [entityId]="taskId"></app-notes>
   </mat-tab>
-  <mat-tab label="Tasks"> Tasks </mat-tab>
 </mat-tab-group>
 }

@@ -19,6 +19,39 @@ export const GET_RESPONSE_SCHEMA = {
     isEnabled: {
       type: "boolean",
     },
+    project: {
+      type: "object",
+      properties: {
+        id: {
+          type: "integer",
+        },
+        name: {
+          type: "string",
+        },
+        client: {
+          type: "object",
+          properties: {
+            id: {
+              type: "integer",
+            },
+            name: {
+              type: "string",
+            },
+          },
+          required: [
+            "id",
+            "name",
+          ],
+          additionalProperties: false,
+        },
+      },
+      required: [
+        "id",
+        "name",
+        "client",
+      ],
+      additionalProperties: false,
+    },
     createdAt: {
       type: "string",
       format: "date-time",
@@ -32,13 +65,14 @@ export const GET_RESPONSE_SCHEMA = {
       format: "date-time",
     },
   },
-  required: ["id", "name", "isEnabled", "createdAt", "updatedAt"],
+  required: ["id", "name", "project", "isEnabled", "createdAt", "updatedAt"],
 };
 
 export const PUT_REQUEST_SCHEMA = {
   type: "object",
   properties: {
     name: { type: "string", maxLength: 255, minLength: 1 },
+    projectId: { type: "integer" },
     isEnabled: { type: "boolean" },
   },
   required: ["name", "isEnabled"],
@@ -50,6 +84,39 @@ export const PUT_RESPONSE_SCHEMA = {
   properties: {
     id: { type: "number" },
     name: { type: "string" },
+    project: {
+      type: "object",
+      properties: {
+        id: {
+          type: "integer",
+        },
+        name: {
+          type: "string",
+        },
+        client: {
+          type: "object",
+          properties: {
+            id: {
+              type: "integer",
+            },
+            name: {
+              type: "string",
+            },
+          },
+          required: [
+            "id",
+            "name",
+          ],
+          additionalProperties: false,
+        },
+      },
+      required: [
+        "id",
+        "name",
+        "client",
+      ],
+      additionalProperties: false,
+    },
     isEnabled: { type: "boolean" },
     createdAt: { type: "string", format: "date-time" },
     updatedAt: { type: "string", format: "date-time" },
@@ -58,7 +125,7 @@ export const PUT_RESPONSE_SCHEMA = {
       format: "date-time",
     },
   },
-  required: ["id", "name", "isEnabled", "createdAt", "updatedAt"],
+  required: ["id", "name", "project", "isEnabled", "createdAt", "updatedAt"],
   additionalProperties: false,
 };
 
@@ -87,6 +154,7 @@ export const handler: Handlers = {
 
       const updateData = await req.json() as {
         name: string;
+        projectId: number;
         isEnabled: boolean;
       };
 
@@ -97,6 +165,7 @@ export const handler: Handlers = {
       const updatedTask = await updateTask(
         taskId,
         updateData.name,
+        updateData.projectId,
         updateData.isEnabled,
         ctx.state.userId as number,
       );

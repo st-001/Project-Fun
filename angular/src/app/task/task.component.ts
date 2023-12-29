@@ -1,15 +1,16 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, ViewChild } from "@angular/core";
 import { Task, TaskService } from "../_services/task/task.service";
 import { firstValueFrom } from "rxjs";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { MatCardModule } from "@angular/material/card";
 import { DatePipe } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
-import { MatTabsModule } from "@angular/material/tabs";
+import { MatTabGroup, MatTabsModule } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { EditTaskDialogComponent } from "../edit-task-dialog/edit-task-dialog.component";
 import { defaultMatDialogTop } from "../util";
 import { NotesComponent } from "../notes/notes.component";
+import { AssistantComponent } from "../assistant/assistant.component";
 
 @Component({
   selector: "app-task",
@@ -21,6 +22,7 @@ import { NotesComponent } from "../notes/notes.component";
     RouterLink,
     MatTabsModule,
     NotesComponent,
+    AssistantComponent,
   ],
   templateUrl: "./task.component.html",
   styleUrl: "./task.component.scss",
@@ -32,7 +34,6 @@ export class TaskComponent {
   taskService = inject(TaskService);
   task: Task | undefined;
   taskId = Number(this.route.snapshot.paramMap.get("id"));
-
   async ngOnInit() {
     await this.getTask();
   }

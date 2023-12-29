@@ -1,10 +1,11 @@
 import sql from "../db.ts";
-import { Client, getClientById } from "./client.ts";
+import { type Client, getClientById } from "./client.ts";
 
 export interface Contact {
   id: number;
   name: string;
   emailAddress: string;
+  jobTitle: string;
   client: Client;
   clientId?: number | string;
   isEnabled: boolean;
@@ -17,18 +18,20 @@ export async function insertContact(
   name: string,
   isEnabled: boolean,
   emailAddress: string,
+  jobTitle: string,
   clientId: number | string,
   createdById: number,
 ) {
   const insertResult = await sql`
     INSERT INTO contact
-      (name, is_enabled, email_address, client_id, created_by, updated_by)
+      (name, is_enabled, email_address, job_title, client_id, created_by, updated_by)
     VALUES
-      (${name}, ${isEnabled}, ${emailAddress}, ${clientId}, ${createdById}, ${createdById})
+      (${name}, ${isEnabled}, ${emailAddress}, ${jobTitle}, ${clientId}, ${createdById}, ${createdById})
     RETURNING 
       id, 
       name,
       email_address AS "emailAddress",
+      job_title AS "jobTitle",
       client_id AS "clientId",
       is_enabled AS "isEnabled",
       created_at AS "createdAt",
@@ -49,6 +52,7 @@ export async function updateContact(
   contactId: number | string,
   name: string,
   emailAddress: string,
+  jobTitle: string,
   clientId: number | string,
   isEnabled: boolean,
   updatedById: number,
@@ -58,6 +62,7 @@ export async function updateContact(
     SET
       name = ${name},
       email_address = ${emailAddress},
+      job_title = ${jobTitle},
       client_id = ${clientId},
       is_enabled = ${isEnabled},
       updated_at = now(),
@@ -90,6 +95,7 @@ export async function getContactById(id: number | string) {
       contact.id,
       contact.name,
       contact.email_address AS "emailAddress",
+      contact.job_title AS "jobTitle",
       contact.is_enabled AS "isEnabled",
       contact.created_at AS "createdAt",
       contact.updated_at AS "updatedAt",
@@ -110,6 +116,7 @@ export async function getContactById(id: number | string) {
     id: result[0].id,
     name: result[0].name,
     emailAddress: result[0].emailAddress,
+    jobTitle: result[0].jobTitle,
     isEnabled: result[0].isEnabled,
     createdAt: result[0].createdAt,
     updatedAt: result[0].updatedAt,
@@ -121,12 +128,20 @@ export async function getContactById(id: number | string) {
   } as Contact;
 }
 
-export async function getAllContacts() {
+export async function getAllContacts(
+  options: {
+    clientId?: number;
+    isEnabled?: boolean;
+  } = {},
+) {
+  const { clientId, isEnabled } = options;
+
   const result = await sql`
     SELECT
       contact.id,
       contact.name,
       contact.email_address AS "emailAddress",
+      contact.job_title AS "jobTitle",
       contact.is_enabled AS "isEnabled",
       contact.created_at AS "createdAt",
       contact.updated_at AS "updatedAt",
@@ -136,6 +151,14 @@ export async function getAllContacts() {
     FROM
       contact
     INNER JOIN client ON contact.client_id = client.id
+    WHERE
+      1 = 1
+      ${clientId ? sql`AND contact.client_id = ${clientId}` : sql``}
+      ${
+    typeof isEnabled !== "undefined"
+      ? sql`AND contact.is_enabled = ${isEnabled}`
+      : sql``
+  }
   `;
 
   return result.map((contact) => ({
@@ -143,8 +166,8 @@ export async function getAllContacts() {
     client: {
       id: contact.clientId,
       name: contact.clientName,
-    } as Contact,
-  }));
+    },
+  } as Contact));
 }
 
 export async function enableContact(

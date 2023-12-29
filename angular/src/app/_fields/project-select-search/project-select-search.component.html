@@ -1,0 +1,11 @@
+<mat-form-field>
+  <mat-label>{{placeholder}}</mat-label>
+  <mat-select [placeholder]="placeholder" [formControl]="control" #projectSelect>
+    <mat-option>
+      <ngx-mat-select-search placeholderLabel="Find project" [formControl]="projectFilterCtrl"></ngx-mat-select-search>
+    </mat-option>
+    @for (project of filteredProjects | async; track project) {
+    <mat-option [value]="project.id">{{project.name}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>

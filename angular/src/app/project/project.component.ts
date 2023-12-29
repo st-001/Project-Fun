@@ -10,6 +10,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { EditProjectDialogComponent } from "../edit-project-dialog/edit-project-dialog.component";
 import { defaultMatDialogTop } from "../util";
 import { NotesComponent } from "../notes/notes.component";
+import { AssistantComponent } from "../assistant/assistant.component";
+import { TasksComponent } from "../tasks/tasks.component";
 
 @Component({
   selector: "app-project",
@@ -21,6 +23,8 @@ import { NotesComponent } from "../notes/notes.component";
     RouterLink,
     MatTabsModule,
     NotesComponent,
+    AssistantComponent,
+    TasksComponent,
   ],
   templateUrl: "./project.component.html",
   styleUrl: "./project.component.scss",

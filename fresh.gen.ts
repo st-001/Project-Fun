@@ -3,6 +3,7 @@
 // This file is automatically updated during development when running `dev.ts`.
 
 import * as $_middleware from "./routes/_middleware.ts";
+import * as $assistant_index from "./routes/assistant/index.ts";
 import * as $authenticate_index from "./routes/authenticate/index.ts";
 import * as $clients_id_disable from "./routes/clients/[id]/disable.ts";
 import * as $clients_id_enable from "./routes/clients/[id]/enable.ts";
@@ -40,6 +41,7 @@ import { type Manifest } from "$fresh/server.ts";
 const manifest = {
   routes: {
     "./routes/_middleware.ts": $_middleware,
+    "./routes/assistant/index.ts": $assistant_index,
     "./routes/authenticate/index.ts": $authenticate_index,
     "./routes/clients/[id]/disable.ts": $clients_id_disable,
     "./routes/clients/[id]/enable.ts": $clients_id_enable,

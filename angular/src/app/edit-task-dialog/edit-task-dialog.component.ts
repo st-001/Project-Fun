@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -20,6 +20,7 @@ import { Task, TaskService } from "../_services/task/task.service";
 import { firstValueFrom } from "rxjs";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { ProjectSelectSearchComponent } from "../_fields/project-select-search/project-select-search.component";
 
 @Component({
   selector: "app-edit-task-dialog",
@@ -34,6 +35,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
     MatDialogTitle,
     MatDialogContent,
     MatCheckboxModule,
+    ProjectSelectSearchComponent,
   ],
   templateUrl: "./edit-task-dialog.component.html",
   styleUrl: "./edit-task-dialog.component.scss",
@@ -52,6 +54,7 @@ export class EditTaskDialogComponent {
     );
     this.editTaskForm = new FormGroup({
       name: new FormControl(this.task.name, [Validators.required]),
+      projectId: new FormControl(this.task.project.id, [Validators.required]),
       isEnabled: new FormControl(this.task.isEnabled),
     });
   }
@@ -62,6 +65,7 @@ export class EditTaskDialogComponent {
       result = await firstValueFrom(
         this.taskService.updateTaskById(this.task!.id, {
           name: this.editTaskForm!.value.name!,
+          projectId: this.editTaskForm!.value.projectId!,
           isEnabled: this.editTaskForm!.value.isEnabled!,
         }),
       );

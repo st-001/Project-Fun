@@ -17,19 +17,16 @@
     </mat-card-content>
   </mat-card>
 </div>
-<mat-tab-group animationDuration="0ms">
+<mat-tab-group mat-stretch-tabs="false" animationDuration="0ms">
   <mat-tab label="Assistant">
-    <div style="padding: 10px; font-size: large;">
-      <mat-card>
-        <mat-card-content>
-          <p>How may I help you with this project?</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
+    <app-assistant [entityType]="'project'" [entityId]="projectId"
+      [introMessage]="'Hey, how may I help you with this project?'"></app-assistant>
   </mat-tab>
   <mat-tab label="Notes">
     <app-notes [entityType]="'project'" [entityId]="projectId"></app-notes>
   </mat-tab>
-  <mat-tab label="Tasks"> Tasks </mat-tab>
+  <mat-tab label="Tasks">
+    <app-tasks [queryParams]="{projectId: project.id}"></app-tasks>
+  </mat-tab>
 </mat-tab-group>
 }

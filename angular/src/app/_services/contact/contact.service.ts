@@ -7,6 +7,7 @@ export interface Contact {
   id: number;
   name: string;
   emailAddress: string;
+  jobTitle: string;
   client: Client;
   isEnabled: boolean;
   createdAt: string;
@@ -22,6 +23,7 @@ export class ContactService {
     contact: {
       name: string;
       emailAddress: string;
+      jobTitle: string;
       clientId: number;
       isEnabled: boolean;
     },
@@ -42,6 +44,7 @@ export class ContactService {
     contact: {
       name: string;
       emailAddress: string;
+      jobTitle: string;
       clientId: number;
       isEnabled: boolean;
     },

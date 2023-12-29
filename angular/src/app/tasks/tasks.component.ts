@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from "@angular/core";
+import { Component, ElementRef, inject, Input, ViewChild } from "@angular/core";
 import { Task, TaskService } from "../_services/task/task.service";
 import { firstValueFrom } from "rxjs";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
@@ -35,11 +35,16 @@ export class TasksComponent {
   dataSource = new MatTableDataSource<Task>();
   displayedColumns: string[] = [
     "name",
+    "client",
+    "project",
     "isEnabled",
     "createdAt",
     "updatedAt",
     "deletedAt",
   ];
+
+  @Input()
+  queryParams: { isEnabled?: boolean; projectId?: number } = {};
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
@@ -64,7 +69,9 @@ export class TasksComponent {
   }
 
   async getAllTasks() {
-    this.dataSource.data = await firstValueFrom(this.taskService.getAll());
+    this.dataSource.data = await firstValueFrom(
+      this.taskService.getAll(this.queryParams),
+    );
   }
 
   async ngAfterViewInit() {
@@ -78,6 +85,9 @@ export class TasksComponent {
       width: "500px",
       position: {
         top: defaultMatDialogTop,
+      },
+      data: {
+        projectId: this.queryParams.projectId,
       },
     });
 

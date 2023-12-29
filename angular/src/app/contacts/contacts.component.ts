@@ -37,6 +37,7 @@ export class ContactsComponent {
     "name",
     "isEnabled",
     "clientName",
+    "jobTitle",
     "emailAddress",
     "createdAt",
     "updatedAt",

@@ -45,7 +45,7 @@ export class NotesComponent {
 
   async openCreateNoteDialog() {
     const dialogRef = this.dialog.open(CreateNewNoteDialogComponent, {
-      width: "500px",
+      width: "800px",
       position: {
         top: defaultMatDialogTop,
       },

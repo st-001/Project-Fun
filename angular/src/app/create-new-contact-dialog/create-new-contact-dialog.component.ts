@@ -1,6 +1,5 @@
 import { Component, inject } from "@angular/core";
 import {
-  MatDialog,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
@@ -49,6 +48,7 @@ export class CreateNewContactDialogComponent {
   createNewContactForm = new FormGroup({
     name: new FormControl("", [Validators.required]),
     emailAddress: new FormControl("", [Validators.required, Validators.email]),
+    jobTitle: new FormControl("", [Validators.required]),
     clientId: new FormControl(null, [Validators.required]),
     isEnabled: new FormControl(true),
   });
@@ -60,6 +60,7 @@ export class CreateNewContactDialogComponent {
         name: this.createNewContactForm.value.name!,
         isEnabled: this.createNewContactForm.value.isEnabled!,
         emailAddress: this.createNewContactForm.value.emailAddress!,
+        jobTitle: this.createNewContactForm.value.jobTitle!,
         clientId: this.createNewContactForm.value.clientId!,
       }));
       this.snackBar.open("Contact created", "Dismiss", {

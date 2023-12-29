@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -58,6 +58,7 @@ export class EditContactDialogComponent {
         Validators.required,
         Validators.email,
       ]),
+      jobTitle: new FormControl(this.contact.jobTitle, [Validators.required]),
       clientId: new FormControl(this.contact.client.id, [Validators.required]),
       isEnabled: new FormControl(this.contact.isEnabled),
     });
@@ -71,6 +72,7 @@ export class EditContactDialogComponent {
           name: this.editContactForm!.value.name!,
           isEnabled: this.editContactForm!.value.isEnabled!,
           emailAddress: this.editContactForm!.value.emailAddress!,
+          jobTitle: this.editContactForm!.value.jobTitle!,
           clientId: this.editContactForm!.value.clientId!,
         }),
       );

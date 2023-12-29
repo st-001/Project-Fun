@@ -20,6 +20,9 @@ export const GET_RESPONSE_SCHEMA = {
       emailAddress: {
         type: "string",
       },
+      jobTitle: {
+        type: "string",
+      },
       isEnabled: {
         type: "boolean",
       },
@@ -49,7 +52,16 @@ export const GET_RESPONSE_SCHEMA = {
         additionalProperties: false,
       },
     },
-    required: ["id", "name", "isEnabled", "createdAt", "updatedAt", "client"],
+    required: [
+      "id",
+      "name",
+      "isEnabled",
+      "emailAddress",
+      "jobTitle",
+      "createdAt",
+      "updatedAt",
+      "client",
+    ],
     additionalProperties: false,
   },
 };
@@ -59,6 +71,7 @@ export const POST_REQUEST_SCHEMA = {
   properties: {
     name: { type: "string", maxLength: 255, minLength: 1 },
     emailAddress: { type: "string", maxLength: 255, minLength: 1 },
+    jobTitle: { type: "string", maxLength: 255, minLength: 1 },
     clientId: { type: "number" },
     isEnabled: { type: "boolean" },
   },
@@ -72,6 +85,7 @@ export const POST_RESPONSE_SCHEMA = {
     id: { type: "number" },
     name: { type: "string" },
     emailAddress: { type: "string" },
+    jobTitle: { type: "string" },
     isEnabled: { type: "boolean" },
     createdAt: { type: "string", format: "date-time" },
     updatedAt: { type: "string", format: "date-time" },
@@ -93,7 +107,16 @@ export const POST_RESPONSE_SCHEMA = {
       additionalProperties: false,
     },
   },
-  required: ["id", "name", "isEnabled", "createdAt", "updatedAt", "client"],
+  required: [
+    "id",
+    "name",
+    "isEnabled",
+    "emailAddress",
+    "jobTitle",
+    "createdAt",
+    "updatedAt",
+    "client",
+  ],
   additionalProperties: false,
 };
 
@@ -114,6 +137,7 @@ export const handler: Handlers = {
       const contact = await req.json() as {
         name: string;
         emailAddress: string;
+        jobTitle: string;
         clientId: number;
         isEnabled: boolean;
       };
@@ -126,6 +150,7 @@ export const handler: Handlers = {
         contact.name,
         contact.isEnabled,
         contact.emailAddress,
+        contact.jobTitle,
         contact.clientId,
         ctx.state.userId as number,
       );
