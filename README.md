@@ -1,3 +1,5 @@
+This is a project for fun. I'm using it as a learning exercise.
+
 Install Deno and Docker Desktop.
 
 Run:
